@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>2374 | Admin</title>
+    <meta name="description" content="Jesuit Robotics 2374 Attendance" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+
+    <link rel="stylesheet" href="/assets/main.css" />
+    <link rel="stylesheet" href="/assets/alertify.min.css" />
+</head>
+<overlay id="overlay">
+    <br /><br /><br />
+    <p>Securing Connection...</p>
+</overlay>
+
+<body>
+    <span>&nbsp;</span>
+    <div class="container">
+        <h1>Attendance Requests</h1>
+        <hr />
+        <br />
+        <cardsection id="cards">Loading...</cardsection>
+        <br><br>
+        <button class="p-button" id="back" onclick='javascript:window.location.href="/"'>
+            Back
+        </button>
+    </div>
+
+</body>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://ninjamcuserapi.ariesninja.repl.co/userfetch.js"></script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/assets/alertify.min.js"></script>
+<script type="text/javascript" src="radmin.js"></script>
+
+</html>

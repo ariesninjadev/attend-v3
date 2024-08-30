@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<!-- VERSION 2.9.14 s-dev.8.a -->
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>2374 | Attendance</title>
+    <meta name="description" content="Jesuit Robotics 2374 Attendance" />
+    <link rel="stylesheet" href="assets/main.css" />
+    <link rel="stylesheet" href="/assets/alertify.min.css" />
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <link rel="apple-touch-icon" type="image/png" href="assets/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <script src="/assets/gsi.js" async></script>
+</head>
+
+<body>
+    <div class="popup-container" id="popupContainer">
+        <div class="popup-content">
+            <span class="close-button" onclick="closePopup()">&times;</span>
+            <!-- <h2 id="popupTitle">Update</h2> -->
+            <div style="text-align:left;">
+                <h2>Welcome to the 2024-25 season!</h2>
+                <li>During preseason, meetings at Tuesday and Wednesday from 3:15 to 6:00 PM.</li><br>
+            </div>
+            <button class="submit-button" onclick="closePopup()">Awesome!</button>
+        </div>
+    </div>
+
+    <span>&nbsp;</span>
+    <div hidden id="minfo" class="container-top">
+        <p id="m-start" class="m-left"></p>
+        <strong>
+            <p id="m-status" class="m-middle"></p>
+        </strong>
+        <p id="m-end" class="m-right"></p>
+    </div>
+    <div class="container">
+        <h1>Robotics Attendance</h1>
+        <p id="name-display"></p>
+        <div hidden id="apanel">
+            <button class="p-button" id="1" onclick="javascript:window.location.href='/users'">
+                Student Management</button><br /><button class="p-button" id="1a"
+                onclick="javascript:window.location.href='/report'">
+                Generate Report</button><br />
+            <button class="p-button" id="1b" onclick="javascript:window.location.href='/scheduler'">
+                Meeting Scheduler
+            </button><br>
+            <button class="p-button" id="1c" onclick="javascript:window.location.href='/requestsadmin'">
+                Request Handler
+            </button>
+        </div>
+        <p id="data-alert"></p>
+        <h1 style="font-size: 2.4em" id="time-alert"></h1>
+        <br />
+        <button class="p-button" id="2" hidden onclick="javascript:clockin()">
+            Clock In
+        </button>
+        <button class="p-button" id="2b" hidden onclick="javascript:clockout()">
+            Clock Out</button><br />
+        <button class="p-button" disabled id="3" hidden onclick="javascript:window.location.href='/debug'">
+            Debug (Service Operational)
+        </button>
+        <p hidden id="alert2" style="color: #ff6688"></p>
+        <br />
+        <p hidden id="alert"></p>
+        <span style="display: flex; justify-content: center" id="oauthbtn"></span><br />
+        <a id="oalt" style="color: white" hidden href="javascript:sec();">Can't sign in with Google?</a>
+        <button class="p-button" id="out" hidden onclick="javascript:signout()">
+            Sign Out of Account
+        </button>
+        <p id="total-hour-display"></p>
+        <p id="total-perc-display"></p>
+        <div hidden id="minfo2" class="v-prog">
+        </div>
+        <p></p>
+    </div>
+    <div hidden id="eula" class="container-bottom">
+        <h2>Warning</h2>
+        <p class="eula r">
+            It is strictly against Jesuit policy to clock into Robotics while you
+            are not present, <strong>even if you plan on showing up later</strong>.
+            You <strong>must</strong> also clock out if leaving early. If you are
+            leaving when the meeting ends, you will be automatically signed out.<br /><br />You
+            may <strong>not</strong> give other students your login.
+        </p>
+    </div>
+    <p class="tag">Jesuit Portland Robotics 2374</p>
+    <br />
+    <span>&nbsp;</span>
+</body>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://unpkg.com/jwt-decode@3.1.2/build/jwt-decode.js"></script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/assets/alertify.min.js"></script>
+<script src="main.js"></script>
+
+</html>

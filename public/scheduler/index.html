@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>2374 | Admin</title>
+    <meta name="description" content="Jesuit Robotics 2374 Attendance" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+
+    <link rel="stylesheet" href="/assets/main.css" />
+  </head>
+  <overlay id="overlay">
+    <p>Securing Connection...</p>
+  </overlay>
+  <body>
+    <span>&nbsp;</span>
+    <!-- hairspace -->
+    <div class="container">
+      <h1>2374 Robotics</h1>
+      <button class="dotw-btn" id="sun" onclick="javascript:tabOut(this)">
+        Sun
+      </button>
+      <button class="dotw-btn" id="mon" onclick="javascript:tabOut(this)">
+        Mon
+      </button>
+      <button class="dotw-btn" id="tue" onclick="javascript:tabOut(this)">
+        Tue
+      </button>
+      <button class="dotw-btn" id="wed" onclick="javascript:tabOut(this)">
+        Wed
+      </button>
+      <button class="dotw-btn" id="thu" onclick="javascript:tabOut(this)">
+        Thu
+      </button>
+      <button class="dotw-btn" id="fri" onclick="javascript:tabOut(this)">
+        Fri
+      </button>
+      <button class="dotw-btn" id="sat" onclick="javascript:tabOut(this)">
+        Sat
+      </button>
+      <hr />
+      <br />
+      <cardsection>
+        <div class="card">
+          <h2 id="thisdotw">Pick a day</h2>
+          <input disabled type="time" id="startI" placeholder="Start Time" />
+          <input disabled type="time" id="endI" placeholder="End Time" />
+          <p id="alert" style="color: #ff6688"></p>
+          <button
+            disabled
+            class="p-button"
+            id="re"
+            onclick="javascript:schedule()"
+          >
+            ...
+          </button>
+          <button disabled class="p-button" id="one">Once</button>
+        </div> </cardsection
+      ><br />
+      <button
+        class="p-button"
+        id="back"
+        onclick='javascript:window.location.href="/"'
+      >
+        Back
+      </button>
+    </div>
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script
+    src="https://cdn.socket.io/4.7.2/socket.io.min.js"
+    crossorigin="anonymous"
+  ></script>
+  <script src="scheduler.js"></script>
+</html>

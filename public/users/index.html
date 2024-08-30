@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>2374 | Admin</title>
+    <meta name="description" content="Jesuit Robotics 2374 Attendance" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+
+    <link rel="stylesheet" href="/assets/main.css" />
+    <link rel="stylesheet" href="/assets/alertify.min.css" />
+</head>
+<overlay id="overlay">
+    <br /><br /><br />
+    <p>Securing Connection...</p>
+</overlay>
+
+<body>
+    <span>&nbsp;</span>
+    <div class="container">
+        <h1>Member Management</h1>
+        <input type="text" id="userInput" placeholder="Search by Name..." />
+        <hr />
+        <br />
+        <cardsection id="cards">Please enter at least 3 characters<br><strong>OR</strong><br>Type "#" to show all
+            students<br>Type "^[num]" to show students with at least [num] hrs<br><br></cardsection>
+        <button class="p-button" id="back" onclick="javascript:popup2()">
+            General Settings
+        </button>
+        <button class="p-button" id="back" onclick='javascript:window.location.href="/"'>
+            Back
+        </button>
+    </div>
+
+    <div class="popup-container" id="popupContainer">
+        <div class="popup-content">
+            <span class="close-button" onclick="closePopup()">&times;</span>
+            <h2 id="popupTitle">Loading...</h2>
+            <div id="popupContent"></div>
+            <button class="submit-button" onclick="addRecord()">Add</button>
+            <button class="submit-button" onclick="submitPopup()">Close</button>
+        </div>
+    </div>
+
+    <div class="popup-container" id="popupContainer2">
+        <div class="popup-content">
+            <span class="close-button" onclick="closePopup2()">&times;</span>
+            <h2 id="popupTitle">Settings</h2>
+            <div id="popupContent">
+                <button class="submit-button" onclick="addUser()">Add Student</button><br /><br />
+                <button class="submit-button" onclick="clearStudent()">
+                    Clear One Student</button><br /><br />
+                <button class="submit-button redx" onclick="clearAll()">
+                    Clear All Times</button><br /><br />
+            </div>
+            <br /><br /><br />
+            <button class="submit-button" onclick="closePopup2()">Close</button>
+        </div>
+    </div>
+
+    <div class="popup-container" id="popupContainer3">
+        <div class="popup-content">
+            <span class="close-button" onclick="closePopup3()">&times;</span>
+            <h2 id="popupTitle">Edit Field</h2>
+
+            <input type="datetime-local" id="startI" placeholder="Start Time" />
+            <input type="datetime-local" id="endI" placeholder="End Time" />
+            <br>
+            <p id="alert" style="color: #ff6688;text-align:center;"></p>
+            <br /><br />
+            <button class="submit-button grayish" onclick="closePopup3()">Cancel</button>
+            <button id="savebtn" class="submit-button" onclick="closePopup3AndSave()">Save</button>
+        </div>
+    </div>
+
+    <div class="popup-container" id="popupContainer4">
+        <div class="popup-content">
+            <span class="close-button" onclick="closePopup4()">&times;</span>
+            <h2 id="popupTitle">Add Field</h2>
+
+            <input type="datetime-local" id="startIb" placeholder="Start Time" />
+            <input type="datetime-local" id="endIb" placeholder="End Time" />
+            <br>
+            <p id="alertb" style="color: #ff6688;text-align:center;"></p>
+            <br /><br />
+            <button class="submit-button grayish" onclick="closePopup4()">Cancel</button>
+            <button id="savebtnb" class="submit-button" onclick="closePopup4AndSave()">Save</button>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://ninjamcuserapi.ariesninja.repl.co/userfetch.js"></script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/assets/alertify.min.js"></script>
+<script type="text/javascript" src="users.js"></script>
+
+</html>

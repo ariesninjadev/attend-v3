@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+  <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>NJM Web - 2374</title>
+    <script
+      defer
+      data-api="/stats/api/event"
+      data-domain="preview.tabler.io"
+      src="stats/js/script.js"
+    ></script>
+    <meta name="msapplication-TileColor" content="" />
+    <meta name="theme-color" content="" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <link rel="icon" href="static/favicon.png" type="image/x-icon" />
+    <link rel="shortcut icon" href="static/favicon.png" type="image/x-icon" />
+    <meta
+      name="description"
+      content="Tabler comes with tons of well-designed components and features. Start your adventure with Tabler and make your dashboard great again. For free!"
+    />
+    <meta
+      name="twitter:image:src"
+      content="https://preview.tabler.io/static/og.png"
+    />
+    <meta name="twitter:site" content="@tabler_ui" />
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="Tabler: Premium and Open Source dashboard template with responsive and high quality UI."
+    />
+    <meta
+      name="twitter:description"
+      content="Tabler comes with tons of well-designed components and features. Start your adventure with Tabler and make your dashboard great again. For free!"
+    />
+    <meta
+      property="og:image"
+      content="https://preview.tabler.io/static/og.png"
+    />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="640" />
+    <meta property="og:site_name" content="Tabler" />
+    <meta property="og:type" content="object" />
+    <meta
+      property="og:title"
+      content="Tabler: Premium and Open Source dashboard template with responsive and high quality UI."
+    />
+    <meta property="og:url" content="https://preview.tabler.io/static/og.png" />
+    <meta
+      property="og:description"
+      content="Tabler comes with tons of well-designed components and features. Start your adventure with Tabler and make your dashboard great again. For free!"
+    />
+    <!-- CSS files -->
+    <link href="dist/css/tabler.min66d9.css?1674944800" rel="stylesheet" />
+    <link
+      href="dist/css/tabler-flags.min66d9.css?1674944800"
+      rel="stylesheet"
+    />
+    <link
+      href="dist/css/tabler-payments.min66d9.css?1674944800"
+      rel="stylesheet"
+    />
+    <link
+      href="dist/css/tabler-vendors.min66d9.css?1674944800"
+      rel="stylesheet"
+    />
+    <link href="dist/css/demo.min66d9.css?1674944800" rel="stylesheet" />
+    <style>
+      :root {
+        --tblr-font-sans-serif: "Inter Var", -apple-system, BlinkMacSystemFont,
+          San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+      body {
+        font-feature-settings: "cv03", "cv04", "cv11";
+      }
+      overlay {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 10;
+        background-color: #eee;
+      }
+      overlay p {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2em;
+        color: #000;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <overlay id="overlay">
+    <p>Generating Report</p>
+  </overlay>
+  <body>
+    <script src="dist/js/demo-theme.min66d9.js?1674944800"></script>
+    <div class="page">
+      <!-- Navbar -->
+      <header class="navbar navbar-expand-md navbar-light d-print-none">
+        <div class="container-xl">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbar-menu"
+            aria-controls="navbar-menu"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <h1
+            class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3"
+          >
+            <a>
+              <img
+                src="static/logo-full.png"
+                width="110"
+                height="32"
+                alt="Tabler"
+                class="navbar-brand-image"
+              />
+            </a>
+          </h1>
+          <div class="navbar-nav flex-row order-md-last">
+            <div class="nav-item dropdown">
+              <a
+                href="#"
+                class="nav-link d-flex lh-1 text-reset p-0"
+                data-bs-toggle="dropdown"
+                aria-label="Open user menu"
+              >
+                <span
+                  class="avatar avatar-sm"
+                  style="background-image: url(static/avatars/org-jesuit-1.png)"
+                ></span>
+                <div class="d-none d-xl-block ps-2">
+                  <div>2374</div>
+                  <div class="mt-1 small text-muted">jesuit_1</div>
+                </div>
+              </a>
+              <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <a class="dropdown-item">This account is managed by an nORG.</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <header class="navbar-expand-md">
+        <div class="collapse navbar-collapse" id="navbar-menu">
+          <div class="navbar navbar-light">
+            <div class="container-xl">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="/">
+                    <span class="nav-link-icon d-md-none d-lg-inline-block"
+                      ><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="icon"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
+                        <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+                        <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                      </svg>
+                    </span>
+                    <span class="nav-link-title"> Return home </span>
+                  </a>
+                </li>
+
+                <li class="nav-item active">
+                  <a class="nav-link">
+                    <span class="nav-link-icon d-md-none d-lg-inline-block"
+                      ><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="icon icon-tabler icon-tabler-report"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path
+                          d="M8 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h5.697"
+                        />
+                        <path d="M18 14v4h4" />
+                        <path d="M18 11v-4a2 2 0 0 0 -2 -2h-2" />
+                        <path
+                          d="M8 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"
+                        />
+                        <path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                        <path d="M8 11h4" />
+                        <path d="M8 15h3" />
+                      </svg>
+                    </span>
+                    <span class="nav-link-title"> Report </span>
+                  </a>
+                </li>
+              </ul>
+              <div
+                class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last"
+              >
+                <form
+                  action="https://preview.tabler.io/"
+                  method="get"
+                  autocomplete="off"
+                  novalidate
+                >
+                  <div class="input-icon">
+                    <span class="input-icon-addon">
+                      <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="icon"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                        <path d="M21 21l-6 -6" />
+                      </svg>
+                    </span>
+                    <input
+                      type="text"
+                      value=""
+                      class="form-control"
+                      placeholder="Search…"
+                      aria-label="Search in website"
+                    />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="page-wrapper" id="pdf-section">
+        <!-- Page header -->
+        <div class="page-header d-print-none">
+          <div class="container-xl">
+            <div class="row g-2 align-items-center">
+              <div class="col">
+                <!-- Page pre-title -->
+                <div id="s-gen" class="page-pretitle">Report Generator</div>
+                <h2 class="page-title">Robotics Attendance</h2>
+              </div>
+              <!-- Page title actions -->
+              <div class="col-auto ms-auto d-print-none">
+                <div id="s-btn" class="btn-list">
+                  <a
+                    href="javascript:makePDF();"
+                    class="btn btn-primary d-none d-sm-inline-block"
+                  >
+                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="icon"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path d="M12 5l0 14" />
+                      <path d="M5 12l14 0" />
+                    </svg>
+                    Export
+                  </a>
+                  <a
+                    href="javascript:location.reload();"
+                    class="btn btn-primary d-sm-none btn-icon"
+                    aria-label="Create new report"
+                  >
+                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="icon"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path d="M12 5l0 14" />
+                      <path d="M5 12l14 0" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Page body -->
+        <div class="page-body">
+          <div class="container-xl">
+            <div class="row row-deck row-cards">
+              <div class="col-12">
+                <div class="row row-cards">
+                  <div class="col-sm-6 col-lg-3">
+                    <div class="card card-sm">
+                      <div class="card-body">
+                        <div class="row align-items-center">
+                          <div class="col-auto">
+                            <span class="bg-primary text-white avatar"
+                              ><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="icon icon-tabler icon-tabler-user"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                fill="none"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              >
+                                <path
+                                  stroke="none"
+                                  d="M0 0h24v24H0z"
+                                  fill="none"
+                                />
+                                <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                                <path
+                                  d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"
+                                />
+                              </svg>
+                            </span>
+                          </div>
+                          <div class="col">
+                            <div id="total_students" class="font-weight-medium">
+                              TOTAL_STUDENTS
+                            </div>
+                            <div class="text-muted">Total Students</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-lg-3">
+                    <div class="card card-sm">
+                      <div class="card-body">
+                        <div class="row align-items-center">
+                          <div class="col-auto">
+                            <span class="bg-green text-white avatar"
+                              ><!-- Download SVG icon from http://tabler-icons.io/i/shopping-cart -->
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="icon icon-tabler icon-tabler-user-star"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                fill="none"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              >
+                                <path
+                                  stroke="none"
+                                  d="M0 0h24v24H0z"
+                                  fill="none"
+                                />
+                                <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+                                <path d="M6 21v-2a4 4 0 0 1 4 -4h.5" />
+                                <path
+                                  d="M17.8 20.817l-2.172 1.138a.392 .392 0 0 1 -.568 -.41l.415 -2.411l-1.757 -1.707a.389 .389 0 0 1 .217 -.665l2.428 -.352l1.086 -2.193a.392 .392 0 0 1 .702 0l1.086 2.193l2.428 .352a.39 .39 0 0 1 .217 .665l-1.757 1.707l.414 2.41a.39 .39 0 0 1 -.567 .411l-2.172 -1.138z"
+                                />
+                              </svg>
+                            </span>
+                          </div>
+                          <div class="col">
+                            <div
+                              id="active_students"
+                              class="font-weight-medium"
+                            >
+                              ACTIVE_STUDENTS
+                            </div>
+                            <div class="text-muted">Active Students (30d)</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-lg-3">
+                    <div class="card card-sm">
+                      <div class="card-body">
+                        <div class="row align-items-center">
+                          <div class="col-auto">
+                            <span class="bg-twitter text-white avatar"
+                              ><!-- Download SVG icon from http://tabler-icons.io/i/brand-twitter -->
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="icon icon-tabler icon-tabler-clock"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                fill="none"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              >
+                                <path
+                                  stroke="none"
+                                  d="M0 0h24v24H0z"
+                                  fill="none"
+                                />
+                                <path
+                                  d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"
+                                />
+                                <path d="M12 7v5l3 3" />
+                              </svg>
+                            </span>
+                          </div>
+                          <div class="col">
+                            <div id="total_hours" class="font-weight-medium">
+                              TOTAL_HOURS
+                            </div>
+                            <div class="text-muted">Total Hours</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-lg-3">
+                    <div class="card card-sm">
+                      <div class="card-body">
+                        <div class="row align-items-center">
+                          <div class="col-auto">
+                            <span class="bg-facebook text-white avatar"
+                              ><!-- Download SVG icon from http://tabler-icons.io/i/brand-facebook -->
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="icon icon-tabler icon-tabler-repeat"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                fill="none"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              >
+                                <path
+                                  stroke="none"
+                                  d="M0 0h24v24H0z"
+                                  fill="none"
+                                />
+                                <path
+                                  d="M4 12v-3a3 3 0 0 1 3 -3h13m-3 -3l3 3l-3 3"
+                                />
+                                <path
+                                  d="M20 12v3a3 3 0 0 1 -3 3h-13m3 3l-3 -3l3 -3"
+                                />
+                              </svg>
+                            </span>
+                          </div>
+                          <div class="col">
+                            <div id="retention" class="font-weight-medium">
+                              STUDENT_RETENTION
+                            </div>
+                            <div class="text-muted">
+                              Student Retention (30d)
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-6">
+                <div class="card">
+                  <div class="card-body">
+                    <h3 class="card-title">Activity Summary</h3>
+                    <div id="chart-a" class="chart-lg"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-6">
+                <div class="card">
+                  <div class="card-body">
+                    <h3 class="card-title">Attendance Weekly Moving Average</h3>
+                    <div id="chart-b" class="chart-lg"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Students</h3>
+                  </div>
+
+                  <div class="table-responsive">
+                    <table
+                      class="table card-table table-vcenter text-nowrap datatable"
+                    >
+                      <thead>
+                        <tr>
+                          <th class="w-1">
+                            No.
+                            <!-- Download SVG icon from http://tabler-icons.io/i/chevron-up -->
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="icon icon-sm icon-thick"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              stroke-width="2"
+                              stroke="currentColor"
+                              fill="none"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path
+                                stroke="none"
+                                d="M0 0h24v24H0z"
+                                fill="none"
+                              />
+                              <path d="M6 15l6 -6l6 6" />
+                            </svg>
+                          </th>
+                          <th>Name</th>
+                          <th>Email</th>
+                          <th>Total Hours</th>
+                          <th>Avg. Time</th>
+                          <th>Class</th>
+                          <th>Last Attended</th>
+                        </tr>
+                      </thead>
+                      <tbody id="list">
+                        <tr>
+                          <td><span class="text-muted">NUM</span></td>
+                          <td><a class="text-reset" tabindex="-1">NAME</a></td>
+                          <td>EMAIL</td>
+                          <td>HRS</td>
+                          <td>TIME</td>
+                          <td>CLASS</td>
+                          <td>recorda<br />recordb</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <footer class="footer footer-transparent d-print-none">
+          <div class="container-xl">
+            <div class="row text-center align-items-center flex-row-reverse">
+              <div id="s-ftr" class="col-lg-auto ms-lg-auto">
+                <ul class="list-inline list-inline-dots mb-0">
+                  <li class="list-inline-item">
+                    <a class="link-secondary">Documentation</a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a class="link-secondary">License</a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a target="_blank" class="link-secondary" rel="noopener"
+                      >Source code</a
+                    >
+                  </li>
+                  <li class="list-inline-item">
+                    <a target="_blank" class="link-secondary" rel="noopener">
+                      <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="icon text-pink icon-filled icon-inline"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path
+                          d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"
+                        />
+                      </svg>
+                      Sponsor
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                <ul class="list-inline list-inline-dots mb-0">
+                  <li class="list-inline-item">
+                    Copyright &copy; 2023
+                    <a class="link-secondary">Ninjam Studios</a>. All rights
+                    reserved.
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="" class="link-secondary" rel="noopener">
+                      v8.6.2
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Libs JS -->
+    <script
+      src="dist/libs/apexcharts/dist/apexcharts.min66d9.js?1674944800"
+      defer
+    ></script>
+    <!-- Tabler Core -->
+    <script src="dist/js/tabler.min66d9.js?1674944800" defer></script>
+    <script src="dist/js/demo.min66d9.js?1674944800" defer></script>
+  </body>
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="https://ninjamcuserapi.ariesninja.repl.co/userfetch.js"
+  ></script>
+  <script
+    src="https://cdn.socket.io/4.7.2/socket.io.min.js"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+    integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.js"></script>
+
+  <script type="text/javascript" src="report.js"></script>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!-- VERSION 2.8.5 tj65-1a -->
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>2374 | Requests</title>
+    <meta name="description" content="Jesuit Robotics 2374 Attendance" />
+    <link rel="stylesheet" href="/assets/main.css" />
+    <link rel="stylesheet" href="/assets/alertify.min.css" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+    <link rel="apple-touch-icon" type="image/png" href="/assets/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <script src="/assets/gsi.js" async></script>
+</head>
+
+<body>
+    <span>&nbsp;</span>
+    <!-- hairspace -->
+    <div hidden id="minfo" class="container-top">
+        <p id="m-start" class="m-left"></p>
+        <strong>
+            <p id="m-status" class="m-middle"></p>
+        </strong>
+        <p id="m-end" class="m-right"></p>
+    </div>
+    <div class="container">
+        <h1>Attendance Request</h1>
+        <p>If you have an issue, forgot to sign in, forgot to sign out, or would like to request extra hours, please
+            complete a request below.</p>
+        <br>
+        <select name="request-type" id="request-type" onchange="update()">
+            <option selected hidden disabled value="0">Select a Request Type</option>
+            <option value="1">My hours don't look right</option>
+            <option value="2">I forgot to sign in/out</option>
+            <option value="3">I stayed late to a meeting</option>
+            <option value="4">The tool was disabled during a meeting</option>
+        </select><br><br>
+        <div style="display:none;" id="1">
+            <textarea id='issue-1-1' type='text' name='desc' placeholder='Describe the issue.' required></textarea>
+            <p>Enter the date of occurance, if applicable.</p>
+            <input type="date" id="issue-1-2" placeholder="date" />
+            <br>
+            <p><strong>Please do not submit a request if you are requesting less than 15 minutes.</strong></p>
+            <button class="submit-button grayish" onclick="window.location.href = '/'">Cancel</button>
+            <button class="submit-button" onclick="submitRequest()">Submit</button>
+        </div>
+        <div style="display:none;" id="2">
+            <hl></hl>
+            <select style="width:40%;" name="signtypea" id="signtypea" onchange="updateSignType()">
+                <option selected hidden disabled value="0">I didn't...</option>
+                <option value="in">Sign In</option>
+                <option value="out">Sign Out</option>
+            </select>
+            <p id="typedesc"></p>
+            <input style="display:none;margin: 0 auto;" type="date" id="issue-2-2" placeholder="date" />
+            <p id="typedesc2"></p>
+            <input style="display:none;margin: 0 auto;" type="time" id="issue-2b-2" placeholder="time" />
+            <p id="typedesc3"></p>
+            <input style="display:none;margin: 0 auto;" type="time" id="issue-2c-2" placeholder="time" />
+            <br>
+            <p><strong>Please do not submit a request if you are requesting less than 15 minutes.</strong></p>
+            <br>
+            <button style="display:none;" id="issue-2-3" class="submit-button grayish"
+                onclick="window.location.href = '/'">Cancel</button>
+            <button style="display:none;" id="issue-2-4" class="submit-button" onclick="submitRequest()">Submit</button>
+        </div>
+        <div style="display:none;" id="3">
+            <textarea id='issue-3-1' type='text' name='desc'
+                placeholder='Describe what you completed after the regulated meeting time ended.' required></textarea>
+            <p>What day did you stay late?</p>
+            <input type="date" id="issue-3-2" placeholder="time" />
+            <p>When did you leave the meeting?</p>
+            <input type="time" id="issue-3-3" placeholder="time" />
+            <br>
+            <p><strong>Please do not submit a request if you are requesting less than 15 minutes.</strong></p>
+            <br>
+            <button id="issue-3-2" class="submit-button grayish" onclick="window.location.href = '/'">Cancel</button>
+            <button id="issue-3-3" class="submit-button" onclick="submitRequest()">Submit</button>
+        </div>
+        <div style="display:none;" id="4">
+            <p class='redtext'>Sorry, you are not eligable for these hours.</p>
+        </div>
+        <br><span>&nbsp;</span>
+    </div>
+    <p class="tag">Jesuit Portland Robotics 2374</p>
+    <br />
+    <span>&nbsp;</span>
+</body>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://unpkg.com/jwt-decode@3.1.2/build/jwt-decode.js"></script>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/assets/alertify.min.js"></script>
+<script src="requests.js"></script>
+
+</html>
