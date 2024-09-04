@@ -9,21 +9,11 @@ var socket = io();
 
 let refobj;
 
-function getCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(";");
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == " ") c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-    }
-    return null;
-}
 
 if (
-    getCookie("auth") == "aries.powvalla@gmail.com" ||
-    getCookie("auth") == "whitenj@gmail.com" ||
-    getCookie("auth") == "pwhite@jesuitmail.org"
+    localStorage.getItem("auth") == "aries.powvalla@gmail.com" ||
+    localStorage.getItem("auth") == "whitenj@gmail.com" ||
+    localStorage.getItem("auth") == "pwhite@jesuitmail.org"
 ) {
     document.getElementById("overlay").remove();
 } else {
@@ -68,13 +58,13 @@ function isLoggedIn(arr) {
     return arr[arr.length - 1].end === undefined;
 }
 
-const gty = (y) => {
-    const currentYear = new Date().getFullYear() % 100;
-    const graduationYear = parseInt(y, 10);
-    const grade =
-        currentYear >= graduationYear ? 12 : 13 - (graduationYear - currentYear);
-    return Math.max(1, Math.min(12, grade));
-};
+// const gty = (y) => {
+//     const currentYear = new Date().getFullYear() % 100;
+//     const graduationYear = parseInt(y, 10);
+//     const grade =
+//         currentYear >= graduationYear ? 12 : 13 - (graduationYear - currentYear);
+//     return Math.max(1, Math.min(12, grade));
+// };
 
 var uData;
 var globalReferenceID;
@@ -367,7 +357,7 @@ function valve(content) {
             uData.forEach((s) => {
                 document.getElementById("cards").innerHTML += `<div class="card">
   <h2>${s.name}</h2>
-  <p>Grade: ${gty(s.grad)}</p>
+  <p>Year: ${s.grad}</p>
   <button class='p-button signon-button${isLoggedIn(s.record) ? " sel" : ""
                     }' id="${s.id}" onclick="${isLoggedIn(s.record) ? "userout" : "userin"}('${s.id
                     }')">${isLoggedIn(s.record) ? "Sign Out" : "Sign In"}</button>
@@ -389,13 +379,13 @@ function addUser() {
         return false;
     }
     var n = prompt("Full Name?");
-
-    if (e == "" || n == "") {
+    if (n == null || n == "") {
         return false;
     }
-    if (e != null && n != null) {
+    var s = prompt("Subgroup?");
+    if (e != null && n != null && s != null) {
         console.log(e);
-        socket.emit("createUser", e, n, (response) => {
+        socket.emit("createUser", e, n, s, (response) => {
             if (response.status == "ok") {
                 alert("User added.");
                 location.reload();

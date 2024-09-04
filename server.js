@@ -140,7 +140,7 @@ try {
     var io = require("socket.io")(server);
     io.sockets.on("connection", function (socket) {
 
-        socket.on("createUser", (email, name, callback) => {
+        socket.on("createUser", (email, name, subgroup, callback) => {
             try {
                 const match = email.match(/\d+/);
                 var gradYear = 0;
@@ -151,7 +151,7 @@ try {
                     console.log("No graduation year found in the email");
                     return false;
                 }
-                db.registerUser(email, name, gradYear, version).then((data) => {
+                db.registerUser(email, name, gradYear, version, subgroup).then((data) => {
                     callback({
                         status: "ok",
                         data: data,

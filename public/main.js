@@ -6,8 +6,7 @@ vLetterTotal = 120;
 var socket = io();
 
 if (
-    location.host.indexOf("localhost") < 0 &&
-    location.protocol.toLowerCase() !== "https:"
+    !location.host == "2374.team"
 ) {
     const url = `https://${location.host}`;
     location.replace(url);
@@ -20,25 +19,7 @@ if (
 //   });
 // });
 
-function setCookie(name, value, days) {
-    var expires = "";
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-        expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + (value || "") + expires + "; path=/";
-}
-function getCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(";");
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == " ") c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-    }
-    return null;
-}
+
 
 function signout() {
     document.cookie = "auth=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
@@ -72,26 +53,24 @@ function isLoggedIn(arr) {
     return arr[arr.length - 1].end === undefined;
 }
 
-function googleLogin(s) {
-    setCookie("auth", jwt_decode(s.credential).email, 90);
-    setCookie("name", jwt_decode(s.credential).name, 90);
-    window.location.href = "/";
-}
+// function googleLogin(s) {
+//     setCookie("auth", jwt_decode(s.credential).email, 90);
+//     setCookie("name", jwt_decode(s.credential).name, 90);
+//     window.location.href = "/";
+// }
 
 var isLoggedInT = false;
 
-function testUser() {
-    setCookie("auth", "apowvalla26@jesuitmail.org", 90);
-}
+// function testUser() {
+//     setCookie("auth", "apowvalla26@jesuitmail.org", 90);
+// }
 
-function testAdmin() {
-    setCookie("auth", "aries.powvalla@gmail.com", 90);
-}
+// function testAdmin() {
+//     setCookie("auth", "aries.powvalla@gmail.com", 90);
+// }
 
-if (!getCookie("auth")) {
-    document.getElementById("oauthbtn").innerHTML =
-        '<div id="g_id_onload" data-client_id="633834763330-rno4lrnuodol8tfs3ma6g174jmuq27ug.apps.googleusercontent.com" data-context="signin" data-callback="googleLogin" data-ux_mode="popup" data-login_uri="https://2374-a.com/" data-auto_prompt="false"></div><div style="text-align:center;" class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_black" data-text="continue_with" data-size="large" data-logo_alignment="left"></div>';
-    document.getElementById("oalt").removeAttribute("hidden");
+if (!localStorage.getItem("auth")) {
+    location.replace("/login");
 } else {
     document.getElementById("out").removeAttribute("hidden");
     isLoggedInT = true;
@@ -193,7 +172,7 @@ var y = {
 };
 
 function performChecks() {
-    socket.emit("dataRequest", getCookie("auth"), (response) => {
+    socket.emit("dataRequest", localStorage.getItem("auth"), (response) => {
         if (response.status == "ok") {
             udata = response.data;
             if (isEmpty(udata)) {
@@ -232,7 +211,7 @@ function performChecks() {
                 //document.getElementById("2").removeAttribute("hidden");
                 //document.getElementById("2b").removeAttribute("hidden");
                 document.getElementById("name-display").innerHTML =
-                    "Signed in as: <strong>" + getCookie("name") + "</strong>";
+                    "Signed in as: <strong>" + localStorage.getItem("name") + "</strong>";
                 if (!response.m) {
                     document.getElementById("alert2").removeAttribute("hidden");
                     document.getElementById("alert2").innerHTML =
@@ -269,7 +248,7 @@ function performChecks() {
 }
 
 function clockin() {
-    socket.emit("signIn", getCookie("auth"), (response) => {
+    socket.emit("signIn", localStorage.getItem("auth"), (response) => {
         if (response.status == "success") {
             document.getElementById("data-alert").innerHTML = "You are clocked in.";
             document.getElementById("2").setAttribute("hidden", true);
@@ -303,7 +282,7 @@ function clockin() {
 }
 
 function clockout() {
-    socket.emit("signOut", getCookie("auth"), (response) => {
+    socket.emit("signOut", localStorage.getItem("auth"), (response) => {
         if (response.status == "success") {
             document.getElementById("data-alert").innerHTML = "You are clocked out.";
             document.getElementById("2b").setAttribute("hidden", true);

@@ -1,28 +1,16 @@
 var socket = io();
 
 if (
-  location.host.indexOf("localhost") < 0 &&
-  location.protocol.toLowerCase() !== "https:"
+  !location.host == "2374.team"
 ) {
   const url = `https://${location.host}`;
   location.replace(url);
 }
 
-function getCookie(name) {
-  var nameEQ = name + "=";
-  var ca = document.cookie.split(";");
-  for (var i = 0; i < ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == " ") c = c.substring(1, c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-  }
-  return null;
-}
-
 if (
-  getCookie("auth") == "aries.powvalla@gmail.com" ||
-  getCookie("auth") == "whitenj@gmail.com" ||
-  getCookie("auth") == "pwhite@jesuitmail.org"
+  localStorage.getItem("auth") == "aries.powvalla@gmail.com" ||
+  localStorage.getItem("auth") == "whitenj@gmail.com" ||
+  localStorage.getItem("auth") == "pwhite@jesuitmail.org"
 ) {
 } else {
   window.location.replace("/");

@@ -206,7 +206,7 @@ const Request = mongoose.model("requests", requestSchema);
 const Subgroups = mongoose.model("subgroups", subgroupsSchema);
 const Submissions = mongoose.model("submissions", submissionsSchema);
 
-async function registerUser(id, name, grade, v) {
+async function registerUser(id, name, grade, v, subgroup) {
     const newUser = new User({
         id: id,
         grad: grade,
@@ -216,7 +216,8 @@ async function registerUser(id, name, grade, v) {
         certs: [],
         record: [],
         name: name,
-        latest: v
+        latest: v,
+        subgroup: subgroup,
     });
 
     newUser.save();

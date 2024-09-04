@@ -11,3 +11,13 @@ function googleLogin(s) {
 
     window.location.href = "/";
 }
+
+function testUser() {
+    localStorage.setItem("auth", "apowvalla26@jesuitmail.org");
+    localStorage.setItem("name", "Aries Powvalla");
+}
+
+function testAdmin() {
+    localStorage.setItem("auth", "aries.powvalla@gmail.com");
+    localStorage.setItem("name", "Aries Powvalla");
+}
