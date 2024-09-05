@@ -1,6 +1,6 @@
 // Check if user is already logged in
 if (localStorage.getItem("auth") != null) {
-    window.location.href = "/";
+    window.location.href = "/router";
 }
 
 // Accept a callback from Google CDI

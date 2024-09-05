@@ -69,13 +69,6 @@ var isLoggedInT = false;
 //     setCookie("auth", "aries.powvalla@gmail.com", 90);
 // }
 
-if (!localStorage.getItem("auth")) {
-    location.replace("/login");
-} else {
-    document.getElementById("out").removeAttribute("hidden");
-    isLoggedInT = true;
-    performChecks();
-}
 
 var sti;
 
