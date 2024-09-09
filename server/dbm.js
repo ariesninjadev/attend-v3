@@ -445,6 +445,18 @@ async function retrieve(id) {
     }
 }
 
+// Check if the user id is an admin by checking if they are marked as such in the subgroups collection
+async function isAdmin(id) {
+    try {
+        const result = await Subgroups.findOne({ owner: id });
+        if (!result) return false;
+        return true;
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
 function isNumeric(str) {
     if (typeof str != "string") return false
     return !isNaN(str) && !isNaN(parseFloat(str))
@@ -770,6 +782,7 @@ module.exports = {
     postData,
     postTime,
     retrieve,
+    isAdmin,
     outdated,
     sch_pull,
     disableDay,

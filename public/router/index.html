@@ -12,10 +12,33 @@
             right: 2%;
             text-align: right;
         }
+        .logo {
+            text-align: center;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            position: absolute;
+            transition: 0.5s;
+        }
+        .error {
+            font-size: 15px;
+            color: red;
+            position: absolute;
+            top: 65%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Arial';
+            transition: 0.5s;
+        }
     </style>
     </head>
     <body>
+        <img src="../assets/favicon.ico" alt="logo" class="logo a">
+        <p id="syserror" class="error" style="display:none;"></p>
         <a href="/dash" class="BRHang">Not loading?</a>
     </body>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/assets/alertify.min.js"></script>
     <script src="router.js"></script>
 </html>

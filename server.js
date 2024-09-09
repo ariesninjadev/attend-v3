@@ -17,6 +17,8 @@ const network_admins = [
 
 process.env.TZ = "America/Los_Angeles";
 
+const register_as_offline = false;
+
 /// ----------------------------- ///
 
 try {
@@ -168,20 +170,47 @@ try {
 
         socket.on("dataRequest", (email, callback) => {
             try {
-                if (network_admins.includes(email)) {
+                if (register_as_offline) {
+                    // Hang for 2 seconds to simulate offline mode then callback offline
+                    setTimeout(() => {
+                        callback({
+                            status: "offline",
+                        });
+                    }, 2000);
+                    return false;
+                }
+                if (email == null) {
                     callback({
-                        status: "admin",
+                        status: "guest",
                     });
                     return false;
                 }
-                db.retrieve(email)
+                db.isAdmin(email)
                     .then((data) => {
-                        callback({
-                            status: "ok",
-                            data: data,
-                            m: meetingActive,
-                            mdata_local: fetchToday(),
-                        });
+                        if (data) {
+                            callback({
+                                status: "admin",
+                            });
+                        } else {
+                            db.retrieve(email)
+                            .then((data) => {
+                                if (!data) {
+                                    callback({
+                                        status: "nonuser",
+                                    });
+                                    return false;
+                                }
+                                callback({
+                                    status: "user",
+                                });
+                            })
+                            .catch((err) => {
+                                callback({
+                                    status: "error",
+                                    data: err,
+                                });
+                            });
+                        }
                     })
                     .catch((err) => {
                         callback({
@@ -189,6 +218,21 @@ try {
                             data: err,
                         });
                     });
+                // db.retrieve(email)
+                //     .then((data) => {
+                //         callback({
+                //             status: "user",
+                //             data: data,
+                //             m: meetingActive,
+                //             mdata_local: fetchToday(),
+                //         });
+                //     })
+                //     .catch((err) => {
+                //         callback({
+                //             status: "error",
+                //             data: err,
+                //         });
+                //     });
             } catch (err) {
                 callback({
                     status: "error",
