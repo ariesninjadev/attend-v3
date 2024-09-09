@@ -6,18 +6,18 @@ if (localStorage.getItem("auth") != null) {
 // Accept a callback from Google CDI
 function googleLogin(s) {
 
-    localStorage.setItem("auth", jwt_decode(s.credential).email);
-    localStorage.setItem("name", jwt_decode(s.credential).name);
+    const dc = jwt_decode(s.credential);
+
+    localStorage.setItem("auth", dc.email);
+    localStorage.setItem("name", dc.name);
+    if (decodedToken.picture) {
+        localStorage.setItem("picture", dc.picture);
+    }
 
     window.location.href = "/";
 }
 
 function testUser() {
     localStorage.setItem("auth", "apowvalla26@jesuitmail.org");
-    localStorage.setItem("name", "Aries Powvalla");
-}
-
-function testAdmin() {
-    localStorage.setItem("auth", "aries.powvalla@gmail.com");
     localStorage.setItem("name", "Aries Powvalla");
 }

@@ -47,12 +47,24 @@ function syserror(msg) {
 function performChecks() {
     socket.emit("dataRequest", localStorage.getItem("auth"), (response) => {
         console.log(response.status);
+
+        // ---- SOFT LOCK ---- //
+
+        if (localStorage.getItem("auth") != "apowvalla26@jesuitmail.org") {
+            setTimeout(() => {
+                syserror("The robotics attendance utility isn't in use yet. It will open on September 17th.");
+            }, 1000);
+            return false;
+        }
+
         if (response.status == "guest") {
             localStorage.removeItem("auth");
             localStorage.removeItem("name");
             location.replace("/login");
         } else if (response.status == "nonuser") {
-            location.replace("https://team2374.org/");
+            setTimeout(() => {
+                syserror("It looks like you haven't registered for Robotics yet. Please contact Coach White.");
+            }, 1000);
         } else if (response.status == "user") {
             location.replace("/dash");
         } else if ((response.status == "admin")) {

@@ -11,6 +11,7 @@
             bottom: 2%;
             right: 2%;
             text-align: right;
+            font-family: 'Arial';
         }
         .logo {
             text-align: center;
@@ -19,6 +20,11 @@
             transform: translate(-50%, -50%);
             position: absolute;
             transition: 0.5s;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -o-user-select: none;
+            user-select: none;
         }
         .error {
             font-size: 15px;
@@ -33,9 +39,9 @@
     </style>
     </head>
     <body>
-        <img src="../assets/favicon.ico" alt="logo" class="logo a">
+        <img src="../assets/favicon.ico" alt="logo" class="logo a" draggable="false">
         <p id="syserror" class="error" style="display:none;"></p>
-        <a href="/dash" class="BRHang">Not loading?</a>
+        <a href="https://team2374.org/" class="BRHang">2374 Robotics</a>
     </body>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" crossorigin="anonymous"></script>
