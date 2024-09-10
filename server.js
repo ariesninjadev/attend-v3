@@ -9,7 +9,7 @@ const popupVersion = "10";
 const network = [];
 
 const network_admins = [
-    "aries.powvalla@gmail.com",
+    "apowvalla26@jesuitmail.org",
     "whitenj@gmail.com",
     "pwhite@jesuitportland.org",
     "pwhite@jesuitmail.org",
@@ -170,6 +170,12 @@ try {
 
         socket.on("dataRequest", (email, callback) => {
             try {
+                if (network_admins.includes(email)) {
+                    callback({
+                        status: "networkAdmin",
+                    });
+                    return false;
+                }
                 if (register_as_offline) {
                     // Hang for 2 seconds to simulate offline mode then callback offline
                     setTimeout(() => {
@@ -249,6 +255,26 @@ try {
                             status: "ok",
                             data: data,
                         });
+                    })
+                    .catch((err) => {
+                        callback({
+                            status: "error",
+                            data: err,
+                        });
+                    });
+            } catch (err) {
+                callback({
+                    status: "error",
+                    data: err,
+                });
+            }
+        });
+
+        socket.on("getSubteam", (email, callback) => {
+            try {
+                db.getSubteam(email)
+                    .then((data) => {
+                        callback(data);
                     })
                     .catch((err) => {
                         callback({

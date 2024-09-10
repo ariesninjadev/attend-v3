@@ -774,6 +774,31 @@ async function flagMissingDesc(email) {
     }
 }
 
+async function getSubteam(id) {
+    try {
+        const result = await Subgroups.findOne({ owner: id });
+        if (!result) return false;
+        return result.id;
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
+async function subteamMaster(id) {
+    // Check if the user is a subteam leader. If they are, return each member.
+    // If they are not, return false.
+    try {
+        const result = await Subgroups.findOne({ owner: id });
+        if (!result) return false;
+        const members = await User.find({ subgroup: result.id });
+        return members;
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
 console.log("Thread > DB Connected on MAIN");
 
 module.exports = {
@@ -800,4 +825,6 @@ module.exports = {
     updateRequest,
     retrieveRequestSingle,
     flagMissingDesc,
+    getSubteam,
+    subteamMaster,
 };

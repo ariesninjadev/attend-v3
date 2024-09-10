@@ -67,9 +67,15 @@ function performChecks() {
             }, 1000);
         } else if (response.status == "user") {
             location.replace("/dash");
-        } else if ((response.status == "admin")) {
+        } else if (response.status == "admin") {
             location.replace("/manage");
-        } else if ((response.status == "offline")) {
+        } else if (response.status == "networkAdmin") {
+            if (localStorage.getItem("auth") == "apowvalla26@jesuitmail.org") {
+                location.replace("/manage");
+                return false;
+            }
+            location.replace("/admin");
+        } else if (response.status == "offline") {
             console.log("offline!");
             syserror("The system appears to be offline. Please try again later.");
         } else {
