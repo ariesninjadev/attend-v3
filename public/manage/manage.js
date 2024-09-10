@@ -1,3 +1,17 @@
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {} else {
+        // This means the page was reloaded
+        if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
+            window.location.replace('/router');
+        }
+    }
+});
+let referrer = document.referrer;
+console.log(referrer);
+if (referrer != 'http://localhost:8080/router/') {
+    location.replace("/router");
+}
+
 if (localStorage.getItem("subteam")) {
     document.getElementById('user-subteam').innerText = localStorage.getItem("subteam");
 }
