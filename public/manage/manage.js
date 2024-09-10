@@ -10,20 +10,48 @@ function generateProfilePicture(firstName) {
     document.getElementById('profile-picture').appendChild(avatarSpan);
 }
 
+async function cacheProfilePicture(url) {
+    const cacheName = 'profile-picture-cache';
+    const cache = await caches.open(cacheName);
 
+    // Check if the image is already cached
+    const cachedResponse = await cache.match(url);
+    if (cachedResponse) {
+        return cachedResponse.blob();
+    }
 
-function main() {
-    // If localstorage "picture" is set
-    if (localStorage.getItem("picture")) {
-        // Set the profile picture to the value of localstorage "picture"
-        const avatarSpan = document.createElement('span');
-        avatarSpan.className = 'avatar avatar-sm';
-        avatarSpan.style.backgroundImage = `url(${localStorage.getItem("picture")})`;
-        document.getElementById('profile-picture').appendChild(avatarSpan);
+    // Fetch and cache the image if not cached
+    const response = await fetch(url);
+    if (response.ok) {
+        await cache.put(url, response.clone());
+        return response.blob();
+    }
+
+    throw new Error('Failed to fetch the profile picture');
+}
+
+async function setProfilePicture() {
+    const pictureUrl = localStorage.getItem("picture");
+    if (pictureUrl) {
+        try {
+            const blob = await cacheProfilePicture(pictureUrl);
+            const avatarSpan = document.createElement('span');
+            avatarSpan.className = 'avatar avatar-sm';
+            avatarSpan.style.backgroundImage = `url(${URL.createObjectURL(blob)})`;
+            document.getElementById('profile-picture').appendChild(avatarSpan);
+        } catch (error) {
+            console.error('Error setting profile picture:', error);
+        }
     } else {
         // Generate a profile picture using the user's name
         generateProfilePicture(localStorage.getItem("name"));
     }
+}
+
+
+function main() {
+    
+    setProfilePicture();
 
     // If localstorage "name" is set
     if (localStorage.getItem("name")) {
