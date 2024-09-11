@@ -87,4 +87,4 @@ function performChecks() {
 
 setTimeout(() => {
     performChecks();
-}, 1000);
+}, 1);
