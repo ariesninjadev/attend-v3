@@ -8,7 +8,7 @@ window.addEventListener('pageshow', function(event) {
 });
 let referrer = document.referrer;
 console.log(referrer);
-if (referrer != 'http://localhost:8080/router/') {
+if (!referrer.includes("router")) {
     location.replace("/router");
 }
 
@@ -24,35 +24,32 @@ function generateProfilePicture(firstName) {
     document.getElementById('profile-picture').appendChild(avatarSpan);
 }
 
-async function cacheProfilePicture(url) {
-    const cacheName = 'profile-picture-cache';
-    const cache = await caches.open(cacheName);
-
-    // Check if the image is already cached
-    const cachedResponse = await cache.match(url);
-    if (cachedResponse) {
-        return cachedResponse.blob();
-    }
-
-    // Fetch and cache the image if not cached
-    const response = await fetch(url);
-    if (response.ok) {
-        await cache.put(url, response.clone());
-        return response.blob();
-    }
-
-    throw new Error('Failed to fetch the profile picture');
-}
-
 async function setProfilePicture() {
     const pictureUrl = localStorage.getItem("picture");
     if (pictureUrl) {
         try {
-            const blob = await cacheProfilePicture(pictureUrl);
-            const avatarSpan = document.createElement('span');
-            avatarSpan.className = 'avatar avatar-sm';
-            avatarSpan.style.backgroundImage = `url(${URL.createObjectURL(blob)})`;
-            document.getElementById('profile-picture').appendChild(avatarSpan);
+            const pictureData = localStorage.getItem("pdata");
+            if (pictureData) {
+                // Use the cached picture data
+                const avatarSpan = document.createElement('span');
+                avatarSpan.className = 'avatar avatar-sm';
+                avatarSpan.style.backgroundImage = `url(${pictureData})`;
+                document.getElementById('profile-picture').appendChild(avatarSpan);
+            } else {
+                // Fetch from the URL and then cache it
+                const response = await fetch(pictureUrl);
+                console.log("FETCHED PHOTO");
+                const blob = await response.blob();
+                const reader = new FileReader();
+                reader.onload = function() {
+                    localStorage.setItem("pdata", reader.result);
+                    const avatarSpan = document.createElement('span');
+                    avatarSpan.className = 'avatar avatar-sm';
+                    avatarSpan.style.backgroundImage = `url(${reader.result})`;
+                    document.getElementById('profile-picture').appendChild(avatarSpan);
+                }
+                reader.readAsDataURL(blob);
+            }
         } catch (error) {
             console.error('Error setting profile picture:', error);
         }

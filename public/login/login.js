@@ -33,6 +33,6 @@ window.addEventListener('pageshow', function(event) {
 
 let referrer = document.referrer;
 console.log(referrer);
-if (referrer != 'http://localhost:8080/router/') {
+if (!referrer.includes("router")) {
     location.replace("/router");
 }
