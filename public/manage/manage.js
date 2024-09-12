@@ -33,6 +33,19 @@ if (localStorage.getItem("subteam")) {
     document.getElementById('user-subteam').innerText = localStorage.getItem("subteam");
 }
 
+/*
+User objects contain this structure:
+record: {
+            type: [
+                {
+                    start: { type: Date, required: true },
+                    end: { type: Date, required: false },
+                },
+            ],
+            required: false,
+        },
+so lets make a function that checks if a user is logged in by checking if the user's latest record only has a start time and no end time
+*/
 
 
 function generateProfilePicture(firstName) {
