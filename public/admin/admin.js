@@ -166,6 +166,7 @@ var y = {
 
 function performChecks() {
     socket.emit("dataRequest", localStorage.getItem("auth"), (response) => {
+        console.log(response.status);
         if (response.status == "ok") {
             udata = response.data;
             if (isEmpty(udata)) {
@@ -239,6 +240,8 @@ function performChecks() {
         }
     });
 }
+
+performChecks();
 
 function clockin() {
     socket.emit("signIn", localStorage.getItem("auth"), (response) => {

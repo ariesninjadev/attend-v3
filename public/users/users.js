@@ -11,7 +11,7 @@ let refobj;
 
 
 if (
-    localStorage.getItem("auth") == "aries.powvalla@gmail.com" ||
+    localStorage.getItem("auth") == "apowvalla26@jesuitmail.org" ||
     localStorage.getItem("auth") == "whitenj@gmail.com" ||
     localStorage.getItem("auth") == "pwhite@jesuitmail.org"
 ) {

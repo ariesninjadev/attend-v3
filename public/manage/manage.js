@@ -1,5 +1,5 @@
-window.addEventListener('pageshow', function(event) {
-    if (event.persisted) {} else {
+window.addEventListener('pageshow', function (event) {
+    if (event.persisted) { } else {
         // This means the page was reloaded
         if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
             window.location.replace('/router');
@@ -12,9 +12,20 @@ if (!referrer.includes("router")) {
     location.replace("/router");
 }
 
+document.addEventListener("DOMContentLoaded", function (event) {
+    var scrollpos = localStorage.getItem('scrollpos');
+    if (scrollpos) window.scrollTo(0, scrollpos);
+});
+
+window.onbeforeunload = function (e) {
+    localStorage.setItem('scrollpos', window.scrollY);
+};
+
 if (localStorage.getItem("subteam")) {
     document.getElementById('user-subteam').innerText = localStorage.getItem("subteam");
 }
+
+
 
 function generateProfilePicture(firstName) {
     const firstLetter = firstName.charAt(0).toUpperCase();
@@ -41,7 +52,7 @@ async function setProfilePicture() {
                 console.log("FETCHED PHOTO");
                 const blob = await response.blob();
                 const reader = new FileReader();
-                reader.onload = function() {
+                reader.onload = function () {
                     localStorage.setItem("pdata", reader.result);
                     const avatarSpan = document.createElement('span');
                     avatarSpan.className = 'avatar avatar-sm';
@@ -59,9 +70,57 @@ async function setProfilePicture() {
     }
 }
 
+function orgHandler() {
+    socket.emit("stm", localStorage.getItem("auth"), (response) => {
+        // If response is not null
+        if (response) {
+            // Create a card for each subteam member. response is an array of user objects.
+            // Insert HTML AFTER the element "aHead"
+            let html = "";
+            let i = 0;
+            response.forEach((user) => {
+                html += ```
+                <div class="col-md-6 col-lg-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">${user.name}</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="btn-group w-100" role="group">
+                                        <input type="radio" class="btn-check" name="btg-${i}" id="btg-${i}-1"
+                                            autocomplete="off" checked>
+                                        <label for="btg-${i}-1" type="button" class="btn"><svg
+                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M18 6l-12 12" />
+                                                <path d="M6 6l12 12" />
+                                            </svg></label>
+                                        <input type="radio" class="btn-check" name="btg-${i}" id="btg-${i}-2"
+                                            autocomplete="off">
+                                        <label for="btg-${i}-2" type="button" class="btn">Arriving</label>
+                                        <input type="radio" class="btn-check" name="btg-${i}" id="btg-${i}-3"
+                                            autocomplete="off">
+                                        <label for="btg-${i}-3" type="button" class="btn">Leaving</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>```
+            i++;
+            });
+            document.getElementById('aHead').insertAdjacentHTML('afterend', html);
+
+        } else {
+            // Set the profile subteam to "Undeclared"
+            document.getElementById('user-subteam').innerText = "Undeclared";
+        }
+    });
+}
 
 function main() {
-    
+
     setProfilePicture();
 
     // If localstorage "name" is set
@@ -82,6 +141,7 @@ function main() {
             // Set the profile subteam to "Undeclared"
             document.getElementById('user-subteam').innerText = "Undeclared";
         }
+        orgHandler();
     });
 }
 

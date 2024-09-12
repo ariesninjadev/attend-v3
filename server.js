@@ -290,6 +290,26 @@ try {
             }
         });
 
+        socket.on("stm", (email, callback) => {
+            try {
+                db.subteamMaster(email)
+                    .then((data) => {
+                        callback(data);
+                    })
+                    .catch((err) => {
+                        callback({
+                            status: "error",
+                            data: err,
+                        });
+                    });
+            } catch (err) {
+                callback({
+                    status: "error",
+                    data: err,
+                });
+            }
+        });
+
         socket.on("findUsers", (content, callback) => {
             try {
                 db.findUsersViaSearch(content)
