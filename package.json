@@ -22,5 +22,6 @@
   "bugs": {
     "url": "https://github.com/JesuitRobotics2374/attend-v2/issues"
   },
-  "homepage": "https://github.com/JesuitRobotics2374/attend-v2#readme"
+  "homepage": "https://github.com/JesuitRobotics2374/attend-v2#readme",
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }
