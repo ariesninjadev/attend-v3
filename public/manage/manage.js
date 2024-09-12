@@ -21,6 +21,14 @@ window.onbeforeunload = function (e) {
     localStorage.setItem('scrollpos', window.scrollY);
 };
 
+const tDate = document.getElementById('tDate');
+tDate.innerText = new Date().toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric'
+});
+
+
 if (localStorage.getItem("subteam")) {
     document.getElementById('user-subteam').innerText = localStorage.getItem("subteam");
 }
@@ -79,14 +87,14 @@ function orgHandler() {
             let html = "";
             let i = 0;
             response.forEach((user) => {
-                html += ```
+                html += `
                 <div class="col-md-6 col-lg-4">
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">${user.name}</h3>
                                 </div>
                                 <div class="card-body">
-                                    <div class="btn-group w-100" role="group">
+                                    <div class="btn-group w-100 userData" role="group" data-email="${user.id}">
                                         <input type="radio" class="btn-check" name="btg-${i}" id="btg-${i}-1"
                                             autocomplete="off" checked>
                                         <label for="btg-${i}-1" type="button" class="btn"><svg
@@ -107,10 +115,12 @@ function orgHandler() {
                                     </div>
                                 </div>
                             </div>
-                        </div>```
-            i++;
+                        </div>`
+                i++;
             });
             document.getElementById('aHead').insertAdjacentHTML('afterend', html);
+            document.getElementById('self-name').innerText = localStorage.getItem("name");
+            document.getElementById('self-email').setAttribute('data-email', localStorage.getItem("auth"));
 
         } else {
             // Set the profile subteam to "Undeclared"

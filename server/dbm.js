@@ -589,6 +589,20 @@ async function removeAllRecords() {
     }
 }
 
+// Delete all user documents
+async function removeAllUsers() {
+    try {
+        const result = await User.deleteMany({});
+        return "success";
+    }
+    catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
+// removeAllUsers(); // Uncomment when you want to destroy everything!!! heheheha
+
 async function removeRecordById(userId) {
     try {
         const result = await User.updateOne(

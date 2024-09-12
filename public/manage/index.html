@@ -463,11 +463,11 @@
                             </div>
                         </div>
                         <hr>
-                        <h3 id="aHead" class="card-title">Take Attendance for <span>September 11th, 2024</span>.</h3>
+                        <h3 class="card-title">Take Attendance for <span id="tDate"></span>.</h3>
 
-                        <div class="col-md-6 col-lg-4">
+                        <div id="aHead" class="col-md-6 col-lg-4">
                             <div class="card">
-                                <div class="ribbon ribbon-top bg-yellow">
+                                <div class="ribbon ribbon-top bg-green">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/star -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user"
                                         width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff"
@@ -479,13 +479,13 @@
                                 </div>
 
                                 <div class="card-header">
-                                    <h3 class="card-title">Aries Powvalla (You)</h3>
+                                    <h3 class="card-title"><span id="self-name"></span> (You)</h3>
                                 </div>
                                 <div class="card-body">
-                                    <div class="btn-group w-100" role="group">
-                                        <input type="radio" class="btn-check" name="btg-1" id="btg-1-1"
+                                    <div class="btn-group w-100 userData" role="group" id="self-email">
+                                        <input type="radio" class="btn-check" name="btg-self" id="btg-self-1"
                                             autocomplete="off" checked>
-                                        <label for="btg-1-1" type="button" class="btn"><svg
+                                        <label for="btg-self-1" type="button" class="btn"><svg
                                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                                 stroke-linecap="round" stroke-linejoin="round"
@@ -494,70 +494,12 @@
                                                 <path d="M18 6l-12 12" />
                                                 <path d="M6 6l12 12" />
                                             </svg></label>
-                                        <input type="radio" class="btn-check" name="btg-1" id="btg-1-2"
+                                        <input type="radio" class="btn-check" name="btg-self" id="btg-self-2"
                                             autocomplete="off">
-                                        <label for="btg-1-2" type="button" class="btn">Arriving</label>
-                                        <input type="radio" class="btn-check" name="btg-1" id="btg-1-3"
+                                        <label for="btg-self-2" type="button" class="btn">Arriving</label>
+                                        <input type="radio" class="btn-check" name="btg-self" id="btg-self-3"
                                             autocomplete="off">
-                                        <label for="btg-1-3" type="button" class="btn">Leaving</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-lg-4">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title">Test User 0</h3>
-                                </div>
-                                <div class="card-body">
-                                    <div class="btn-group w-100" role="group">
-                                        <input type="radio" class="btn-check" name="btg-2" id="btg-2-1"
-                                            autocomplete="off" checked>
-                                        <label for="btg-2-1" type="button" class="btn"><svg
-                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round"
-                                                class="icon icon-tabler icons-tabler-outline icon-tabler-x">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                <path d="M18 6l-12 12" />
-                                                <path d="M6 6l12 12" />
-                                            </svg></label>
-                                        <input type="radio" class="btn-check" name="btg-2" id="btg-2-2"
-                                            autocomplete="off">
-                                        <label for="btg-2-2" type="button" class="btn">Arriving</label>
-                                        <input type="radio" class="btn-check" name="btg-2" id="btg-2-3"
-                                            autocomplete="off">
-                                        <label for="btg-2-3" type="button" class="btn">Leaving</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-lg-4">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title">Test User 0</h3>
-                                </div>
-                                <div class="card-body">
-                                    <div class="btn-group w-100" role="group">
-                                        <input type="radio" class="btn-check" name="btg-2" id="btg-2-1"
-                                            autocomplete="off" checked>
-                                        <label for="btg-2-1" type="button" class="btn"><svg
-                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round"
-                                                class="icon icon-tabler icons-tabler-outline icon-tabler-x">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                <path d="M18 6l-12 12" />
-                                                <path d="M6 6l12 12" />
-                                            </svg></label>
-                                        <input type="radio" class="btn-check" name="btg-2" id="btg-2-2"
-                                            autocomplete="off">
-                                        <label for="btg-2-2" type="button" class="btn">Arriving</label>
-                                        <input type="radio" class="btn-check" name="btg-2" id="btg-2-3"
-                                            autocomplete="off">
-                                        <label for="btg-2-3" type="button" class="btn">Leaving</label>
+                                        <label for="btg-self-3" type="button" class="btn">Leaving</label>
                                     </div>
                                 </div>
                             </div>

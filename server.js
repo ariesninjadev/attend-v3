@@ -153,7 +153,7 @@ try {
                     console.log("No graduation year found in the email");
                     return false;
                 }
-                db.registerUser(email, name, gradYear, version, subgroup).then((data) => {
+                db.registerUser(email, name, gradYear, popupVersion, subgroup).then((data) => {
                     callback({
                         status: "ok",
                         data: data,
