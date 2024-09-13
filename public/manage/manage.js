@@ -119,7 +119,7 @@ function orgHandler() {
 
             console.log(response.data);
 
-            if (!response.m) {
+            if (response.m) {
                 document.getElementById('submit-warn').style.display = "none";
                 isMeeting = true;
             }
