@@ -46,7 +46,19 @@ record: {
         },
 so lets make a function that checks if a user is logged in by checking if the user's latest record only has a start time and no end time
 */
-
+function isLoggedIn(user) {
+    const record = user.record;
+    if (record.length > 0) {
+        const latestRecord = record[record.length - 1];
+        if (latestRecord.end) {
+            return false;
+        } else {
+            return true;
+        }
+    } else {
+        return false;
+    }
+}
 
 function generateProfilePicture(firstName) {
     const firstLetter = firstName.charAt(0).toUpperCase();
@@ -100,11 +112,19 @@ function orgHandler() {
             let html = "";
             let i = 0;
             response.forEach((user) => {
+                let status = "";
+                let l = isLoggedIn(user);
+                if (i==0) {
+                    status += "(You) ";
+                }
+                if (l) {
+                    status += "<span class='badge bg-primary text-green-fg ms-2'>Present</span>";
+                }
                 html += `
                 <div class="col-md-6 col-lg-4">
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">${user.name}</h3>
+                                    <h3 class="card-title">${user.name} ${status}</h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="btn-group w-100 userData" role="group" data-email="${user.id}">
@@ -120,10 +140,10 @@ function orgHandler() {
                                                 <path d="M6 6l12 12" />
                                             </svg></label>
                                         <input type="radio" class="btn-check" name="btg-${i}" id="btg-${i}-2"
-                                            autocomplete="off">
+                                            autocomplete="off" ${l ? "disabled" : ""}>
                                         <label for="btg-${i}-2" type="button" class="btn">Arriving</label>
                                         <input type="radio" class="btn-check" name="btg-${i}" id="btg-${i}-3"
-                                            autocomplete="off">
+                                            autocomplete="off" ${!l ? "disabled" : ""}>
                                         <label for="btg-${i}-3" type="button" class="btn">Leaving</label>
                                     </div>
                                 </div>

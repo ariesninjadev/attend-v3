@@ -806,6 +806,12 @@ async function subteamMaster(id) {
         const result = await Subgroups.findOne({ owner: id });
         if (!result) return false;
         const members = await User.find({ subgroup: result.id });
+        // Remove the requesting user from the array
+        const index = members.findIndex((member) => member.id === id);
+        members.splice(index, 1);
+        // Finally, get the requesting users' data and then add it to the beginning of the array.
+        const user = await User.findOne({ id: id });
+        members.unshift(user);
         return members;
     } catch (err) {
         console.error(err);
