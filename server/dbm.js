@@ -73,6 +73,8 @@ const userSchema = new mongoose.Schema(
                 {
                     start: { type: Date, required: true },
                     end: { type: Date, required: false },
+                    verified: { type: Boolean, required: false },
+                    issuer: { type: String, required: false },
                 },
             ],
             required: false,
@@ -189,9 +191,8 @@ const submissionsSchema = new mongoose.Schema(
         data: {
             type: [
                 {
-                    time: { type: Date, required: true },
-                    in: { type: Boolean, required: true },
                     id: { type: String, required: true },
+                    status: { type: Number, required: true },
                 },
             ],
             required: true,
@@ -316,19 +317,6 @@ async function createSubmission(id, owner, type, time, adminNotes, data) {
             data: data,
         });
         newSubmission.save();
-        // Post a time record for each user in the data array
-        for (let i = 0; i < data.length; i++) {
-            const user = await User.findOne({ id: data[i].id });
-            const insertIndex = checkAndInsert(user.record, new Date(data[i].time), new Date(data[i].time));
-            if (insertIndex >= 0) {
-                user.record.splice(insertIndex, 0, {
-                    start: new Date(data[i].time),
-                    end: new Date(data[i].time),
-                });
-            }
-            user.hours = calculateTotalHours(user.record);
-            await user.save();
-        }
         return true;
     } catch (err) {
         console.error(err);
@@ -381,7 +369,7 @@ async function signOutAllUsers(time) {
     }
 }
 
-async function postTime(id, time, type) {
+async function postTime(id, time, type, admin) {
     // TYPE: true = start, false = end
     //console.log(time);
     try {
@@ -397,7 +385,7 @@ async function postTime(id, time, type) {
                 { id: id },
                 {
                     $push: {
-                        record: { start: time },
+                        record: { start: time, issuer: admin },
                     },
                 }
             );
@@ -448,9 +436,16 @@ async function retrieve(id) {
 // Check if the user id is an admin by checking if they are marked as such in the subgroups collection
 async function isAdmin(id) {
     try {
+        // Is the user a lead or vice?
         const result = await Subgroups.findOne({ owner: id });
-        if (!result) return false;
-        return true;
+        if (result) {
+            return true;
+        }
+        const result2 = await Subgroups.findOne({ vice: id });
+        if (result2) {
+            return true;
+        }
+        return false;
     } catch (err) {
         console.error(err);
         return false;
@@ -823,6 +818,42 @@ async function subteamMaster(id) {
     }
 }
 
+async function massSubmit(email, users) {
+    // Check that the email provided is a lead or vice
+    const user = await Subgroups.findOne({ owner: email });
+    if (!user) {
+        return false;
+    }
+    // users is an array of objects, each object containing the user's id and the "status". 0 for ignore, 1 for in, 2 for out.
+    // Iterate through each user in the array
+    for (let i = 0; i < users.length; i++) {
+        // If the status is 0, skip this user
+        if (users[i].status == 0) {
+            continue;
+        }
+        // Find the user in the database
+        const user = await User.findOne({ id: users[i].id });
+        // If the user is not found, skip this user
+        if (!user) {
+            console.log("User not found: " + users[i].id);
+            continue;
+        }
+        // Get the current time
+        const time = new Date();
+        
+        // Perform the action using postTime
+        const result = await postTime(users[i].id, time, users[i].status == 1, email);
+        // If the action was successful, log it
+        if (result[0] != "success") {
+            console.log("Failure: " + users[i].id);
+        }
+    }
+    // Create a submission
+    const time = new Date();
+    createSubmission(Date.now(), email, "mass", time, "N/A", users);
+    return true;
+}
+
 console.log("Thread > DB Connected on MAIN");
 
 module.exports = {
@@ -851,4 +882,5 @@ module.exports = {
     flagMissingDesc,
     getSubteam,
     subteamMaster,
+    massSubmit,
 };

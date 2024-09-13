@@ -310,6 +310,28 @@ try {
             }
         });
 
+        socket.on("massSubmit", (email, users, callback) => {
+            try {
+                db.massSubmit(email, users)
+                    .then((data) => {
+                        callback({
+                            status: data,
+                        });
+                    })
+                    .catch((err) => {
+                        callback({
+                            status: "error",
+                            data: err,
+                        });
+                    });
+            } catch (err) {
+                callback({
+                    status: "error",
+                    data: err,
+                });
+            }
+        });
+
         socket.on("findUsers", (content, callback) => {
             try {
                 db.findUsersViaSearch(content)
@@ -383,7 +405,7 @@ try {
                 }
                 var dateObject = new Date(pstDateString);
                 var finalTime = dateObject.getTime();
-                db.postTime(email, finalTime, true)
+                db.postTime(email, finalTime, true, "None")
                     .then((r) => {
                         callback({
                             status: r[0],
@@ -414,7 +436,7 @@ try {
                     });
                     return false;
                 }
-                db.postTime(email, Date.now(), false)
+                db.postTime(email, Date.now(), false, "None")
                     .then((r) => {
                         callback({
                             status: r[0],

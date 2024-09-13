@@ -18,7 +18,7 @@ const intID = setInterval(() => {
 }, 1000);
 
 if (
-    !location.host == "2374-a.com"
+    location.host == "2374-a.com"
 ) {
     const url = `https://${location.host}`;
     location.replace(url);

@@ -11,6 +11,8 @@ if (!referrer.includes("router")) {
     location.replace("/router");
 }
 
+var isMeeting = false;
+
 document.addEventListener("DOMContentLoaded", function (event) {
     var scrollpos = localStorage.getItem('scrollpos');
     if (scrollpos) window.scrollTo(0, scrollpos);
@@ -102,6 +104,14 @@ async function setProfilePicture() {
     }
 }
 
+function radioDidSelectAction(id) {
+    // Get last char of id and convert to int
+    let i = parseInt(id.slice(-1));
+    return (i != 1);
+}
+
+var actionsSum = 0;
+
 function orgHandler() {
     socket.emit("stm", localStorage.getItem("auth"), (response) => {
         // If response is not null
@@ -109,8 +119,9 @@ function orgHandler() {
 
             console.log(response.data);
 
-            if (response.m) {
-                document.getElementById('submit-btn').disabled = false;
+            if (!response.m) {
+                document.getElementById('submit-warn').style.display = "none";
+                isMeeting = true;
             }
 
             // Create a card for each subteam member. response is an array of user objects.
@@ -176,9 +187,50 @@ function orgHandler() {
             });
             document.getElementById('aHead').insertAdjacentHTML('afterend', html);
 
+            // Select all radio input elements
+            const radioButtons = document.querySelectorAll('input[type="radio"]');
+
+            // Iterate over the NodeList and attach an event listener to each radio button
+            radioButtons.forEach(radioButton => {
+                radioButton.addEventListener('change', function (event) {
+                    // console.log('Radio button selected:', event.target.id);
+                    if (radioDidSelectAction(event.target.id)) {
+                        actionsSum++;
+                    } else {
+                        actionsSum--;
+                    }
+                    if (actionsSum > 0) {
+                        document.getElementById('submit-btn').disabled = false;
+                    } else {
+                        document.getElementById('submit-btn').disabled = true;   
+                    }
+                });
+            });
+
         } else {
             // Set the profile subteam to "Undeclared"
             document.getElementById('user-subteam').innerText = "Undeclared";
+        }
+    });
+}
+
+function passSubmit() {
+    let data = [];
+    let i = 0;
+    document.querySelectorAll('.userData').forEach((e) => {
+        let email = e.getAttribute('data-email');
+        let status = 0;
+        if (document.getElementById(`btg-${i}-2`).checked) {
+            status = 1;
+        } else if (document.getElementById(`btg-${i}-3`).checked) {
+            status = 2;
+        }
+        data.push({ id: email, status: status });
+        i++;
+    });
+    socket.emit("massSubmit", localStorage.getItem("auth"), data, (response) => {
+        if (response) {
+            location.replace("/router");
         }
     });
 }
