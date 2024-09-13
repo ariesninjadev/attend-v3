@@ -814,7 +814,7 @@ async function subteamMaster(id) {
         members.splice(members.indexOf(vice), 1);
         members.unshift(leader);
         members.splice(1, 0, vice);
-
+        
 
         return members;
     } catch (err) {
