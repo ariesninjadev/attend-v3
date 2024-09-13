@@ -294,7 +294,7 @@ try {
             try {
                 db.subteamMaster(email)
                     .then((data) => {
-                        callback(data);
+                        callback({data,m:meetingActive});
                     })
                     .catch((err) => {
                         callback({

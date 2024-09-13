@@ -293,7 +293,8 @@
                                     <h3 class="card-title">Won't be here today?</h3>
                                     <p class="text-secondary">Please plan to hand over your attendance responsibility to
                                         the vice-lead of your subteam when you won't be present at a meeting. Failure to
-                                        do so could result in lost records.</p>
+                                        do so could result in lost records. Vice-leads always have access to the
+                                        attendance, but be sure to alert them ahead of time.</p>
                                     <span class="d-none d-sm-inline">
                                         <a href="/requests" class="btn btn-primary">
                                             <svg xmlns="http://www.w3.org/2000/svg"
@@ -304,7 +305,7 @@
                                                 <path d="M4 18v-6a3 3 0 0 1 3 -3h7" />
                                                 <path d="M10 13l4 -4l-4 -4m5 8l4 -4l-4 -4" />
                                             </svg>
-                                            Handoff to Vice-Lead (1 day)
+                                            Email your Vice-lead
                                         </a>
                                     </span>
                                 </div>
@@ -506,7 +507,7 @@
  -->
 
 
-                        <button class="btn btn-primary" style="margin-top:20px;"><svg xmlns="http://www.w3.org/2000/svg"
+                        <button disabled id="submit-btn" class="btn btn-primary" style="margin-top:20px;"><svg xmlns="http://www.w3.org/2000/svg"
                                 width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                 class="icon icon-tabler icons-tabler-outline icon-tabler-mail-forward">
@@ -516,6 +517,7 @@
                                 <path d="M15 18h6" />
                                 <path d="M18 15l3 3l-3 3" />
                             </svg>Submit Attendance</button>
+                            <p style="text-align:center;color:red;">There is no meeting currently active.</p>
                         <hr>
                         <div class="col-12">
                             <div class="card">

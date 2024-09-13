@@ -7,7 +7,6 @@ window.addEventListener('pageshow', function (event) {
     }
 });
 let referrer = document.referrer;
-console.log(referrer);
 if (!referrer.includes("router")) {
     location.replace("/router");
 }
@@ -107,15 +106,38 @@ function orgHandler() {
     socket.emit("stm", localStorage.getItem("auth"), (response) => {
         // If response is not null
         if (response) {
+
+            console.log(response.data);
+
+            if (response.m) {
+                document.getElementById('submit-btn').disabled = false;
+            }
+
             // Create a card for each subteam member. response is an array of user objects.
             // Insert HTML AFTER the element "aHead"
             let html = "";
             let i = 0;
-            response.forEach((user) => {
+            response.data.forEach((user) => {
                 let status = "";
                 let l = isLoggedIn(user);
-                if (i==0) {
+                let badge = "";
+                if (user.id == localStorage.getItem("auth")) {
                     status += "(You) ";
+                }
+                if (i == 0) {
+                    badge = `<div class="ribbon ribbon-top bg-red">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-crown" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M12 6l4 6l5 -4l-2 10h-14l-2 -10l5 4z" />
+</svg>
+                                </div>`;
+                } else if (i == 1) {
+                    badge = `<div class="ribbon ribbon-top bg-blue">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-number-2" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M8 8a4 4 0 1 1 8 0c0 1.098 -.564 2.025 -1.159 2.815l-6.841 9.185h8" />
+</svg>
+                                </div>`;
                 }
                 if (l) {
                     status += "<span class='badge bg-primary text-green-fg ms-2'>Present</span>";
@@ -123,6 +145,7 @@ function orgHandler() {
                 html += `
                 <div class="col-md-6 col-lg-4">
                             <div class="card">
+                                ${badge}
                                 <div class="card-header">
                                     <h3 class="card-title">${user.name} ${status}</h3>
                                 </div>
@@ -152,8 +175,6 @@ function orgHandler() {
                 i++;
             });
             document.getElementById('aHead').insertAdjacentHTML('afterend', html);
-            document.getElementById('self-name').innerText = localStorage.getItem("name");
-            document.getElementById('self-email').setAttribute('data-email', localStorage.getItem("auth"));
 
         } else {
             // Set the profile subteam to "Undeclared"
