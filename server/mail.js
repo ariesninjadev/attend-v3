@@ -725,7 +725,7 @@ async function sendAAlert(uemail, uname, udate) {
                                                 <h1
                                                   style="Margin:0;line-height:46px;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-size:38px;font-style:normal;font-weight:bold;color:#333333"
                                                   >
-                                                  Attendance Request
+                                                  Attendance Alert
                                                 </h1>
                                               </td>
                                             </tr>
@@ -744,26 +744,15 @@ async function sendAAlert(uemail, uname, udate) {
                                                 <p
                                                   style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px"
                                                   >
-                                                  Your request to ${ureason} was ${ustatus}.
-                                                </p>
-                                                <br /><br />
-                                                <p
-                                                  style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px"
-                                                  >
-                                                  Date: ${udate}
+                                                  The lead of your subteam won't be present today. If you will be present, you are expected to manage your subteam's attendance for the day. If you won't make it, it's your responsibility to contact Coach White and Alia so they can handle your subteam's attendance.
                                                 </p>
                                                 <br />
                                                 <p
                                                   style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px"
                                                   >
-                                                  <strong>Hours Granted: ${uhours}</strong>
+                                                  <strong>Date: ${udate}</strong>
                                                 </p>
-                                                <br /><br />
-                                                <p
-                                                  style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px"
-                                                  >
-                                                  ${udata}
-                                                </p>
+                                       
                                               </td>
                                             </tr>
                                             <tr>
@@ -782,13 +771,13 @@ async function sendAAlert(uemail, uname, udate) {
                                                     style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#5C68E2;font-size:14px"
                                                     >here</a
                                                     >
-                                                  to view your updated hours.
+                                                  to manage the attendance.
                                                 </p>
                                                 <br />
                                                 <p
                                                   style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:10px"
                                                   >
-                                                  Request ID: ${uid}
+                                                  Alert ID: ${uid}<br>This data is tracked! Please contact apowvalla26@jesuitmail.org if you have questions.
                                                 </p>
                                               </td>
                                             </tr>
@@ -849,7 +838,7 @@ async function sendAAlert(uemail, uname, udate) {
                                                 <p
                                                   style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:18px;color:#333333;font-size:12px"
                                                   >
-                                                  2024 © NJM Studios, Jesuit Robotics.
+                                                  ${year} © NJM, Jesuit Portland.
                                                 </p>
                                               </td>
                                             </tr>
@@ -935,4 +924,4 @@ async function sendAAlert(uemail, uname, udate) {
     return "success";
 }
 
-module.exports = { sendConfirmation };
+module.exports = { sendConfirmation, sendAAlert };
