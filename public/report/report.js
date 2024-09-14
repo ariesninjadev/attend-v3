@@ -8,7 +8,7 @@ if (
 }
 
 if (
-  localStorage.getItem("auth") == "aries.powvalla@gmail.com" ||
+  localStorage.getItem("auth") == "apowvalla26@jesuitmail.org" ||
   localStorage.getItem("auth") == "whitenj@gmail.com" ||
   localStorage.getItem("auth") == "pwhite@jesuitmail.org"
 ) {
@@ -82,7 +82,7 @@ function formatDate1(dateStringa, dateStringb) {
     return `<strong>${dayOfWeek} ${month}/${day}/${year} | ${hours}:${minutes} ${period} (SIGNED IN)</strong>`;
   }
 
-  const formattedDate = `${dayOfWeek} ${month}/${day}/${year} | ${hours}:${minutes} ${period} > ${hours2}:${minutes2} ${period2}`;
+  const formattedDate = `${dayOfWeek} ${month}/${day}/${year} from ${hours}:${minutes} ${period} to ${hours2}:${minutes2} ${period2}`;
 
   return formattedDate;
 }
@@ -129,6 +129,8 @@ socket.emit("findUsers", "#", (response) => {
     uData.forEach((s) => {
       var recd = "";
 
+      console.log(s.id);
+
       if (s.record === undefined || s.record.length == 0) {
         const textField = document.createElement("p");
         recd = "-";
@@ -141,9 +143,16 @@ socket.emit("findUsers", "#", (response) => {
         while (recd == "") {
           rtindex += 1;
           ritem = reversedData[rtindex];
+          console.log(ritem);
           const timeDifference = new Date(ritem.end) - new Date(ritem.start);
+          console.log(timeDifference);
           if (!(timeDifference > 0 && timeDifference <= 10 * 60 * 1000)) {
             recd = formatDate1(ritem.start, ritem.end);
+            console.log(recd);
+          }
+          // If we reach the end of the array and still haven't found a valid entry, set recd to "N/A"
+          if (rtindex === reversedData.length - 1 && recd == "") {
+            recd = "-";
           }
         }
       }

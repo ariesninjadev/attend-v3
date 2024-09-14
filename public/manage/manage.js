@@ -199,7 +199,7 @@ function orgHandler() {
                     } else {
                         actionsSum--;
                     }
-                    if (actionsSum > 0) {
+                    if (actionsSum > 0 && isMeeting) {
                         document.getElementById('submit-btn').disabled = false;
                     } else {
                         document.getElementById('submit-btn').disabled = true;   
