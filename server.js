@@ -332,6 +332,38 @@ try {
             }
         });
 
+        socket.on("sendAlert", (email, callback) => {
+            try {
+                db.sendAlert(email)
+                    .then((data) => {
+                        mail.sendAAlert(data.email, data.name)
+                            .then((data) => {
+                                callback({
+                                    status: data,
+                                });
+                            })
+                            .catch((err) => {
+                                callback({
+                                    status: "error",
+                                    data: err,
+                                });
+                                console.error(err);
+                            });
+                    })
+                    .catch((err) => {
+                        callback({
+                            status: "error",
+                            data: err,
+                        });
+                    });
+            } catch (err) {
+                callback({
+                    status: "error",
+                    data: err,
+                });
+            }
+        });
+
         socket.on("findUsers", (content, callback) => {
             try {
                 db.findUsersViaSearch(content)

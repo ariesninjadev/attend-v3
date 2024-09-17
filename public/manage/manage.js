@@ -18,6 +18,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
     if (scrollpos) window.scrollTo(0, scrollpos);
 });
 
+if (localStorage.getItem("alert") != null) {
+    alertify.success(localStorage.getItem("alert"));
+    localStorage.removeItem("alert");
+}
+
 window.onbeforeunload = function (e) {
     localStorage.setItem('scrollpos', window.scrollY);
 };
@@ -274,3 +279,12 @@ function performChecks() {
 }
 
 performChecks();
+
+function sendAlert() {
+    socket.emit("sendAlert", localStorage.getItem("auth"), (response) => {
+        if (response) {
+            localStorage.setItem("alert", "Alert sent!");
+            location.replace("/router");
+        }
+    });
+}

@@ -854,6 +854,19 @@ async function massSubmit(email, users) {
     return true;
 }
 
+async function sendAlert(email) {
+    const user = await User.findOne({ id: email });
+    // Check if the user is a subteam lead
+    const subteam = await Subgroups.findOne({ owner: email });
+    if (!subteam) {
+        return false;
+    }
+    // Get the subteam vice
+    const vice = await User.findOne({ id: subteam.vice });
+    // Return the vice's email and name
+    return { email: vice.id, name: vice.name };
+}
+
 console.log("Thread > DB Connected on MAIN");
 
 module.exports = {
@@ -883,4 +896,5 @@ module.exports = {
     getSubteam,
     subteamMaster,
     massSubmit,
+    sendAlert,
 };

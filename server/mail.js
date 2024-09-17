@@ -5,9 +5,9 @@ const from = "2374 Request <pings@theklay.xyz>";
 
 async function sendConfirmation(uemail, uname, ureason, ustatus, udate, uhours, udata, uid) {
 
-  if (ustatus == "DONOTSEND") {
-    return "success";
-  }
+    if (ustatus == "DONOTSEND") {
+        return "success";
+    }
 
     // if (utype == "1") {
     //     var type = "Bug/Issue";
@@ -470,24 +470,22 @@ async function sendConfirmation(uemail, uname, ureason, ustatus, udate, uhours, 
     return "success";
 }
 
-async function sendAAlert(uemail, uname, udate) {
+async function sendAAlert(uemail, uname) {
 
-  var uid = Math.floor(Math.random() * 1000000);
+    // Generate a UID from 111111 to 999999
+    const uid = Math.floor(Math.random() * 999999) + 111111;
 
-    // if (utype == "1") {
-    //     var type = "Bug/Issue";
-    //     var data = `Description: ${udesc}<br>Date: ${udesc2}`;
-    // } else if (utype == "2") {
-    //     var type = "Forgot to log";
-    //     if (udesc == "in") {
-    //       var data = `In/Out: ${udesc}<br>Date: ${udesc2}<br>Time In: ${udesc3}<br>Time Out: ${udesc4}`;
-    //     } else {
-    //       var data = `In/Out: ${udesc}<br>Date: ${udesc2}<br>Time Out: ${udesc4}`;
-    //     }
-    // } else if (utype == "3") {
-    //     var type = "Stayed Late";
-    //     var data = `Description: ${udesc}<br>Date: ${udesc2}<br>Time Out: ${udesc3}`;
-    // }
+    // Write the data to mailLogger.txt
+    fs.appendFileSync(
+        "mailLogger.txt",
+        `Vice advisory sent to ${uemail} at ${new Date().toLocaleString()} with UID ${uid}\n`
+    );
+
+    // Set year
+    var year = new Date().getFullYear();
+
+    // Get the date in a human readable format
+    var date = new Date().toLocaleString();
 
     // Ask for email address
     const to = uemail;
