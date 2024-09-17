@@ -800,7 +800,7 @@ async function subteamMaster(id) {
     try {
         const result = await Subgroups.findOne({ owner: id });
         if (!result) return false;
-        const members = await User.find({ subgroup: result.id });
+        var members = await User.find({ subgroup: result.id });
         
         // Move the leader to the front of the array, and the vice to 2nd.
         const leader = members.find((member) => member.id === result.owner);
@@ -809,7 +809,11 @@ async function subteamMaster(id) {
         members.splice(members.indexOf(vice), 1);
         members.unshift(leader);
         members.splice(1, 0, vice);
-        
+
+        // Remove null elements
+        members = members.filter((member) => member !== undefined);
+
+        console.log(members);
 
         return members;
     } catch (err) {

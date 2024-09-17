@@ -70,7 +70,7 @@ function performChecks() {
             location.replace("/dash");
         } else if (response.status == "admin") {
             syserror("Attendance tracking will begin on Thursday, September 18th.");
-            // location.replace("/manage");
+            location.replace("/manage");
         } else if (response.status == "networkAdmin") {
             if (localStorage.getItem("auth") == "apowvalla26@jesuitmail.org") {
                 location.replace("/manage");
