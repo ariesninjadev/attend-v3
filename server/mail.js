@@ -1,7 +1,8 @@
 const nodemailer = require("nodemailer");
+const fs = require("fs");
 
 // Email address that sends the emails
-const from = "2374 Request <pings@theklay.xyz>";
+const from = "Team 2374 <no-reply@klay.lol>";
 
 async function sendConfirmation(uemail, uname, ureason, ustatus, udate, uhours, udata, uid) {
 
@@ -33,7 +34,7 @@ async function sendConfirmation(uemail, uname, ureason, ustatus, udate, uhours, 
         port: 587,
         auth: {
             user: "aries.powvalla@gmail.com",
-            pass: "dsdd unug hegb lzuv",
+            pass: "nmet eapc pfdh cmld",
         },
     });
 
@@ -485,7 +486,7 @@ async function sendAAlert(uemail, uname) {
     var year = new Date().getFullYear();
 
     // Get the date in a human readable format
-    var date = new Date().toLocaleString();
+    var udate = new Date().toLocaleString();
 
     // Ask for email address
     const to = uemail;
@@ -496,7 +497,7 @@ async function sendAAlert(uemail, uname) {
         port: 587,
         auth: {
             user: "aries.powvalla@gmail.com",
-            pass: "dsdd unug hegb lzuv",
+            pass: "nmet eapc pfdh cmld",
         },
     });
 
@@ -505,7 +506,7 @@ async function sendAAlert(uemail, uname) {
         {
             from,
             to,
-            subject: "[2374R-AR] Attendance Request",
+            subject: "[Robotics] Attendance Notice",
             html: `
             <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
             <html
@@ -916,9 +917,11 @@ async function sendAAlert(uemail, uname) {
        `,
         },
         (err, data) => {
+            console.log(err);
             return err;
         }
     );
+    console.log("success");
     return "success";
 }
 

@@ -117,6 +117,14 @@ function radioDidSelectAction(id) {
 
 var actionsSum = 0;
 
+function copyEmail(email) {
+    navigator.clipboard.writeText(email).then(function () {
+        alertify.success('Email copied to clipboard');
+    }, function (err) {
+        console.error('Error copying email to clipboard:', err);
+    });
+}
+
 function orgHandler() {
     socket.emit("stm", localStorage.getItem("auth"), (response) => {
         // If response is not null
@@ -162,10 +170,11 @@ function orgHandler() {
                 <div class="col-md-6 col-lg-4">
                             <div class="card">
                                 ${badge}
-                                <div class="card-header">
-                                    <h3 class="card-title">${user.name} ${status}</h3>
-                                </div>
+                               
                                 <div class="card-body">
+                                <h3 class="card-title">${user.name} ${status}</h3>
+                                    <p class="card-subtitle"><a onclick="copyEmail('${user.id}')" href="#" style="color:gray;"><svg style="margin-right:4px;" xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg>
+                                    ${user.id}</a></p>
                                     <div class="btn-group w-100 userData" role="group" data-email="${user.id}">
                                         <input type="radio" class="btn-check" name="btg-${i}" id="btg-${i}-1"
                                             autocomplete="off" checked>
@@ -207,7 +216,7 @@ function orgHandler() {
                     if (actionsSum > 0 && isMeeting) {
                         document.getElementById('submit-btn').disabled = false;
                     } else {
-                        document.getElementById('submit-btn').disabled = true;   
+                        document.getElementById('submit-btn').disabled = true;
                     }
                 });
             });

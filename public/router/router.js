@@ -69,7 +69,8 @@ function performChecks() {
         } else if (response.status == "user") {
             location.replace("/dash");
         } else if (response.status == "admin") {
-            location.replace("/manage");
+            syserror("Attendance tracking will begin on Thursday, September 18th.");
+            // location.replace("/manage");
         } else if (response.status == "networkAdmin") {
             if (localStorage.getItem("auth") == "apowvalla26@jesuitmail.org") {
                 location.replace("/manage");
@@ -87,4 +88,4 @@ function performChecks() {
 
 setTimeout(() => {
     performChecks();
-}, 1);
+}, 1000);

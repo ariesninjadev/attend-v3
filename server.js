@@ -131,7 +131,6 @@ try {
         return Math.abs(dateA - dateB) <= 900000;
     }
 
-    /// ----------------------------------- ///
 
     app.get("*", function (req, res) {
         res.status(404).sendFile(__dirname + "/public/404/index.html");
