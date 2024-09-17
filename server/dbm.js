@@ -436,6 +436,10 @@ async function retrieve(id) {
 // Check if the user id is an admin by checking if they are marked as such in the subgroups collection
 async function isAdmin(id) {
     try {
+        const requester = await User.findOne({ id: id });
+        if (requester.subgroup == "management") {
+            return true;
+        }
         // Is the user a lead or vice?
         const result = await Subgroups.findOne({ owner: id });
         if (result) {
@@ -798,24 +802,44 @@ async function subteamMaster(id) {
     // Check if the user is a subteam leader. If they are, return each member.
     // If they are not, return false.
     try {
-        const result = await Subgroups.findOne({ owner: id });
-        if (!result) return false;
-        var members = await User.find({ subgroup: result.id });
-        
-        // Move the leader to the front of the array, and the vice to 2nd.
-        const leader = members.find((member) => member.id === result.owner);
-        const vice = members.find((member) => member.id === result.vice);
-        members.splice(members.indexOf(leader), 1);
-        members.splice(members.indexOf(vice), 1);
-        members.unshift(leader);
-        members.splice(1, 0, vice);
 
-        // Remove null elements
-        members = members.filter((member) => member !== undefined);
+        const result = await Subgroups.findOne({ owner: id });
+        const requester = await User.findOne({ id: id });
+
+        if (requester.subgroup == "management") {
+            // Return ALL users
+            var members = await User.find({});
+
+            // Move the leader to the front of the array, and the vice to 2nd.
+            const leader = members.find((member) => member.id === "iveloso25@jesuitmail.org");
+            const vice = members.find((member) => member.id === "");
+            members.splice(members.indexOf(leader), 1);
+            members.splice(members.indexOf(vice), 1);
+            members.unshift(leader);
+            members.splice(1, 0, vice);
+        } else {
+
+            if (!result) return false;
+
+            var members = await User.find({ subgroup: result.id });
+
+            // Move the leader to the front of the array, and the vice to 2nd.
+            const leader = members.find((member) => member.id === result.owner);
+            const vice = members.find((member) => member.id === result.vice);
+            members.splice(members.indexOf(leader), 1);
+            members.splice(members.indexOf(vice), 1);
+            members.unshift(leader);
+            members.splice(1, 0, vice);
+
+            // Remove null elements
+            members = members.filter((member) => member !== undefined);
+
+        }
 
         console.log(members);
 
         return members;
+
     } catch (err) {
         console.error(err);
         return false;
