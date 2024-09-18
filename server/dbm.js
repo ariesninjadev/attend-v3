@@ -806,6 +806,8 @@ async function subteamMaster(id) {
         const result = await Subgroups.findOne({ owner: id });
         const requester = await User.findOne({ id: id });
 
+        var hasVice = true;
+
         if (requester.subgroup == "management") {
             // Return ALL users
             var members = await User.find({});
@@ -831,14 +833,19 @@ async function subteamMaster(id) {
             members.unshift(leader);
             members.splice(1, 0, vice);
 
-            // Remove null elements
-            members = members.filter((member) => member !== undefined);
-
         }
+
+        // If the second element is undefined, it means there is no vice
+        if (members[1] === undefined) {
+            hasVice = false;
+        }
+
+        // Remove null elements
+        members = members.filter((member) => member !== undefined);
 
         console.log(members);
 
-        return members;
+        return { members, hasVice };
 
     } catch (err) {
         console.error(err);

@@ -141,7 +141,7 @@ function orgHandler() {
             // Insert HTML AFTER the element "aHead"
             let html = "";
             let i = 0;
-            response.data.forEach((user) => {
+            response.data.members.forEach((user) => {
                 let status = "";
                 let l = isLoggedIn(user);
                 let badge = "";
@@ -155,7 +155,7 @@ function orgHandler() {
   <path d="M12 6l4 6l5 -4l-2 10h-14l-2 -10l5 4z" />
 </svg>
                                 </div>`;
-                } else if (i == 1) {
+                } else if (i == 1 && response.data.hasVice) {
                     badge = `<div class="ribbon ribbon-top bg-blue">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-number-2" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
