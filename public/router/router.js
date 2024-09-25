@@ -20,7 +20,7 @@ const intID = setInterval(() => {
 if (
     location.host == "2374-a.com"
 ) {
-    const url = `https://${location.host}/${location.pathname.split("/")[1]}/${location.pathname.split("/")[1]}`;
+    const url = `https://${location.host}/${location.pathname.split("/")[1]}`;
     location.replace(url);
 }
 
