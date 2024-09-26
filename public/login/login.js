@@ -10,7 +10,7 @@ function googleLogin(s) {
 
     localStorage.setItem("auth", dc.email);
     localStorage.setItem("name", dc.name);
-    if (decodedToken.picture) {
+    if (dc.picture) {
         localStorage.setItem("picture", dc.picture);
     }
 
