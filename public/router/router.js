@@ -44,7 +44,7 @@ function syserror(msg) {
 
 function performChecks() {
     // If the email isnt an email from the org @jesuitmail.org, then display an error
-    if (!localStorage.getItem("auth").includes("@jesuitmail.org") {
+    if (!localStorage.getItem("auth").includes("@jesuitmail.org")) {
         syserror("You must use a Jesuit email to access the Robotics attendance utility. Reload the page to sign out.");
         // Sign out
         localStorage.removeItem("auth");
