@@ -1,13 +1,6 @@
 var socket = io();
 
 if (
-  !location.host == "2374.team"
-) {
-  const url = `https://${location.host}/${location.pathname.split("/")[1]}`;
-  location.replace(url);
-}
-
-if (
   localStorage.getItem("auth") == "apowvalla26@jesuitmail.org" ||
   localStorage.getItem("auth") == "whitenj@gmail.com" ||
   localStorage.getItem("auth") == "pwhite@jesuitmail.org"

@@ -5,13 +5,6 @@ vLetterTotal = 120;
 
 var socket = io();
 
-if (
-    !location.host == "2374.team"
-) {
-    const url = `https://${location.host}/${location.pathname.split("/")[1]}`;
-    location.replace(url);
-}
-
 // $(document).ready(function () {
 //   $(window).scroll(function () {
 //     var scrollPos = $(this).scrollTop();

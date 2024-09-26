@@ -17,12 +17,6 @@ const intID = setInterval(() => {
     }, 500);
 }, 1000);
 
-if (
-    location.host == "2374-a.com"
-) {
-    const url = `https://${location.host}/${location.pathname.split("/")[1]}`;
-    location.replace(url);
-}
 
 function isEmpty(obj) {
     for (const prop in obj) {
