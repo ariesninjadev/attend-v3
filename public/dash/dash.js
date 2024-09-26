@@ -1,16 +1,4 @@
-window.addEventListener('pageshow', function(event) {
-    if (event.persisted) {} else {
-        // This means the page was reloaded
-        if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
-            window.location.replace('/router');
-        }
-    }
-});
-let referrer = document.referrer;
-console.log(referrer);
-if (!referrer.includes("router")) {
-    location.replace("/router");
-}
+
 
 if (localStorage.getItem("subteam")) {
     document.getElementById('user-subteam').innerText = localStorage.getItem("subteam");

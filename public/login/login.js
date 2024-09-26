@@ -22,17 +22,3 @@ function testUser() {
     localStorage.setItem("name", "Aries Powvalla");
 }
 
-window.addEventListener('pageshow', function(event) {
-    if (event.persisted) {} else {
-        // This means the page was reloaded
-        if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
-            window.location.replace('/router');
-        }
-    }
-});
-
-let referrer = document.referrer;
-console.log(referrer);
-if (!referrer.includes("router")) {
-    location.replace("/router");
-}
