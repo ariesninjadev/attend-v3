@@ -843,7 +843,7 @@ async function subteamMaster(id) {
         // Remove null elements
         members = members.filter((member) => member !== undefined);
 
-        console.log(members);
+        //console.log(members);
 
         return { members, hasVice };
 
