@@ -17,7 +17,6 @@ const intID = setInterval(() => {
     }, 500);
 }, 1000);
 
-
 function isEmpty(obj) {
     for (const prop in obj) {
         if (Object.hasOwn(obj, prop)) {
@@ -44,6 +43,14 @@ function syserror(msg) {
 }
 
 function performChecks() {
+    // If the email isnt an email from the org @jesuitmail.org, then display an error
+    if (!localStorage.getItem("auth").includes("@jesuitmail.org") {
+        syserror("You must use a Jesuit email to access the Robotics attendance utility. Reload the page to sign out.");
+        // Sign out
+        localStorage.removeItem("auth");
+        localStorage.removeItem("name");
+        return false;
+    }
     socket.emit("dataRequest", localStorage.getItem("auth"), (response) => {
         console.log(response.status);
 
