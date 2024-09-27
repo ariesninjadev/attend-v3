@@ -863,7 +863,11 @@ async function massSubmit(email, users) {
     // Check that the email provided is a lead or vice
     const user = await Subgroups.findOne({ owner: email });
     if (!user) {
-        return false;
+        // Now check if they are management
+        const management = await User.findOne({ id: email });
+        if (management.subgroup != "management") {
+            return false;
+        }
     }
     // users is an array of objects, each object containing the user's id and the "status". 0 for ignore, 1 for in, 2 for out.
     // Iterate through each user in the array
