@@ -790,6 +790,12 @@ async function flagMissingDesc(email) {
 async function getSubteam(id) {
     try {
         const result = await Subgroups.findOne({ owner: id });
+        const requester = await User.findOne({ id: id });
+
+        if (requester.subgroup == "management") {
+            return "management";
+        }
+
         if (!result) return false;
         return result.id;
     } catch (err) {
