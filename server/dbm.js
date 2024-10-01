@@ -810,6 +810,7 @@ async function subteamMaster(id) {
     try {
 
         const result = await Subgroups.findOne({ owner: id });
+        const result2 = await Subgroups.findOne({ vice: id });
         const requester = await User.findOne({ id: id });
 
         var hasVice = true;
@@ -819,7 +820,7 @@ async function subteamMaster(id) {
             var members = await User.find({});
 
             // Move the leader to the front of the array, and the vice to 2nd.
-            const leader = members.find((member) => member.id === "iveloso25@jesuitmail.org");
+            const leader = members.find((member) => member.id === "ahuang26@jesuitmail.org");
             const vice = members.find((member) => member.id === "");
             members.splice(members.indexOf(leader), 1);
             members.splice(members.indexOf(vice), 1);
@@ -827,13 +828,21 @@ async function subteamMaster(id) {
             members.splice(1, 0, vice);
         } else {
 
-            if (!result) return false;
+            var comp;
 
-            var members = await User.find({ subgroup: result.id });
+            if (result) {
+                comp = result;
+            } else if (result2) {
+                comp = result2;
+            } else {
+                return false;
+            }
+
+            var members = await User.find({ subgroup: comp.id });
 
             // Move the leader to the front of the array, and the vice to 2nd.
-            const leader = members.find((member) => member.id === result.owner);
-            const vice = members.find((member) => member.id === result.vice);
+            const leader = members.find((member) => member.id === comp.owner);
+            const vice = members.find((member) => member.id === comp.vice);
             members.splice(members.indexOf(leader), 1);
             members.splice(members.indexOf(vice), 1);
             members.unshift(leader);
