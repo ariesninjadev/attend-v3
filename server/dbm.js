@@ -208,6 +208,11 @@ const Subgroups = mongoose.model("subgroups", subgroupsSchema);
 const Submissions = mongoose.model("submissions", submissionsSchema);
 
 async function registerUser(id, name, grade, v, subgroup) {
+    // Check if the user already exists
+    const user = await User({ id: id });
+    if (user) {
+        return "User Exists.";
+    }
     const newUser = new User({
         id: id,
         grad: grade,
