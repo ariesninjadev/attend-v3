@@ -485,7 +485,7 @@ async function fetchAllRequests() {
     try {
         const rq = await Request.find({ status: 0 });
         const user = await User.find({});
-        return {rq,user};
+        return { rq, user };
     } catch (err) {
         console.error(err);
         return [];
@@ -843,10 +843,18 @@ async function subteamMaster(id) {
             // Move the leader to the front of the array, and the vice to 2nd.
             const leader = members.find((member) => member.id === comp.owner);
             const vice = members.find((member) => member.id === comp.vice);
+
             members.splice(members.indexOf(leader), 1);
-            members.splice(members.indexOf(vice), 1);
+
+            if (vice) {
+                members.splice(members.indexOf(vice), 1);
+            }
+
             members.unshift(leader);
-            members.splice(1, 0, vice);
+
+            if (vice) {
+                members.splice(1, 0, vice);
+            }
 
         }
 
@@ -894,7 +902,7 @@ async function massSubmit(email, users) {
         }
         // Get the current time
         const time = new Date();
-        
+
         // Perform the action using postTime
         const result = await postTime(users[i].id, time, users[i].status == 1, email);
         // If the action was successful, log it
