@@ -386,7 +386,7 @@ function addUser() {
     if (e != null && n != null && s != null) {
         console.log(e);
         socket.emit("createUser", e, n, s, (response) => {
-            if (response.status == "ok") {
+            if (response.status == "ok" && response.data == true) {
                 alert("User added.");
                 location.reload();
             } else {
