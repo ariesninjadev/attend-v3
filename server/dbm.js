@@ -210,6 +210,7 @@ const Submissions = mongoose.model("submissions", submissionsSchema);
 async function registerUser(id, name, grade, v, subgroup) {
     // Check if the user already exists
     const user = await User({ id: id });
+    console.log(user);
     if (user) {
         return "User Exists.";
     }
