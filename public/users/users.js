@@ -161,9 +161,9 @@ function hourRemove(docid) {
         return;
     }
 
-    if (!confirm("Delete?")) {
-        return false;
-    }
+    // if (!confirm("Delete?")) {
+    //     return false;
+    // }
 
     var popupContent = document.getElementById("popupContent");
     var spans = popupContent.getElementsByTagName("span");
