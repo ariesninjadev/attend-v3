@@ -22,7 +22,7 @@ function activeUsers(users) {
     )
   ).length;
 
-  return n==0 ? "N/A" : n;
+  return n == 0 ? "N/A" : n;
 }
 
 function retention(users) {
