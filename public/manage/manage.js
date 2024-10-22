@@ -459,14 +459,14 @@ var uData;
 socket.emit("findUsers", "#", (response) => {
     if (response.status == "ok") {
         // document.getElementById("list").innerHTML = "";
-        // var tData = response.data;
-        // uData = tData.slice(); // Create a shallow copy to avoid modifying the original array
-        // uData.sort((a, b) => {
-        //     const lastNameA = a.name.split(" ").pop(); // Extract last name of a
-        //     const lastNameB = b.name.split(" ").pop(); // Extract last name of b
-        //     return lastNameA.localeCompare(lastNameB); // Compare last names alphabetically
-        // });
-        // var numy = 1;
+        var tData = response.data;
+        uData = tData.slice(); // Create a shallow copy to avoid modifying the original array
+        uData.sort((a, b) => {
+            const lastNameA = a.name.split(" ").pop(); // Extract last name of a
+            const lastNameB = b.name.split(" ").pop(); // Extract last name of b
+            return lastNameA.localeCompare(lastNameB); // Compare last names alphabetically
+        });
+        var numy = 1;
 
         // MASS DATA FIELDS
 
