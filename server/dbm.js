@@ -913,7 +913,7 @@ async function massSubmit(email, users) {
         const result = await postTime(users[i].id, time, users[i].status == 1, email);
         // If the action was successful, log it
         if (result[0] != "success") {
-            console.log("Failure: " + users[i].id);
+            console.log("Failure: " + users[i].id + " (" + result[0] + ")");
         }
     }
     // Create a submission
