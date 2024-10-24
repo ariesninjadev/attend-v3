@@ -442,15 +442,6 @@ function formatDate1(dateStringa, dateStringb) {
     return formattedDate;
 }
 
-function isLoggedIn(arr) {
-    if (arr === undefined || arr.length === 0) {
-        return false;
-    }
-    const lastElement = arr[arr.length - 1];
-    return lastElement !== undefined && lastElement.end === undefined;
-}
-
-
 const gty = (y) => {
     const currentYear = new Date().getFullYear() % 100;
     const graduationYear = parseInt(y, 10);
