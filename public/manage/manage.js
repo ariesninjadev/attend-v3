@@ -329,7 +329,7 @@ function main() {
         // If response is not null
         if (response) {
             if (response == "management") {
-                document.getElementById('wbht').style.display = "none";
+                // document.getElementById('wbht').style.display = "none";
             }
             // Set the profile subteam to the value of response and capitalize the first letter
             let wu = response.charAt(0).toUpperCase() + response.slice(1)
