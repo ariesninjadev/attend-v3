@@ -42,6 +42,8 @@ record: {
 so lets make a function that checks if a user is logged in by checking if the user's latest record only has a start time and no end time
 */
 function isLoggedIn(user) {
+    console.log("ISLOGGED");
+    console.log(user);
     const record = user.record;
     if (record.length > 0) {
         const latestRecord = record[record.length - 1];
