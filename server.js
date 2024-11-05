@@ -85,7 +85,7 @@ try {
     }
 
     function isLastBehindCurrent(last, current) {
-        
+
         // Legacy version support; always outdated so force update
         if (typeof last === 'string' || last instanceof String) {
             return true;
@@ -198,23 +198,23 @@ try {
                             });
                         } else {
                             db.retrieve(email)
-                            .then((data) => {
-                                if (!data) {
+                                .then((data) => {
+                                    if (!data) {
+                                        callback({
+                                            status: "nonuser",
+                                        });
+                                        return false;
+                                    }
                                     callback({
-                                        status: "nonuser",
+                                        status: "user",
                                     });
-                                    return false;
-                                }
-                                callback({
-                                    status: "user",
+                                })
+                                .catch((err) => {
+                                    callback({
+                                        status: "error",
+                                        data: err,
+                                    });
                                 });
-                            })
-                            .catch((err) => {
-                                callback({
-                                    status: "error",
-                                    data: err,
-                                });
-                            });
                         }
                     })
                     .catch((err) => {
@@ -293,7 +293,7 @@ try {
             try {
                 db.subteamMaster(email)
                     .then((data) => {
-                        callback({data,m:meetingActive});
+                        callback({ data, m: meetingActive });
                     })
                     .catch((err) => {
                         callback({
@@ -768,6 +768,29 @@ try {
                 });
 
 
+            } catch (err) {
+                callback({
+                    status: "error",
+                    data: err,
+                });
+            }
+        });
+
+        socket.on("getLoggedInPerSubteam", (callback) => {
+            try {
+                db.getLoggedInPerSubteam()
+                    .then((data) => {
+                        callback({
+                            status: "ok",
+                            data: data,
+                        });
+                    })
+                    .catch((err) => {
+                        callback({
+                            status: "error",
+                            data: err,
+                        });
+                    });
             } catch (err) {
                 callback({
                     status: "error",

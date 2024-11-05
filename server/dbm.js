@@ -935,6 +935,29 @@ async function sendAlert(email) {
     return { email: vice.id, name: vice.name };
 }
 
+async function getLoggedInPerSubteam() {
+    try {
+        const allUsers = await User.find();
+        const subteams = await Subgroups.find();
+        const loggedInPerSubteam = {};
+
+        for (subteam of subteams) {
+            loggedInPerSubteam[subteam.id] = 0;
+        }
+
+        for (user of allUsers) {
+            if (isLoggedIn(user.record)) {
+                loggedInPerSubteam[user.subgroup] += 1;
+            }
+        }
+
+        return loggedInPerSubteam;
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
 console.log("Thread > DB Connected on MAIN");
 
 module.exports = {
@@ -965,4 +988,5 @@ module.exports = {
     subteamMaster,
     massSubmit,
     sendAlert,
+    getLoggedInPerSubteam,
 };

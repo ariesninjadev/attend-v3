@@ -495,3 +495,11 @@ function checkTimeValidity2() {
 }
 
 setInterval(checkTimeValidity, 200);
+
+socket.emit("getLoggedInPerSubteam", (response) => {
+    // response.data is an object containing each subteam id and the number of people logged in
+    document.getElementById("subteam-data").innerHTML = "";
+    for (const [key, value] of Object.entries(response.data)) {
+        document.getElementById("subteam-data").innerHTML += `<p>${key}: ${value}</p>`;
+    }
+});
