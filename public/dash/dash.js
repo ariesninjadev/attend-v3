@@ -53,7 +53,7 @@ function performChecks() {
         console.log(response.status);
 
         if (!(response.status == "user")) {
-            location.replace("/router")
+            location.replace("/limbo")
         } else {
             main();
         }

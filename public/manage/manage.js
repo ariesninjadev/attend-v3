@@ -311,7 +311,7 @@ function passSubmit() {
     });
     socket.emit("massSubmit", localStorage.getItem("auth"), data, (response) => {
         if (response) {
-            location.replace("/router");
+            location.replace("/limbo");
         }
     });
 }
@@ -350,7 +350,7 @@ function performChecks() {
         console.log(response.status);
 
         if (!(response.status == "admin" || response.status == "networkAdmin")) {
-            location.replace("/router")
+            location.replace("/limbo")
         } else {
             main();
         }
@@ -363,7 +363,7 @@ function sendAlert() {
     socket.emit("sendAlert", localStorage.getItem("auth"), (response) => {
         if (response) {
             localStorage.setItem("alert", "Alert sent!");
-            location.replace("/router");
+            location.replace("/limbo");
         }
     });
 }

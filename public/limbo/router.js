@@ -43,6 +43,34 @@ function syserror(msg) {
 }
 
 function performChecks() {
+
+    // Get the URL parameter "intent". If it is "lock", then don't redirect or perform any checks.
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has("intent")) {
+        if (urlParams.get("intent") == "lock") {
+            syserror("You have been sent to limbo. You can reconnect in 2 minutes.");
+            // Get the time from the URL parameter "time" otherwise default to 2 minutes
+            const lockTime = urlParams.has("time") ? urlParams.get("time") : 2;
+            // Add a cookie with a lifespan of x minutes and a cookie with the user-friendly time in 2 minutes.
+            document.cookie = "limbo=true; max-age=" + 60*lockTime + "; path=/"; // This cookie is available for the entire site
+            document.cookie = "limboTime=" + new Date(new Date().getTime() + 60000 * lockTime).toLocaleTimeString() + "; max-age=120; path=/"; // This cookie is available for the entire site
+            // Sign out the user
+            localStorage.removeItem("auth");
+            // Remove the "intent" parameter from the URL
+            location.replace("/limbo");
+            return false;
+        }
+    }
+
+
+    // If the cookie "limbo" exists, then display an error
+    if (document.cookie.includes("limbo=true")) {
+        // Get the time from the cookie
+        const x = document.cookie.split("limboTime=")[1].split(";")[0];
+        syserror(`You have been sent to limbo. You can reconnect at ${x}.`);
+        return false;
+    }
+
     if (!localStorage.getItem("auth")) {
         location.replace("/login");
         return false;

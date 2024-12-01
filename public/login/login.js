@@ -1,6 +1,6 @@
 // Check if user is already logged in
-if (localStorage.getItem("auth") != null) {
-    window.location.href = "/router";
+if (localStorage.getItem("auth") != null || document.cookie.includes("limbo=true")) {
+    window.location.href = "/limbo";
 }
 
 // Accept a callback from Google CDI

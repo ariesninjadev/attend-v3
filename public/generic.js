@@ -9,5 +9,5 @@ if (
 }
 
 setTimeout(() => {
-        location.replace("/router");
+        location.replace("/limbo");
 }, 1800000);
