@@ -5,6 +5,8 @@ mongoose.connect(
     "mongodb+srv://admin:ariesmongo123@ariesdb.cbmjd5h.mongodb.net/2374-attendance"
 );
 
+var conversionCache = [];
+
 function checkAndInsert(record, newStartTime, newEndTime) {
     // A: Verify that the pair provided doesn't overlap with ANY of the existing pairs in the array
     const overlaps = record.some(
@@ -75,6 +77,7 @@ const userSchema = new mongoose.Schema(
                     end: { type: Date, required: false },
                     verified: { type: Boolean, required: false },
                     issuer: { type: String, required: false },
+                    status: { type: Number, required: false }, // 1 = verified, 2 = under review, 3 = revoked
                 },
             ],
             required: false,
@@ -391,7 +394,7 @@ async function postTime(id, time, type, admin) {
                 { id: id },
                 {
                     $push: {
-                        record: { start: time, issuer: admin },
+                        record: { start: time, issuer: admin, status: 1 },
                     },
                 }
             );
@@ -428,11 +431,39 @@ async function postTime(id, time, type, admin) {
     }
 }
 
+async function idToName(id) {
+    try {
+        const result = await User.findOne({ id: id });
+        if (!result) return false;
+        return result.name;
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
 async function retrieve(id) {
     try {
         const result = await User.findOne({ id: id });
         if (!result) return false;
+        // Each item in the record has an issuer. Iterate over each item. If they are not in the conversion cache, add them. 
+        // ConversionCache looks like: { id, name }
+        for (let i = 0; i < result.record.length; i++) {
+            if (conversionCache.find((item) => item.id === result.record[i].issuer) === undefined) {
+                const name = await idToName(result.record[i].issuer);
+                conversionCache.push({ id: result.record[i].issuer, name: name });
+            }
+        }
         return result;
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
+function getConversionCache() {
+    try {
+        return conversionCache;
     } catch (err) {
         console.error(err);
         return false;
@@ -802,7 +833,10 @@ async function getSubteam(id) {
             return "management";
         }
 
-        if (!result) return false;
+        if (!result) {
+            return requester.subgroup;
+        }
+
         return result.id;
     } catch (err) {
         console.error(err);
@@ -966,6 +1000,7 @@ module.exports = {
     postData,
     postTime,
     retrieve,
+    getConversionCache,
     isAdmin,
     outdated,
     sch_pull,

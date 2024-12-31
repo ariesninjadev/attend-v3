@@ -55,16 +55,7 @@ function generateProfilePicture(firstName) {
     const avatarSpan = document.createElement('span');
     avatarSpan.className = 'avatar avatar-sm';
     avatarSpan.textContent = firstLetter;
-    document.getElementById('profile-picture').innerHTML = "";
     document.getElementById('profile-picture').appendChild(avatarSpan);
-}
-
-generateProfilePicture(localStorage.getItem("name"));
-
-// If localstorage "name" is set
-if (localStorage.getItem("name")) {
-    // Set the profile name to the value of localstorage "name"
-    document.getElementById('user-name').textContent = localStorage.getItem("name");
 }
 
 var data;
@@ -77,8 +68,16 @@ function main() {
         const avatarSpan = document.createElement('span');
         avatarSpan.className = 'avatar avatar-sm';
         avatarSpan.style.backgroundImage = `url(${localStorage.getItem("picture")})`;
-        document.getElementById('profile-picture').innerHTML = "";
         document.getElementById('profile-picture').appendChild(avatarSpan);
+    } else {
+        // Generate a profile picture using the user's name
+        generateProfilePicture(localStorage.getItem("name"));
+    }
+
+    // If localstorage "name" is set
+    if (localStorage.getItem("name")) {
+        // Set the profile name to the value of localstorage "name"
+        document.getElementById('user-name').textContent = localStorage.getItem("name");
     }
 
     if (data.subgroup) {
@@ -90,44 +89,6 @@ function main() {
         // Set the profile subteam to "Undeclared"
         document.getElementById('user-subteam').innerText = "Undeclared";
     }
-
-    // Post 3.5
-
-    // Element with id "record" is a list of all attendance records of this user. Format:
-    // <tr>
-    //     <td><span class="text-secondary">0001</span></td>
-    //     <td>Sep 9, 2024</td>
-    //     <td>Aries Powvalla</td>
-    //     <td>3:15 PM</td>
-    //     <td>6:00 PM</td>
-    //     <td>2.75</td>
-    //     <td>
-    //         <span class="badge bg-success me-1"></span> Verified
-    //     </td>
-    // </tr>
-    const record = document.getElementById("record");
-    var count = 0;
-    record.innerHTML = "";
-    data.record.forEach((element) => {
-        count++;
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td class="sort-number"><span class="text-secondary">${numPad(count)}</span></td>
-            <td class="sort-date">${timestampToDate(element.start)}</td>
-            <td class="sort-issuer">${idToName(element.issuer, conversion)}</td>
-            <td class="sort-in">${timestampToTime(element.start)}</td>
-            <td class="sort-out">${timestampToTime(element.end)}</td>
-            <td class="sort-hours">${calculateDelta(element.start, element.end)}</td>
-            <td class="sort-status">${getStatus(element.status)}</td>
-        `;
-        record.appendChild(tr);
-    });
-
-    const list = new List('table-default', {
-        sortClass: 'table-sort',
-        listClass: 'table-tbody',
-        valueNames: ['sort-number', { attr: 'data-date', name: 'sort-date' }, 'sort-issuer', { attr: 'data-in', name: 'sort-in' }, { attr: 'data-out', name: 'sort-out' }, 'sort-hours', 'sort-status']
-    });
 
 }
 

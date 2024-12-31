@@ -2,9 +2,9 @@
 //       IMPORTANT STATICS        //
 /// ----------------------------- ///
 
-const version = "2.9.20";
+const version = "3.5.0";
 
-const popupVersion = "10";
+const popupVersion = "100001";
 
 const network = [];
 
@@ -207,6 +207,8 @@ try {
                                     }
                                     callback({
                                         status: "user",
+                                        data: data,
+                                        conversion: db.getConversionCache(),
                                     });
                                 })
                                 .catch((err) => {

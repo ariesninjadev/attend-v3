@@ -44,23 +44,7 @@
                     </a>
                 </h1>
                 <div class="navbar-nav flex-row order-md-last">
-                    <div class="nav-item d-none d-md-flex me-3">
-                        <div class="btn-list">
-                            <a href="/relocate" class="btn" rel="noreferrer">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    class="icon icon-tabler icons-tabler-outline icon-tabler-exchange">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M5 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-                                    <path d="M19 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-                                    <path d="M19 8v5a5 5 0 0 1 -5 5h-3l3 -3m0 6l-3 -3" />
-                                    <path d="M5 16v-5a5 5 0 0 1 5 -5h3l-3 -3m0 6l3 -3" />
-                                </svg>
-                                Change Subteams
-                            </a>
-                        </div>
-                    </div>
+                    
                     <div class="d-none d-md-flex" style="margin-right:5px;">
                         <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" title="Enable dark mode"
                             data-bs-toggle="tooltip" data-bs-placement="bottom">
@@ -210,8 +194,8 @@
                             aria-label="Open user menu">
                             <div id="profile-picture"></div>
                             <div class="d-none d-xl-block ps-2">
-                                <div id="user-name"><div class="placeholder placeholder-xs col-12"></div></div>
-                                <div id="user-subteam" class="mt-1 small text-secondary"><div class="placeholder placeholder-xs col-12"></div></div>
+                                <div id="user-name"></div>
+                                <div id="user-subteam" class="mt-1 small text-secondary"></div>
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -232,48 +216,19 @@
                                 2374
                             </div>
                             <h2 class="page-title">
-                                Attendance
+                                Relocation
                             </h2>
                         </div>
-                        <!-- Page title actions -->
-                        <div class="col-auto ms-auto d-print-none">
-                            <div class="btn-list">
-                                <!-- <span class="d-none d-sm-inline">
-                    <a href="#" class="btn">
-                      New view
-                    </a>
-                  </span> -->
-                                <span class="d-none d-sm-inline"></span>
-                                <a href="/requests" class="btn btn-primary">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        class="icon icon-tabler icons-tabler-outline icon-tabler-file-certificate">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M14 3v4a1 1 0 0 0 1 1h4" />
-                                        <path d="M5 8v-3a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2h-5" />
-                                        <path d="M6 14m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
-                                        <path d="M4.5 17l-1.5 5l3 -1.5l3 1.5l-1.5 -5" />
-                                    </svg>
-                                    Petition Hours
-                                </a>
-                                </span>
-                                <!-- <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                    Inline Modal
-                  </a>
-                  <a href="#" class="btn btn-primary d-sm-none btn-icon" data-bs-toggle="modal" data-bs-target="#modal-report" aria-label="Create new report">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                  </a> -->
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
             <!-- Page body -->
             <div class="page-body">
                 <div class="container-xl">
-                    <div class="row row-deck row-cards">
+                    
+                    <div class="row row-cards">
+
                         <div class="col-12">
                             <div class="card bg-orange text-primary-fg">
 
@@ -286,224 +241,55 @@
                             </div>
                         </div>
 
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-body" style="text-align:center;">
-                                    <p>No meeting today.</p>
-                                </div>
-                            </div>
-                        </div>
-
                         <hr style="margin-top: 20px; margin-bottom: 20px;">
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div class="subheader">Stat 1</div>
-                                        <div class="ms-auto lh-1">
-                                            <div class="dropdown">
-                                                <a class="dropdown-toggle text-secondary" href="#"
-                                                    data-bs-toggle="dropdown" aria-haspopup="true"
-                                                    aria-expanded="false">Last 7 days</a>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a class="dropdown-item active" href="#">Last 7 days</a>
-                                                    <a class="dropdown-item" href="#">Last 30 days</a>
-                                                    <a class="dropdown-item" href="#">Last 3 months</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-baseline">
-                                        <div class="h1 mb-0 me-2">100</div>
-                                        <div class="me-auto">
-                                            <span class="text-green d-inline-flex align-items-center lh-1">
-                                                8%
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24"
-                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                    stroke="currentColor" fill="none" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                    <path d="M3 17l6 -6l4 4l8 -8" />
-                                                    <path d="M14 7l7 0l0 7" />
-                                                </svg>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="chart-revenue-bg" class="chart-sm"></div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div class="subheader">Stat 2</div>
-                                        <div class="ms-auto lh-1">
-                                            <div class="dropdown">
-                                                <a class="dropdown-toggle text-secondary" href="#"
-                                                    data-bs-toggle="dropdown" aria-haspopup="true"
-                                                    aria-expanded="false">Last 7 days</a>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a class="dropdown-item active" href="#">Last 7 days</a>
-                                                    <a class="dropdown-item" href="#">Last 30 days</a>
-                                                    <a class="dropdown-item" href="#">Last 3 months</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-baseline">
-                                        <div class="h1 mb-0 me-2">200</div>
-                                        <div class="me-auto">
-                                            <span class="text-green d-inline-flex align-items-center lh-1">
-                                                17%
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24"
-                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                    stroke="currentColor" fill="none" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                    <path d="M3 17l6 -6l4 4l8 -8" />
-                                                    <path d="M14 7l7 0l0 7" />
-                                                </svg>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="chart-revenue-bg" class="chart-sm"></div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div class="subheader">Stat 3</div>
-                                        <div class="ms-auto lh-1">
-                                            <div class="dropdown">
-                                                <a class="dropdown-toggle text-secondary" href="#"
-                                                    data-bs-toggle="dropdown" aria-haspopup="true"
-                                                    aria-expanded="false">Last 7 days</a>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a class="dropdown-item active" href="#">Last 7 days</a>
-                                                    <a class="dropdown-item" href="#">Last 30 days</a>
-                                                    <a class="dropdown-item" href="#">Last 3 months</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-baseline">
-                                        <div class="h1 mb-3 me-2">300</div>
-                                        <div class="me-auto">
-                                            <span class="text-yellow d-inline-flex align-items-center lh-1">
-                                                0%
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24"
-                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                    stroke="currentColor" fill="none" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                    <path d="M5 12l14 0" />
-                                                </svg>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div id="chart-new-clients" class="chart-sm"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div class="subheader">Stat 4</div>
-                                        <div class="ms-auto lh-1">
-                                            <div class="dropdown">
-                                                <a class="dropdown-toggle text-secondary" href="#"
-                                                    data-bs-toggle="dropdown" aria-haspopup="true"
-                                                    aria-expanded="false">Last 7 days</a>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a class="dropdown-item active" href="#">Last 7 days</a>
-                                                    <a class="dropdown-item" href="#">Last 30 days</a>
-                                                    <a class="dropdown-item" href="#">Last 3 months</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-baseline">
-                                        <div class="h1 mb-3 me-2">400</div>
-                                        <div class="me-auto">
-                                            <span class="text-red d-inline-flex align-items-center lh-1">
-                                                -4%
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    class="icon icon-tabler icon-tabler-trending-down" width="44"
-                                                    height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#D63939"
-                                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                    <path d="M3 7l6 6l4 -4l8 8" />
-                                                    <path d="M21 10l0 7l-7 0" />
-                                                </svg>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div id="chart-active-users" class="chart-sm"></div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title">Your Record</h3>
-                                </div>
-                                <div id="table-default" class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th><button class="table-sort asc" data-sort="sort-number">No.</button>
-                                                </th>
-                                                <th><button class="table-sort" data-sort="sort-date">Date</button></th>
-                                                <th><button class="table-sort" data-sort="sort-issuer">Issuer</button>
-                                                </th>
-                                                <th><button class="table-sort" data-sort="sort-in">In</button>
-                                                </th>
-                                                <th><button class="table-sort" data-sort="sort-out">Out</button></th>
-                                                <th><button class="table-sort" data-sort="sort-hours">Hours</button>
-                                                </th>
-                                                <th><button class="table-sort" data-sort="sort-status">Status</button>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="table-tbody placeholder-glow" id="record">
-                                            <tr>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                            </tr>
-                                            <tr>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                            </tr>
-                                            <tr>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                        <div class="col-lg-12">
+                          <div class="card card-lg">
+                            <div class="card-body">
+                              <div class="markdown">
+                                <p>Changing subteams is a big decision. Before proceeding, make sure you've given a lot of thought to the idea of changing your subteam, as you likely won't be able to change it again.</p>
+                                <p>Changing your subteam is an agreement between you, the coach, the captain, the attendance manager, your current subteam lead, and your potential new subteam lead. To obtain the necessary approval, please send a single email addressed to the following people:</p>
+                                <ul>
+                                    <li>Coach: <a href="mailto:pwhite@jesuitmail.org">pwhite@jesuitmail.org</a></li>
+                                    <li>Captain: <a href="mailto:ahuang26@jesuitmail.org">ahuang26@jesuitmail.org</a></li>
+                                    <li>Attendance Manager: <a href="mailto:apowvalla26@jesuitmail.org">apowvalla26@jesuitmail.org</a></li>
+                                    <li>Current Subteam Lead*</li>
+                                    <li>Desired Subteam Lead*</li>
+                                </ul>
+                                <em>*Subteam lead emails listed at bottom</em>
+                                <br><br>
+                                <p>Make sure to include the following information in your email:</p>
+                                <ul>
+                                    <li>Your name</li>
+                                    <li>Your current subteam</li>
+                                    <li>Your desired subteam</li>
+                                    <li>Why you want to change subteams</li>
+                                </ul>
+                                <p>Once you've sent the email, you'll receive a response from the coach as promptly as possible.</p>
+                                <p>Other things to note:</p>
+                                <ul>
+                                    <li>Changing subteams is a big decision. Make sure you've given it a lot of thought.</li>
+                                    <li>Changing subteams is not guaranteed. The coach has the final say.</li>
+                                    <li>Changing subteams may not be possible if the desired subteam is full/overpopulated.</li>
+                                    <li>Changing subteams may not be possible at certain times during the year, especially midway through the season.</li>
+                                    <li>Changing subteams may only be possible once.</li>
+                                </ul>
+                                <p>Once your request is approved, you'll want to meet with your new subteam lead at the next meeting to discuss how you'll move forward.</p>
+                                <br>
+                                <p>Subteam Lead Emails:</p>
+                                <ul>
+                                    <li>Design: <a href="mailto:bschind25@jesuitmail.org">bschind25@jesuitmail.org</a></li>
+                                    <li>Electrical: <a href="mailto:skattar26@jesuitmail.org">skattar26@jesuitmail.org</a></li>
+                                    <li>Manufacturing: <a href="mailto:ovacmu26@jesuitmail.org">ovacmu26@jesuitmail.org</a></li>
+                                    <li>Marketing: <a href="mailto:gwerts26@jesuitmail.org">gwerts26@jesuitmail.org</a></li>
+                                    <li>Software: <a href="mailto:apowvalla26@jesuitmail.org">apowvalla26@jesuitmail.org</a></li>
+                              </div>
                             </div>
+                          </div>
                         </div>
-                    </div>
+                        
+                      </div>
+
                 </div>
             </div>
             <footer class="footer footer-transparent d-print-none">
