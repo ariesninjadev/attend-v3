@@ -105,28 +105,23 @@ function main() {
         document.getElementById('user-subteam').innerText = "Undeclared";
     }
 
-    // Post 3.5
-
-    // Element with id "record" is a list of all attendance records of this user. Format:
-    // <tr>
-    //     <td><span class="text-secondary">0001</span></td>
-    //     <td>Sep 9, 2024</td>
-    //     <td>Aries Powvalla</td>
-    //     <td>3:15 PM</td>
-    //     <td>6:00 PM</td>
-    //     <td>2.75</td>
-    //     <td>
-    //         <span class="badge bg-success me-1"></span> Verified
-    //     </td>
-    // </tr>
     const record = document.getElementById("record");
-    var count = data.record.length + 1;
-    record.innerHTML = "";
-    var reversedRecord = data.record.reverse();
-    reversedRecord.forEach((element) => {
-        count--;
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
+
+    if (data.record.length == 0) {
+        record.innerHTML = `
+            <tr>
+                <td colspan="7" class="text-center">No records found</td>
+            </tr>
+        `;
+    } else {
+
+        var count = data.record.length + 1;
+        record.innerHTML = "";
+        var reversedRecord = data.record.reverse();
+        reversedRecord.forEach((element) => {
+            count--;
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
             <td class="sort-number"><span class="text-secondary">${numPad(count)}</span></td>
             <td class="sort-date">${timestampToDate(element.start)}</td>
             <td class="sort-issuer">${idToName(element.issuer, conversion)}</td>
@@ -135,14 +130,16 @@ function main() {
             <td class="sort-hours">${calculateDelta(element.start, element.end)}</td>
             <td class="sort-status">${getStatus(element.status, element.end)}</td>
         `;
-        record.appendChild(tr);
-    });
+            record.appendChild(tr);
+        });
 
-    const list = new List('table-default', {
-        sortClass: 'table-sort',
-        listClass: 'table-tbody',
-        valueNames: ['sort-number', { attr: 'data-date', name: 'sort-date' }, 'sort-issuer', { attr: 'data-in', name: 'sort-in' }, { attr: 'data-out', name: 'sort-out' }, 'sort-hours', 'sort-status']
-    });
+        const list = new List('table-default', {
+            sortClass: 'table-sort',
+            listClass: 'table-tbody',
+            valueNames: ['sort-number', { attr: 'data-date', name: 'sort-date' }, 'sort-issuer', { attr: 'data-in', name: 'sort-in' }, { attr: 'data-out', name: 'sort-out' }, 'sort-hours', 'sort-status']
+        });
+
+    }
 
     const hours = document.getElementById("hours");
     hours.innerHTML = data.hours.toFixed(2);
