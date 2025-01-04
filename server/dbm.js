@@ -49,8 +49,8 @@ function calculateTotalHours(timeArray) {
     let totalHours = 0;
 
     timeArray.forEach((item) => {
-        if (item.state != 1) {
-            //return;
+        if (item.status != 1) {
+            return;
         }
         const startTime = item.start.getTime();
         var endTime = 0;
