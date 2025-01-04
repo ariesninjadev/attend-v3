@@ -925,4 +925,6 @@ async function sendAAlert(uemail, uname) {
     return "success";
 }
 
+console.log("Mail Server Loaded.")
+
 module.exports = { sendConfirmation, sendAAlert };

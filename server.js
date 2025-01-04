@@ -21,6 +21,16 @@ const register_as_offline = false;
 
 /// ----------------------------- ///
 
+console.log(`
+
+    ░█████╗░████████╗████████╗███████╗███╗░░██╗██████╗░  ██╗░░░██╗██████╗░
+    ██╔══██╗╚══██╔══╝╚══██╔══╝██╔════╝████╗░██║██╔══██╗  ██║░░░██║╚════██╗
+    ███████║░░░██║░░░░░░██║░░░█████╗░░██╔██╗██║██║░░██║  ╚██╗░██╔╝░█████╔╝
+    ██╔══██║░░░██║░░░░░░██║░░░██╔══╝░░██║╚████║██║░░██║  ░╚████╔╝░░╚═══██╗
+    ██║░░██║░░░██║░░░░░░██║░░░███████╗██║░╚███║██████╔╝  ░░╚██╔╝░░██████╔╝
+    ╚═╝░░╚═╝░░░╚═╝░░░░░░╚═╝░░░╚══════╝╚═╝░░╚══╝╚═════╝░  ░░░╚═╝░░░╚═════╝░
+`);
+
 try {
     var express = require("express");
     var app = express();
@@ -136,7 +146,7 @@ try {
         res.status(404).sendFile(__dirname + "/public/404/index.html");
     });
 
-    server.listen(8080, () => console.log("0.0.0.0:8080"));
+    server.listen(8080, () => console.log("Websocket Operational."));
 
     var io = require("socket.io")(server);
     io.sockets.on("connection", function (socket) {
@@ -802,7 +812,11 @@ try {
         });
 
         // END OF SOCKET //
+
     });
+
+    console.log("Logging disabled as production mode is enabled.");
+
 } catch (error) {
     console.error("Server encountered an error: ", error);
 }

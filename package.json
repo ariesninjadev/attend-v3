@@ -7,22 +7,22 @@
     "server": "^1.0.38",
     "socket.io": "^4.7.2"
   },
-  "name": "attend-v2",
+  "name": "attend-v3",
   "description": "Attendance tool for Jesuit Highschool Robotics",
-  "version": "2.8.5",
+  "version": "3.6.0",
   "main": "index.js",
   "scripts": {
     "start": "node index.js --host"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JesuitRobotics2374/attend-v2.git"
+    "url": "git+https://github.com/JesuitRobotics2374/attend-v3.git"
   },
   "author": "Aries Powvalla",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/JesuitRobotics2374/attend-v2/issues"
+    "url": "https://github.com/JesuitRobotics2374/attend-v3/issues"
   },
-  "homepage": "https://github.com/JesuitRobotics2374/attend-v2#readme",
+  "homepage": "https://github.com/JesuitRobotics2374/attend-v3#readme",
   "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }

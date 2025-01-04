@@ -1001,7 +1001,7 @@ async function getLoggedInPerSubteam() {
     }
 }
 
-console.log("Thread > DB Connected on MAIN");
+console.log("Database Manager Loaded.");
 
 module.exports = {
     registerUser,
