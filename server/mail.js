@@ -43,7 +43,7 @@ async function sendConfirmation(uemail, uname, ureason, ustatus, udate, uhours, 
         {
             from,
             to,
-            subject: "[2374R-AR] Attendance Request",
+            subject: "Robotics Attendance Request",
             html: `
             <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
             <html
@@ -385,7 +385,7 @@ async function sendConfirmation(uemail, uname, ureason, ustatus, udate, uhours, 
                                                 <p
                                                   style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:18px;color:#333333;font-size:12px"
                                                   >
-                                                  2024 © NJM Studios, Jesuit Robotics.
+                                                  2025 © NJM Studios, Jesuit Robotics.
                                                 </p>
                                               </td>
                                             </tr>

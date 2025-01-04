@@ -49,8 +49,16 @@ function calculateTotalHours(timeArray) {
     let totalHours = 0;
 
     timeArray.forEach((item) => {
+        if (item.state != 1) {
+            //return;
+        }
         const startTime = item.start.getTime();
-        const endTime = item.end.getTime();
+        var endTime = 0;
+        if (item.end === undefined) {
+            endTime = Date.now();
+        } else {
+            endTime = item.end.getTime();
+        }
         const durationInMilliseconds = endTime - startTime;
         const durationInHours = durationInMilliseconds / (1000 * 60 * 60);
         totalHours += durationInHours;
@@ -75,7 +83,6 @@ const userSchema = new mongoose.Schema(
                 {
                     start: { type: Date, required: true },
                     end: { type: Date, required: false },
-                    verified: { type: Boolean, required: false },
                     issuer: { type: String, required: false },
                     status: { type: Number, required: false }, // 1 = verified, 2 = under review, 3 = revoked
                 },
@@ -454,6 +461,8 @@ async function retrieve(id) {
                 conversionCache.push({ id: result.record[i].issuer, name: name });
             }
         }
+        // Update hours
+        result.hours = calculateTotalHours(result.record);
         return result;
     } catch (err) {
         console.error(err);

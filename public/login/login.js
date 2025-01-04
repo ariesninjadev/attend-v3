@@ -17,8 +17,8 @@ function googleLogin(s) {
     window.location.href = "/";
 }
 
-function testUser() {
-    localStorage.setItem("auth", "apowvalla26@jesuitmail.org");
-    localStorage.setItem("name", "Aries Powvalla");
+function testUser(name, email) {
+    localStorage.setItem("auth", email);
+    localStorage.setItem("name", name);
 }
 

@@ -1,7 +1,12 @@
 // Record related getters
 
-function getStatus(status) {
-    if (status == 1) {
+var isLoggedIn = false;
+
+function getStatus(status, end) {
+    if (!end) {
+        isLoggedIn = true;
+        return `<span class="badge bg-yellow me-1"></span> Present`;
+    } else if (status == 1) {
         return `<span class="badge bg-success me-1"></span> Verified`;
     } else if (status == 2) {
         return `<span class="badge bg-warning me-1"></span> Reviewing`;
@@ -16,7 +21,11 @@ function timestampToTime(timestamp) {
     // Format: 2024-09-09T15:15:00.000Z
     // To: 3:15 PM
     const date = new Date(timestamp);
-    return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+    const f = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+    if (f === "Invalid Date") {
+        return " ";
+    }
+    return f;
 }
 
 function timestampToDate(timestamp) {
@@ -32,7 +41,12 @@ function numPad(num) {
 
 function calculateDelta(start, end) {
     const start_date = new Date(start);
-    const end_date = new Date(end);
+    var end_date = 0;
+    if (end) {
+        end_date = new Date(end);
+    } else {
+        end_date = new Date();
+    }
     const delta = (end_date - start_date) / 1000 / 60 / 60;
     // Round to 2 decimal places
     return delta.toFixed(2);
@@ -106,10 +120,11 @@ function main() {
     //     </td>
     // </tr>
     const record = document.getElementById("record");
-    var count = 0;
+    var count = data.record.length + 1;
     record.innerHTML = "";
-    data.record.forEach((element) => {
-        count++;
+    var reversedRecord = data.record.reverse();
+    reversedRecord.forEach((element) => {
+        count--;
         const tr = document.createElement("tr");
         tr.innerHTML = `
             <td class="sort-number"><span class="text-secondary">${numPad(count)}</span></td>
@@ -118,7 +133,7 @@ function main() {
             <td class="sort-in">${timestampToTime(element.start)}</td>
             <td class="sort-out">${timestampToTime(element.end)}</td>
             <td class="sort-hours">${calculateDelta(element.start, element.end)}</td>
-            <td class="sort-status">${getStatus(element.status)}</td>
+            <td class="sort-status">${getStatus(element.status, element.end)}</td>
         `;
         record.appendChild(tr);
     });
@@ -128,6 +143,15 @@ function main() {
         listClass: 'table-tbody',
         valueNames: ['sort-number', { attr: 'data-date', name: 'sort-date' }, 'sort-issuer', { attr: 'data-in', name: 'sort-in' }, { attr: 'data-out', name: 'sort-out' }, 'sort-hours', 'sort-status']
     });
+
+    const hours = document.getElementById("hours");
+    hours.innerHTML = data.hours.toFixed(2);
+
+    if (isLoggedIn) {
+        const banner = document.getElementById("clocked-in");
+        // Unhide
+        banner.style.display = "block";
+    }
 
 }
 
