@@ -2,7 +2,7 @@
 //       IMPORTANT STATICS        //
 /// ----------------------------- ///
 
-const version = "3.5.0";
+const version = "3.6.1";
 
 const popupVersion = "100001";
 
@@ -12,7 +12,6 @@ const network_admins = [
     "apowvalla26@jesuitmail.org",
     "whitenj@gmail.com",
     "pwhite@jesuitportland.org",
-    "pwhite@jesuitmail.org",
 ];
 
 process.env.TZ = "America/Los_Angeles";
@@ -21,14 +20,19 @@ const register_as_offline = false;
 
 /// ----------------------------- ///
 
+console.clear();
+
 console.log(`
 
-    ░█████╗░████████╗████████╗███████╗███╗░░██╗██████╗░  ██╗░░░██╗██████╗░
-    ██╔══██╗╚══██╔══╝╚══██╔══╝██╔════╝████╗░██║██╔══██╗  ██║░░░██║╚════██╗
-    ███████║░░░██║░░░░░░██║░░░█████╗░░██╔██╗██║██║░░██║  ╚██╗░██╔╝░█████╔╝
-    ██╔══██║░░░██║░░░░░░██║░░░██╔══╝░░██║╚████║██║░░██║  ░╚████╔╝░░╚═══██╗
-    ██║░░██║░░░██║░░░░░░██║░░░███████╗██║░╚███║██████╔╝  ░░╚██╔╝░░██████╔╝
-    ╚═╝░░╚═╝░░░╚═╝░░░░░░╚═╝░░░╚══════╝╚═╝░░╚══╝╚═════╝░  ░░░╚═╝░░░╚═════╝░
+     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+    ░░░░░█████╗░████████╗████████╗███████╗███╗░░██╗██████╗░░░░██╗░░░██╗██████╗░░░░░
+    ░░░░██╔══██╗╚══██╔══╝╚══██╔══╝██╔════╝████╗░██║██╔══██╗░░░██║░░░██║╚════██╗░░░░
+    ░░░░███████║░░░██║░░░░░░██║░░░█████╗░░██╔██╗██║██║░░██║░░░╚██╗░██╔╝░█████╔╝░░░░
+    ░░░░██╔══██║░░░██║░░░░░░██║░░░██╔══╝░░██║╚████║██║░░██║░░░░╚████╔╝░░╚═══██╗░░░░
+    ░░░░██║░░██║░░░██║░░░░░░██║░░░███████╗██║░╚███║██████╔╝░░░░░╚██╔╝░░██████╔╝░░░░
+    ░░░░╚═╝░░╚═╝░░░╚═╝░░░░░░╚═╝░░░╚══════╝╚═╝░░╚══╝╚═════╝░░░░░░░╚═╝░░░╚═════╝░░░░░
+     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+         Made by: Aries Powvalla                                Version: ${version}
 `);
 
 try {
@@ -160,7 +164,7 @@ try {
                     gradYear = match[0];
                 } else {
                     console.log("No graduation year found in the email");
-                    return false;
+                    gradYear = 0;
                 }
                 db.registerUser(email, name, gradYear, popupVersion, subgroup).then((data) => {
                     callback({
@@ -180,9 +184,26 @@ try {
         socket.on("dataRequest", (email, callback) => {
             try {
                 if (network_admins.includes(email)) {
-                    callback({
-                        status: "networkAdmin",
-                    });
+                    db.retrieve(email)
+                                .then((data2) => {
+                                    if (!data2) {
+                                        callback({
+                                            status: "nonuser",
+                                        });
+                                        return false;
+                                    }
+                                    callback({
+                                        status: "networkAdmin",
+                                        data: data2,
+                                        conversion: db.getConversionCache(),
+                                    });
+                                })
+                                .catch((err) => {
+                                    callback({
+                                        status: "error",
+                                        data: err,
+                                    });
+                                });
                     return false;
                 }
                 if (register_as_offline) {
@@ -203,9 +224,26 @@ try {
                 db.isAdmin(email)
                     .then((data) => {
                         if (data) {
-                            callback({
-                                status: "admin",
-                            });
+                            db.retrieve(email)
+                                .then((data2) => {
+                                    if (!data2) {
+                                        callback({
+                                            status: "nonuser",
+                                        });
+                                        return false;
+                                    }
+                                    callback({
+                                        status: "admin",
+                                        data: data2,
+                                        conversion: db.getConversionCache(),
+                                    });
+                                })
+                                .catch((err) => {
+                                    callback({
+                                        status: "error",
+                                        data: err,
+                                    });
+                                });
                         } else {
                             db.retrieve(email)
                                 .then((data) => {

@@ -6,7 +6,8 @@ function getStatus(status, end) {
     if (!end) {
         isLoggedIn = true;
         return `<span class="badge bg-yellow me-1"></span> Present`;
-    } else if (status == 1) {
+    }
+    if (status == 1) {
         return `<span class="badge bg-success me-1"></span> Verified`;
     } else if (status == 2) {
         return `<span class="badge bg-warning me-1"></span> Reviewing`;
@@ -118,6 +119,7 @@ function main() {
         var count = data.record.length + 1;
         record.innerHTML = "";
         var reversedRecord = data.record.reverse();
+        isLoggedIn = false;
         reversedRecord.forEach((element) => {
             count--;
             const tr = document.createElement("tr");
@@ -144,18 +146,27 @@ function main() {
     const hours = document.getElementById("hours");
     hours.innerHTML = data.hours.toFixed(2);
 
+    const banner = document.getElementById("clocked-in");
     if (isLoggedIn) {
-        const banner = document.getElementById("clocked-in");
         // Unhide
         banner.style.display = "block";
+    } else {
+        // Hide
+        banner.style.display = "none";
     }
 
 }
 
 function performChecks() {
+
+    if (!localStorage.getItem("auth")) {
+        location.replace("/login");
+        return false;
+    }
+
     socket.emit("dataRequest", localStorage.getItem("auth"), (response) => {
 
-        if (!(response.status == "user")) {
+        if ((response.status === "nonuser" || response.status === "guest")) {
             location.replace("/limbo")
         } else {
             data = response.data;
@@ -166,3 +177,11 @@ function performChecks() {
 }
 
 performChecks();
+
+function refresh() {
+    // Reload all data without refreshing the page
+    performChecks();
+}
+
+// Refresh every 5 seconds (debug)
+setInterval(refresh, 5000);

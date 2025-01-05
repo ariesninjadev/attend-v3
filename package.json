@@ -9,7 +9,7 @@
   },
   "name": "attend-v3",
   "description": "Attendance tool for Jesuit Highschool Robotics",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "main": "index.js",
   "scripts": {
     "start": "node index.js --host"
