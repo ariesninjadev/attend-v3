@@ -2,7 +2,7 @@
 //       IMPORTANT STATICS        //
 /// ----------------------------- ///
 
-const version = "3.7.0";
+const version = "3.7.1";
 
 /// ----------------------------- ///
 
@@ -264,6 +264,10 @@ try {
                     callback({ status: "nonuser" });
                     return;
                 }
+
+                doAlert = await db.checkAlertState(email, popupUID);
+
+                let enabled = (popupEnabled && doAlert);
         
                 callback({
                     status: status,
@@ -274,7 +278,7 @@ try {
                     alert: {
                         uid: popupUID,
                         message: popupMessage,
-                        enabled: popupEnabled && doAlert,
+                        enabled: enabled,
                     },
                     special_events: special_events,
                 });

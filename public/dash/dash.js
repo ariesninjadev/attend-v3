@@ -168,7 +168,7 @@ function main() {
     }
 
     const vars = document.getElementById("varsity");
-    vars.innerHTML = varsity_letter_hours;
+    vars.innerHTML = varsity_letter_hours + "<span style='font-size:0.8em;vertical-align:top;' class='text-secondary'>*</span>";
 
     const elig = document.getElementById("eligibility");
     if (data.hours >= varsity_letter_hours) {
@@ -190,6 +190,8 @@ function main() {
 
     if (!firstLoadDone) {
         firstLoadDone = true;
+
+        console.log(alert);
 
         const versionElement = document.getElementById("version");
         versionElement.innerHTML = "v" + version;
