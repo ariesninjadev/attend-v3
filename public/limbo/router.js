@@ -76,7 +76,7 @@ function performChecks() {
         return false;
     }
     // If the email isnt an email from the org @jesuitmail.org, then display an error
-    if (!localStorage.getItem("auth").includes("@jesuitmail.org")) {
+    if (!(localStorage.getItem("auth").includes("@jesuitmail.org") || localStorage.getItem("auth").includes("@edisonhs.org"))) {
         syserror("You must use a Jesuit email to access the Robotics attendance utility. Reload the page to sign out.");
         // Sign out
         localStorage.removeItem("auth");

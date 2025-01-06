@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const stat = require("./statAdder.js");
 
 mongoose.set("strictQuery", true);
 mongoose.connect(
@@ -75,7 +76,7 @@ const userSchema = new mongoose.Schema(
         grad: { type: Number, required: true },
         hours: { type: Number, required: true },
         addendum: { type: Number, required: true },
-        latest: { type: Number, required: false },
+        latest: { type: String, required: false },
         noDesc: { type: Number, required: false },
         certs: { type: [String], required: false },
         record: {
@@ -88,6 +89,14 @@ const userSchema = new mongoose.Schema(
                 },
             ],
             required: false,
+        },
+        oldHours: {
+            type: [
+                {
+                    period: { type: String, required: false },
+                    hours: { type: Number, required: false },
+                },
+            ],
         },
         subgroup: { type: String, required: false },
     },
@@ -211,11 +220,42 @@ const submissionsSchema = new mongoose.Schema(
     { collection: "submissions" }
 );
 
+const configSchema = new mongoose.Schema(
+    {
+        varsity_letter_hours: { type: Number, required: true },
+        alert: {
+            enabled: { type: Boolean, required: true },
+            message: { type: String, required: true },
+            uid: { type: String, required: true },
+        },
+        timezone: { type: String, required: true },
+        offline: { type: Boolean, required: true },
+        special_events: {
+            type: [
+                {
+                    id: { type: String, required: true },
+                    title: { type: String, required: true },
+                    start: { type: Date, required: true },
+                    end: { type: Date, required: true },
+                    desc: { type: String, required: true },
+                },
+            ],
+            required: true,
+        },
+        network_admins: {
+            type: [String],
+            required: true,
+        },
+    },
+    { collection: "config" }
+);
+
 const User = mongoose.model("students", userSchema);
 const Sched = mongoose.model("schedule", scheduleSchema);
 const Request = mongoose.model("requests", requestSchema);
 const Subgroups = mongoose.model("subgroups", subgroupsSchema);
 const Submissions = mongoose.model("submissions", submissionsSchema);
+const Config = mongoose.model("config", configSchema);
 
 async function registerUser(id, name, grade, v, subgroup) {
     // Check if the user already exists
@@ -586,7 +626,7 @@ async function disableDay(day) {
                 },
             }
         );
-        console.log("disabled a day: " + day);
+        console.log("Day removed from schedule: " + day);
         return await Sched.findOne({ id: "main" });
     } catch (err) {
         console.error(err);
@@ -607,7 +647,7 @@ async function enableDay(day, hrs, mins, duration) {
                 },
             }
         );
-        console.log("enabled a day: " + day);
+        console.log("Day added to schedule: " + day);
         return await Sched.findOne({ id: "main" });
     } catch (err) {
         console.error(err);
@@ -795,7 +835,17 @@ async function hourAdd(userId, start, end) {
     }
 }
 
-async function getLatest(userId, v) {
+async function checkAlertState(userId, v) {
+    try {
+        const user = await User.findOne({ id: userId });
+        return user.latest != v;
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
+async function updateAlertState(userId, v) {
     try {
         const user = await User.findOne({ id: userId });
 
@@ -808,7 +858,7 @@ async function getLatest(userId, v) {
             }
         );
 
-        return user.latest;
+        return true;
     } catch (err) {
         console.error(err);
         return false;
@@ -1001,6 +1051,93 @@ async function getLoggedInPerSubteam() {
     }
 }
 
+async function getConfig() {
+    try {
+        const config = await Config.findOne({ id: "main" });
+        return config;
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
+async function createConfig() {
+    try {
+        const newConfig = new Config({
+            id: "main",
+            varsity_letter_hours: 100,
+            alert: {
+                enabled: false,
+                message: "0",
+                uid: "0",
+            },
+            timezone: "America/Los_Angeles",
+            offline: false,
+            special_events: [],
+            network_admins: [],
+        });
+        newConfig.save();
+        return true;
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
+async function updateOldHours(id, period, hours) {
+    try {
+        const user = await User.findOne({ id: id });
+        const oldHours = user.oldHours;
+        let found = false;
+        for (let i = 0; i < oldHours.length; i++) {
+            if (oldHours[i].period === period) {
+                oldHours[i].hours = hours;
+                found = true;
+            }
+        }
+        if (!found) {
+            oldHours.push({ period: period, hours: hours });
+        }
+        await User.updateOne(
+            { id: id },
+            {
+                $set: {
+                    oldHours: oldHours,
+                },
+            }
+        );
+        return true;
+    }
+    catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
+async function loadAllPreSeasonHours() {
+    try {
+        // Get all users
+        const users = await User.find({}).exec();
+        
+        // Iterate over each user
+        for (let i = 0; i < users.length; i++) {
+            // Get the user's record
+            let record = users[i].record;
+            // Get their preseason hours
+            var h = stat.getPreSeasonHours(users[i].id);
+            // Add preseason hours number to old hours
+            await updateOldHours(users[i].id, "preseason-2025", h);
+        }
+        
+        // Log the completion
+        console.log("All pre-season hours have been loaded.");
+        // Call the callback function
+
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 console.log("Database Manager Loaded.");
 
 module.exports = {
@@ -1024,7 +1161,8 @@ module.exports = {
     hourRemove,
     hourEdit,
     hourAdd,
-    getLatest,
+    checkAlertState,
+    updateAlertState,
     updateRequest,
     retrieveRequestSingle,
     flagMissingDesc,
@@ -1033,4 +1171,8 @@ module.exports = {
     massSubmit,
     sendAlert,
     getLoggedInPerSubteam,
+    getConfig,
+    createConfig,
+    updateOldHours,
+    loadAllPreSeasonHours,
 };

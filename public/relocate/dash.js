@@ -60,6 +60,8 @@ function generateProfilePicture(firstName) {
 
 var data;
 var conversion;
+var varsity_letter_hours;
+var version;
 
 function main() {
     // If localstorage "picture" is set
@@ -90,16 +92,21 @@ function main() {
         document.getElementById('user-subteam').innerText = "Undeclared";
     }
 
+    const versionElement = document.getElementById("version");
+    versionElement.innerHTML = "v" + version;
+
 }
 
 function performChecks() {
     socket.emit("dataRequest", localStorage.getItem("auth"), (response) => {
 
-        if (!(response.status == "user")) {
+        if ((response.status === "nonuser" || response.status === "guest")) {
             location.replace("/limbo")
         } else {
             data = response.data;
             conversion = response.conversion;
+            varsity_letter_hours = response.varsity;
+            version = response.version;
             main();
         }
     });

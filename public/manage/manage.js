@@ -1,6 +1,7 @@
 
 
 var isMeeting = false;
+var version;
 
 document.addEventListener("DOMContentLoaded", function (event) {
     var scrollpos = localStorage.getItem('scrollpos');
@@ -28,19 +29,11 @@ if (localStorage.getItem("subteam")) {
     document.getElementById('user-subteam').innerText = localStorage.getItem("subteam");
 }
 
-/*
-User objects contain this structure:
-record: {
-            type: [
-                {
-                    start: { type: Date, required: true },
-                    end: { type: Date, required: false },
-                },
-            ],
-            required: false,
-        },
-so lets make a function that checks if a user is logged in by checking if the user's latest record only has a start time and no end time
-*/
+function personal() {
+    localStorage.setItem("staffTransfer", "true");
+    location.href = '/dash'
+}
+
 function isLoggedIn(user) {
     console.log("ISLOGGED");
     console.log(user);
@@ -344,6 +337,9 @@ function main() {
         }
         orgHandler();
     });
+
+    const versionElement = document.getElementById("version");
+    versionElement.innerHTML = "v" + version;
 }
 
 function performChecks() {
@@ -353,6 +349,7 @@ function performChecks() {
         if (!(response.status == "admin" || response.status == "networkAdmin")) {
             location.replace("/limbo")
         } else {
+            version = response.version;
             main();
         }
     });
@@ -473,73 +470,6 @@ socket.emit("findUsers", "#", (response) => {
             Math.round(uData.reduce((acc, obj) => acc + obj.hours, 0) * 10) / 10;
         document.getElementById("retention").innerText = "N/A"; //retention(uData);
 
-        //
-
-        //         uData.forEach((s) => {
-        //             var recd = "";
-
-        //             console.log(s.id);
-
-        //             if (s.record === undefined || s.record.length == 0) {
-        //                 const textField = document.createElement("p");
-        //                 recd = "-";
-        //             } else {
-        //                 const reversedData = [...s.record].reverse();
-        //                 // console.log(reversedData);
-
-        //                 let rtindex = -1;
-
-        //                 while (recd == "") {
-        //                     rtindex += 1;
-        //                     ritem = reversedData[rtindex];
-        //                     console.log(ritem);
-        //                     const timeDifference = new Date(ritem.end) - new Date(ritem.start);
-        //                     console.log(timeDifference);
-        //                     if (!(timeDifference > 0 && timeDifference <= 10 * 60 * 1000)) {
-        //                         recd = formatDate1(ritem.start, ritem.end);
-        //                         console.log(recd);
-        //                     }
-        //                     // If we reach the end of the array and still haven't found a valid entry, set recd to "N/A"
-        //                     if (rtindex === reversedData.length - 1 && recd == "") {
-        //                         recd = "-";
-        //                     }
-        //                 }
-        //             }
-
-        //             const validMeetings =
-        //                 s?.record?.filter(
-        //                     (e) => new Date(e.end) - new Date(e.start) > 15 * 60 * 1000
-        //                 ) || [];
-
-        //             const avgm =
-        //                 validMeetings.length > 0
-        //                     ? (
-        //                         validMeetings.reduce(
-        //                             (t, e) => t + (new Date(e.end) - new Date(e.start)),
-        //                             0
-        //                         ) /
-        //                         (validMeetings.length * 3600000)
-        //                     ).toFixed(3)
-        //                     : "-";
-
-        //             if (s.hours == 0) {
-        //                 hrd = "-";
-        //             } else {
-        //                 hrd = s.hours;
-        //             }
-
-        //             document.getElementById("list").innerHTML += `<tr>
-        //     <td><span class="text-muted">${numy}</span></td>
-        //     <td><a class="text-reset" tabindex="-1">${s.name}</a></td>
-        //     <td>${s.id}</td>
-        //     <td>${hrd}</td>
-        //     <td>${avgm}</td>
-        //     <td>20${s.grad}</td>
-        //     <td>${recd}</td>
-        //   </tr>`;
-
-        //             numy += 1;
-        //         });
     } else {
         alert("There was an error!");
     }

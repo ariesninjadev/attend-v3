@@ -2,23 +2,23 @@
 //       IMPORTANT STATICS        //
 /// ----------------------------- ///
 
-const version = "3.6.1";
+const version = "3.7.0";
 
-const popupVersion = "100001";
+/// ----------------------------- ///
 
-const network = [];
+var varsity_letter_hours;
 
-const network_admins = [
-    "apowvalla26@jesuitmail.org",
-    "whitenj@gmail.com",
-    "pwhite@jesuitportland.org",
-];
+var popupUID;
+var popupMessage;
+var popupEnabled = false;
 
 process.env.TZ = "America/Los_Angeles";
 
-const register_as_offline = false;
+var register_as_offline = false;
 
-/// ----------------------------- ///
+var special_events = [];
+
+var network_admins = [];
 
 console.clear();
 
@@ -42,6 +42,7 @@ try {
     const path = require("path");
     const db = require("./server/dbm.js");
     const mail = require("./server/mail.js");
+    const stat = require("./server/statAdder.js");
 
     app.set("view engine", "ejs");
     app.set("views", path.join(__dirname, "public"));
@@ -113,6 +114,25 @@ try {
 
     }
 
+    function updateConfigs() {
+        db.getConfig()
+            .then((data) => {
+                varsity_letter_hours = data.varsity_letter_hours;
+                popupUID = data.alert.uid;
+                popupMessage = data.alert.message;
+                popupEnabled = data.alert.enabled;
+                process.env.TZ = data.timezone;
+                register_as_offline = data.offline;
+                special_events = data.special_events;
+                network_admins = data.network_admins;
+            })
+            .catch((err) => {
+                console.error(err);
+                return false;
+            });
+    }
+
+    // Grab the schedule data
     try {
         db.sch_pull()
             .then((data) => {
@@ -127,7 +147,39 @@ try {
         return false;
     }
 
+    // Load the config data
+    try {
+        db.getConfig()
+            .then((data) => {
+                if (!data || data == null) {
+                    return db.createConfig();
+                }
+            })
+            .then(() => {
+                return db.getConfig();
+            })
+            .then((data) => {
+                varsity_letter_hours = data.varsity_letter_hours;
+                popupUID = data.alert.uid;
+                popupMessage = data.alert.message;
+                popupEnabled = data.alert.enabled;
+                process.env.TZ = data.timezone;
+                register_as_offline = data.offline;
+                special_events = data.special_events;
+                network_admins = data.network_admins;
+                console.log("Config data loaded.");
+            })
+            .catch((err) => {
+                console.error(err);
+                return false;
+            });
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+
     setInterval(schedcron, 10000);
+    setInterval(updateConfigs, 20000);
 
     function convertTimeBToDate(timeB, dateA) {
         return new Date(
@@ -144,6 +196,9 @@ try {
         const dateB = convertTimeBToDate(timeB, dateA);
         return Math.abs(dateA - dateB) <= 900000;
     }
+
+    // // Single run code: load all users preseason hours
+    // db.loadAllPreSeasonHours(stat);
 
 
     app.get("*", function (req, res) {
@@ -166,7 +221,7 @@ try {
                     console.log("No graduation year found in the email");
                     gradYear = 0;
                 }
-                db.registerUser(email, name, gradYear, popupVersion, subgroup).then((data) => {
+                db.registerUser(email, name, gradYear, "0", subgroup).then((data) => {
                     callback({
                         status: "ok",
                         data: data,
@@ -181,118 +236,63 @@ try {
             }
         });
 
-        socket.on("dataRequest", (email, callback) => {
+        socket.on("dataRequest", async (email, callback) => {
             try {
+                let status;
+                let data;
+                let doAlert;
+        
                 if (network_admins.includes(email)) {
-                    db.retrieve(email)
-                                .then((data2) => {
-                                    if (!data2) {
-                                        callback({
-                                            status: "nonuser",
-                                        });
-                                        return false;
-                                    }
-                                    callback({
-                                        status: "networkAdmin",
-                                        data: data2,
-                                        conversion: db.getConversionCache(),
-                                    });
-                                })
-                                .catch((err) => {
-                                    callback({
-                                        status: "error",
-                                        data: err,
-                                    });
-                                });
-                    return false;
-                }
-                if (register_as_offline) {
-                    // Hang for 2 seconds to simulate offline mode then callback offline
+                    status = "networkAdmin";
+                } else if (register_as_offline) {
                     setTimeout(() => {
-                        callback({
-                            status: "offline",
-                        });
+                        callback({ status: "offline" });
                     }, 2000);
-                    return false;
+                    return;
+                } else if (email == null) {
+                    callback({ status: "guest" });
+                    return;
+                } else if (await db.isAdmin(email)) {
+                    status = "admin";
+                } else {
+                    status = "user";
                 }
-                if (email == null) {
-                    callback({
-                        status: "guest",
-                    });
-                    return false;
+        
+                data = await db.retrieve(email);
+        
+                if (!data) {
+                    callback({ status: "nonuser" });
+                    return;
                 }
-                db.isAdmin(email)
+        
+                callback({
+                    status: status,
+                    data: data,
+                    conversion: db.getConversionCache(),
+                    varsity: varsity_letter_hours,
+                    version: version,
+                    alert: {
+                        uid: popupUID,
+                        message: popupMessage,
+                        enabled: popupEnabled && doAlert,
+                    },
+                    special_events: special_events,
+                });
+            } catch (err) {
+                console.error(err);
+                callback({ status: "error", data: err });
+            }
+        });
+
+        socket.on("updateAlertState", (email) => {
+            try {
+                db.updateAlertState(email, popupUID)
                     .then((data) => {
-                        if (data) {
-                            db.retrieve(email)
-                                .then((data2) => {
-                                    if (!data2) {
-                                        callback({
-                                            status: "nonuser",
-                                        });
-                                        return false;
-                                    }
-                                    callback({
-                                        status: "admin",
-                                        data: data2,
-                                        conversion: db.getConversionCache(),
-                                    });
-                                })
-                                .catch((err) => {
-                                    callback({
-                                        status: "error",
-                                        data: err,
-                                    });
-                                });
-                        } else {
-                            db.retrieve(email)
-                                .then((data) => {
-                                    if (!data) {
-                                        callback({
-                                            status: "nonuser",
-                                        });
-                                        return false;
-                                    }
-                                    callback({
-                                        status: "user",
-                                        data: data,
-                                        conversion: db.getConversionCache(),
-                                    });
-                                })
-                                .catch((err) => {
-                                    callback({
-                                        status: "error",
-                                        data: err,
-                                    });
-                                });
-                        }
                     })
                     .catch((err) => {
-                        callback({
-                            status: "error",
-                            data: err,
-                        });
                     });
-                // db.retrieve(email)
-                //     .then((data) => {
-                //         callback({
-                //             status: "user",
-                //             data: data,
-                //             m: meetingActive,
-                //             mdata_local: fetchToday(),
-                //         });
-                //     })
-                //     .catch((err) => {
-                //         callback({
-                //             status: "error",
-                //             data: err,
-                //         });
-                //     });
             } catch (err) {
-                callback({
-                    status: "error",
-                    data: err,
-                });
+                console.error(err);
             }
         });
 
@@ -690,33 +690,33 @@ try {
             }
         });
 
-        socket.on("fetchUpdates", (id, callback) => {
-            try {
-                db.getLatest(id, popupVersion)
-                    .then((data) => {
-                        if (!data || isLastBehindCurrent(data, popupVersion)) {
-                            callback({
-                                status: "update"
-                            });
-                        } else {
-                            callback({
-                                status: "ok",
-                            });
-                        }
-                    })
-                    .catch((err) => {
-                        callback({
-                            status: "error",
-                            data: err,
-                        });
-                    });
-            } catch (err) {
-                callback({
-                    status: "error",
-                    data: err,
-                });
-            }
-        });
+        // socket.on("fetchUpdates", (id, callback) => {
+        //     try {
+        //         db.fetchAlertAndJump(id, popupUID)
+        //             .then((data) => {
+        //                 if (popupEnabled && data) {
+        //                     callback({
+        //                         status: "update"
+        //                     });
+        //                 } else {
+        //                     callback({
+        //                         status: "ok",
+        //                     });
+        //                 }
+        //             })
+        //             .catch((err) => {
+        //                 callback({
+        //                     status: "error",
+        //                     data: err,
+        //                 });
+        //             });
+        //     } catch (err) {
+        //         callback({
+        //             status: "error",
+        //             data: err,
+        //         });
+        //     }
+        // });
 
         socket.on("submitRequest", (uemail, uname, utype, udesc, udesc2, udesc3, udesc4, callback) => {
             try {

@@ -1,6 +1,9 @@
+
 // Record related getters
 
 var isLoggedIn = false;
+
+var firstLoadDone = false;
 
 function getStatus(status, end) {
     if (!end) {
@@ -59,6 +62,11 @@ function idToName(id, conversion) {
     return user.name;
 }
 
+function readAlert() {
+    // Broadcast to server
+    socket.emit("updateAlertState", localStorage.getItem("auth"));
+}
+
 /////////////////////////
 
 if (localStorage.getItem("subteam")) {
@@ -84,6 +92,10 @@ if (localStorage.getItem("name")) {
 
 var data;
 var conversion;
+var varsity_letter_hours;
+var version;
+var alert;
+
 
 function main() {
     // If localstorage "picture" is set
@@ -146,6 +158,27 @@ function main() {
     const hours = document.getElementById("hours");
     hours.innerHTML = data.hours.toFixed(2);
 
+    const preseasonhours = document.getElementById("pre-hours");
+    // find period = preseason-2025 in data.oldHours
+    const preseason = data.oldHours.find(period => period.period === "preseason-2025");
+    if (preseason) {
+        preseasonhours.innerHTML = preseason.hours.toFixed(0);
+    } else {
+        preseasonhours.innerHTML = "0";
+    }
+
+    const vars = document.getElementById("varsity");
+    vars.innerHTML = varsity_letter_hours;
+
+    const elig = document.getElementById("eligibility");
+    if (data.hours >= varsity_letter_hours) {
+        elig.innerHTML = "Eligible";
+        elig.style.color = "green";
+    } else {
+        elig.innerHTML = "Ineligible";
+        elig.style.color = "red";
+    }
+
     const banner = document.getElementById("clocked-in");
     if (isLoggedIn) {
         // Unhide
@@ -153,6 +186,21 @@ function main() {
     } else {
         // Hide
         banner.style.display = "none";
+    }
+
+    if (!firstLoadDone) {
+        firstLoadDone = true;
+
+        const versionElement = document.getElementById("version");
+        versionElement.innerHTML = "v" + version;
+
+        const alertText = document.getElementById("alert-body");
+        alertText.innerHTML = alert.message;
+
+        if (alert.enabled) {
+            var myModal = new bootstrap.Modal(document.getElementById('modal-simple'));
+            myModal.show();
+        }
     }
 
 }
@@ -171,6 +219,9 @@ function performChecks() {
         } else {
             data = response.data;
             conversion = response.conversion;
+            varsity_letter_hours = response.varsity;
+            version = response.version;
+            alert = response.alert;
             main();
         }
     });
@@ -185,3 +236,7 @@ function refresh() {
 
 // Refresh every 5 seconds (debug)
 setInterval(refresh, 5000);
+
+if (localStorage.getItem("staffTransfer") == "true") {
+    document.getElementById("staff-transfer").style.display = "block";
+}
