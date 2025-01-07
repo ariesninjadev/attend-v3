@@ -338,6 +338,43 @@ function main() {
         orgHandler();
     });
 
+    const record = document.getElementById("record");
+
+    if (data.record.length == 0) {
+        record.innerHTML = `
+            <tr>
+                <td colspan="7" class="text-center">No records found</td>
+            </tr>
+        `;
+    } else {
+
+        var count = data.record.length + 1;
+        record.innerHTML = "";
+        var reversedRecord = data.record.reverse();
+        isLoggedIn = false;
+        reversedRecord.forEach((element) => {
+            count--;
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+            <td class="sort-number"><span class="text-secondary">${numPad(count)}</span></td>
+            <td class="sort-date">${timestampToDate(element.start)}</td>
+            <td class="sort-issuer">${idToName(element.issuer, conversion)}</td>
+            <td class="sort-in">${timestampToTime(element.start)}</td>
+            <td class="sort-out">${timestampToTime(element.end)}</td>
+            <td class="sort-hours">${calculateDelta(element.start, element.end)}</td>
+            <td class="sort-status">${getStatus(element.status, element.end)}</td>
+        `;
+            record.appendChild(tr);
+        });
+
+        const list = new List('table-default', {
+            sortClass: 'table-sort',
+            listClass: 'table-tbody',
+            valueNames: ['sort-number', { attr: 'data-date', name: 'sort-date' }, 'sort-issuer', { attr: 'data-in', name: 'sort-in' }, { attr: 'data-out', name: 'sort-out' }, 'sort-hours', 'sort-status']
+        });
+
+    }
+
     const versionElement = document.getElementById("version");
     versionElement.innerHTML = "v" + version;
 }

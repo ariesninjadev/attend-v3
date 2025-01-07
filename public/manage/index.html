@@ -359,107 +359,51 @@
                         <p id="submit-warn" style="text-align:center;color:red;">There is no meeting currently active.
                         </p>
                         <hr>
+
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">Record (Coming Soon)</h3>
+                                    <h3 class="card-title">Your Record</h3>
                                 </div>
-                                <div class="card-body border-bottom py-3">
-                                    <div class="d-flex">
-                                        <div class="text-secondary">
-                                            Show
-                                            <div class="mx-2 d-inline-block">
-                                                <input type="text" class="form-control form-control-sm" value="8"
-                                                    size="3" aria-label="Invoices count">
-                                            </div>
-                                            entries
-                                        </div>
-                                        <div class="ms-auto text-secondary">
-                                            Search:
-                                            <div class="ms-2 d-inline-block">
-                                                <input type="text" class="form-control form-control-sm"
-                                                    aria-label="Search invoice">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table card-table table-vcenter text-nowrap datatable">
+                                <div id="table-default" class="table-responsive">
+                                    <table class="table">
                                         <thead>
                                             <tr>
-                                                <th class="w-1"><input class="form-check-input m-0 align-middle"
-                                                        type="checkbox" aria-label="Select all invoices"></th>
-                                                <th class="w-1">No.
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        class="icon icon-sm icon-thick" width="24" height="24"
-                                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                        <path d="M6 15l6 -6l6 6" />
-                                                    </svg>
+                                                <th><button class="table-sort desc" data-sort="sort-number">No.</button>
                                                 </th>
-                                                <th>Date</th>
-                                                <th>Issuer</th>
-                                                <th>In</th>
-                                                <th>Out</th>
-                                                <th>Hours</th>
-                                                <th>Status</th>
+                                                <th><button class="table-sort" data-sort="sort-date">Date</button></th>
+                                                <th><button class="table-sort" data-sort="sort-issuer">Issuer</button>
+                                                </th>
+                                                <th><button class="table-sort" data-sort="sort-net">Net</button>
+                                                </th>
+                                                <th><button class="table-sort" data-sort="sort-status">Status</button>
+                                                </th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <!-- <tr>
-                                                <td><input class="form-check-input m-0 align-middle" type="checkbox"
-                                                        aria-label="Select invoice"></td>
-                                                <td><span class="text-secondary">0001</span></td>
-                                                <td>Sep 9, 2024</td>
-                                                <td>Aries Powvalla</td>
-                                                <td>3:15 PM</td>
-                                                <td>6:00 PM</td>
-                                                <td>2.75</td>
-                                                <td>
-                                                    <span class="badge bg-success me-1"></span> Verified
-                                                </td>
-                                            </tr> -->
+                                        <tbody class="table-tbody placeholder-glow" id="record">
+                                            <tr>
+                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
+                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
+                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
+                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
+                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
+                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
+                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
+                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
+                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
+                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
+                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
+                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
+                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
+                                            </tr>
                                         </tbody>
                                     </table>
-                                </div>
-                                <div class="card-footer d-flex align-items-center">
-                                    <p class="m-0 text-secondary">Showing <span>0</span> to <span>0</span> of
-                                        <span>0</span> entries
-                                    </p>
-                                    <ul class="pagination m-0 ms-auto">
-                                        <li class="page-item disabled">
-                                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                                                <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                    stroke="currentColor" fill="none" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                    <path d="M15 6l-6 6l6 6" />
-                                                </svg>
-                                                prev
-                                            </a>
-                                        </li>
-                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">5</a></li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#">
-                                                next
-                                                <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                    stroke="currentColor" fill="none" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                    <path d="M9 6l6 6l-6 6" />
-                                                </svg>
-                                            </a>
-                                        </li>
-                                    </ul>
                                 </div>
                             </div>
                         </div>
