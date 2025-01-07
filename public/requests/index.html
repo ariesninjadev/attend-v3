@@ -1,101 +1,335 @@
-<!DOCTYPE html>
-<!-- VERSION 2.8.5 tj65-1a -->
-<html>
+<!doctype html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>2374 | Requests</title>
-    <meta name="description" content="Jesuit Robotics 2374 Attendance" />
-    <link rel="stylesheet" href="/assets/main.css" />
-    <link rel="stylesheet" href="/assets/alertify.min.css" />
+    <!-- CSS files -->
+    <link href="../assets/dist/css/tabler.min.css?1692870487" rel="stylesheet" />
+    <link href="../assets/dist/css/tabler-flags.min.css?1692870487" rel="stylesheet" />
+    <link href="../assets/dist/css/tabler-payments.min.css?1692870487" rel="stylesheet" />
+    <link href="../assets/dist/css/tabler-vendors.min.css?1692870487" rel="stylesheet" />
+    <link href="../assets/dist/css/demo.min.css?1692870487" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
     <link rel="apple-touch-icon" type="image/png" href="/assets/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <script src="/assets/gsi.js" async></script>
+    <style>
+        @import url('https://rsms.me/inter/inter.css');
+
+        :root {
+            --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+        }
+
+        body {
+            font-feature-settings: "cv03", "cv04", "cv11";
+        }
+    </style>
+
 </head>
 
 <body>
-    <span>&nbsp;</span>
-    <!-- hairspace -->
-    <div hidden id="minfo" class="container-top">
-        <p id="m-start" class="m-left"></p>
-        <strong>
-            <p id="m-status" class="m-middle"></p>
-        </strong>
-        <p id="m-end" class="m-right"></p>
+    <script src="../assets/dist/js/demo-theme.min.js?1692870487"></script>
+    <div class="page">
+        <!-- Navbar -->
+        <header class="navbar navbar-expand-md d-print-none">
+            <div class="container-xl">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
+                    aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                    <a href="/">
+                        <img src="logo.png" width="110" height="32" alt="Team 2374" class="navbar-brand-image">
+                    </a>
+                </h1>
+                <div class="navbar-nav flex-row order-md-last">
+                    
+                    <div class="d-none d-md-flex" style="margin-right:5px;">
+                        <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" title="Enable dark mode"
+                            data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/moon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path
+                                    d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+                            </svg>
+                        </a>
+                        <a href="?theme=light" class="nav-link px-0 hide-theme-light" title="Enable light mode"
+                            data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/sun -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                                <path
+                                    d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />
+                            </svg>
+                        </a>
+                       
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
+                            aria-label="Open user menu">
+                            <div id="profile-picture"></div>
+                            <div class="d-none d-xl-block ps-2">
+                                <div id="user-name"></div>
+                                <div id="user-subteam" class="mt-1 small text-secondary"></div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                            <a href="/logout" class="dropdown-item">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <!-- Page pre-title -->
+                            <div class="page-pretitle">
+                                2374
+                            </div>
+                            <h2 class="page-title">
+                                Relocation
+                            </h2>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <!-- Page body -->
+            <div class="page-body">
+                <div class="container-xl">
+                    
+                    <div class="row row-cards">
+
+                        <div class="col-12">
+                            <div class="card bg-secondary text-primary-fg">
+
+                                <div class="card-body">
+                                    <h3 class="card-title">This tool is in beta!</h3>
+                                    <p>If you run into any issues or if something looks wrong, please email <a
+                                            style="color:white;"
+                                            href="mailto:apowvalla26@jesuitmail.org">apowvalla26@jesuitmail.org</a>.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr style="margin-top: 20px; margin-bottom: 20px;">
+
+                        <div class="col-lg-12">
+                          <div class="card card-lg">
+                            <div class="card-body">
+                              <div class="markdown">
+                                <p>Changing subteams is a big decision. Before proceeding, make sure you've given a lot of thought to the idea of changing your subteam, as you likely won't be able to change it again.</p>
+                                <p>Changing your subteam is an agreement between you, the coach, the captain, the attendance manager, your current subteam lead, and your potential new subteam lead. To obtain the necessary approval, please send a single email addressed to the following people:</p>
+                                <ul>
+                                    <li>Coach: <a href="mailto:pwhite@jesuitmail.org">pwhite@jesuitmail.org</a></li>
+                                    <li>Captain: <a href="mailto:ahuang26@jesuitmail.org">ahuang26@jesuitmail.org</a></li>
+                                    <li>Attendance Manager: <a href="mailto:apowvalla26@jesuitmail.org">apowvalla26@jesuitmail.org</a></li>
+                                    <li>Current Subteam Lead*</li>
+                                    <li>Desired Subteam Lead*</li>
+                                </ul>
+                                <em>*Subteam lead emails listed at bottom</em>
+                                <br><br>
+                                <p>Make sure to include the following information in your email:</p>
+                                <ul>
+                                    <li>Your name</li>
+                                    <li>Your current subteam</li>
+                                    <li>Your desired subteam</li>
+                                    <li>Why you want to change subteams</li>
+                                </ul>
+                                <p>Once you've sent the email, you'll receive a response from the coach as promptly as possible.</p>
+                                <p>Other things to note:</p>
+                                <ul>
+                                    <li>Changing subteams is a big decision. Make sure you've given it a lot of thought.</li>
+                                    <li>Changing subteams is not guaranteed. The coach has the final say.</li>
+                                    <li>Changing subteams may not be possible if the desired subteam is full/overpopulated.</li>
+                                    <li>Changing subteams may not be possible at certain times during the year, especially midway through the season.</li>
+                                    <li>Changing subteams may only be possible once.</li>
+                                </ul>
+                                <p>Once your request is approved, you'll want to meet with your new subteam lead at the next meeting to discuss how you'll move forward.</p>
+                                <br>
+                                <p>Subteam Lead Emails:</p>
+                                <ul>
+                                    <li>Design: <a href="mailto:bschind25@jesuitmail.org">bschind25@jesuitmail.org</a></li>
+                                    <li>Electrical: <a href="mailto:skattar26@jesuitmail.org">skattar26@jesuitmail.org</a></li>
+                                    <li>Manufacturing: <a href="mailto:ovacmu26@jesuitmail.org">ovacmu26@jesuitmail.org</a></li>
+                                    <li>Marketing: <a href="mailto:gwerts26@jesuitmail.org">gwerts26@jesuitmail.org</a></li>
+                                    <li>Software: <a href="mailto:apowvalla26@jesuitmail.org">apowvalla26@jesuitmail.org</a></li>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                      </div>
+
+                </div>
+            </div>
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-lg-auto ms-lg-auto">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item"><a href="https://www.instagram.com/2374_jesuit_robotics/"
+                                        class="link-secondary" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+                                <li class="list-inline-item"><a href="https://team2374.org" target="_blank" rel="noopener noreferrer"
+                                        class="link-secondary" rel="noopener">Team 2374</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    Copyright &copy; 2025
+                                    <a href="https://ninjam.co/" class="link-secondary">NJM</a>,
+                                    <a href="https://jesuitportland.org/" class="link-secondary">Jesuit Portland</a>.
+                                    All rights reserved.
+                                </li>
+                                <li class="list-inline-item">
+                                    <a id="version" class="link-secondary" rel="noopener">
+                                        vX.X.X
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
     </div>
-    <div class="container">
-        <h1>Attendance Request</h1>
-        <p>If you have an issue, forgot to sign in, forgot to sign out, or would like to request extra hours, please
-            complete a request below.</p>
-        <i style="color:rgb(255, 113, 113);">This is the old requests webpage! A new one will be released soon. You can still use it for now, however.</i>
-        <br>
-        <br>
-        <select name="request-type" id="request-type" onchange="update()">
-            <option selected hidden disabled value="0">Select a Request Type</option>
-            <option value="1">My hours don't look right</option>
-            <option value="2">I forgot to sign in/out</option>
-            <option value="3">I stayed late to a meeting</option>
-            <option value="4">The tool was disabled during a meeting</option>
-        </select><br><br>
-        <div style="display:none;" id="1">
-            <textarea id='issue-1-1' type='text' name='desc' placeholder='Describe the issue.' required></textarea>
-            <p>Enter the date of occurance, if applicable.</p>
-            <input type="date" id="issue-1-2" placeholder="date" />
-            <br>
-            <p><strong>Please do not submit a request if you are requesting less than 15 minutes.</strong></p>
-            <button class="submit-button grayish" onclick="window.location.href = '/'">Cancel</button>
-            <button class="submit-button" onclick="submitRequest()">Submit</button>
+    <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New report</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="text" class="form-control" name="example-text-input"
+                            placeholder="Your report name">
+                    </div>
+                    <label class="form-label">Report type</label>
+                    <div class="form-selectgroup-boxes row mb-3">
+                        <div class="col-lg-6">
+                            <label class="form-selectgroup-item">
+                                <input type="radio" name="report-type" value="1" class="form-selectgroup-input" checked>
+                                <span class="form-selectgroup-label d-flex align-items-center p-3">
+                                    <span class="me-3">
+                                        <span class="form-selectgroup-check"></span>
+                                    </span>
+                                    <span class="form-selectgroup-label-content">
+                                        <span class="form-selectgroup-title strong mb-1">Simple</span>
+                                        <span class="d-block text-secondary">Provide only basic data needed for the
+                                            report</span>
+                                    </span>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="form-selectgroup-item">
+                                <input type="radio" name="report-type" value="1" class="form-selectgroup-input">
+                                <span class="form-selectgroup-label d-flex align-items-center p-3">
+                                    <span class="me-3">
+                                        <span class="form-selectgroup-check"></span>
+                                    </span>
+                                    <span class="form-selectgroup-label-content">
+                                        <span class="form-selectgroup-title strong mb-1">Advanced</span>
+                                        <span class="d-block text-secondary">Insert charts and additional advanced
+                                            analyses to be inserted
+                                            in the report</span>
+                                    </span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="mb-3">
+                                <label class="form-label">Report url</label>
+                                <div class="input-group input-group-flat">
+                                    <span class="input-group-text">
+                                        https://tabler.io/reports/
+                                    </span>
+                                    <input type="text" class="form-control ps-0" value="report-01" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label class="form-label">Visibility</label>
+                                <select class="form-select">
+                                    <option value="1" selected>Private</option>
+                                    <option value="2">Public</option>
+                                    <option value="3">Hidden</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">Client name</label>
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">Reporting period</label>
+                                <input type="date" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div>
+                                <label class="form-label">Additional information</label>
+                                <textarea class="form-control" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </a>
+                    <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M12 5l0 14" />
+                            <path d="M5 12l14 0" />
+                        </svg>
+                        Create new report
+                    </a>
+                </div>
+            </div>
         </div>
-        <div style="display:none;" id="2">
-            <hl></hl>
-            <select style="width:40%;" name="signtypea" id="signtypea" onchange="updateSignType()">
-                <option selected hidden disabled value="0">I didn't...</option>
-                <option value="in">Sign In</option>
-                <option value="out">Sign Out</option>
-            </select>
-            <p id="typedesc"></p>
-            <input style="display:none;margin: 0 auto;" type="date" id="issue-2-2" placeholder="date" />
-            <p id="typedesc2"></p>
-            <input style="display:none;margin: 0 auto;" type="time" id="issue-2b-2" placeholder="time" />
-            <p id="typedesc3"></p>
-            <input style="display:none;margin: 0 auto;" type="time" id="issue-2c-2" placeholder="time" />
-            <br>
-            <p><strong>Please do not submit a request if you are requesting less than 15 minutes.</strong></p>
-            <br>
-            <button style="display:none;" id="issue-2-3" class="submit-button grayish"
-                onclick="window.location.href = '/'">Cancel</button>
-            <button style="display:none;" id="issue-2-4" class="submit-button" onclick="submitRequest()">Submit</button>
-        </div>
-        <div style="display:none;" id="3">
-            <textarea id='issue-3-1' type='text' name='desc'
-                placeholder='Describe what you completed after the regulated meeting time ended.' required></textarea>
-            <p>What day did you stay late?</p>
-            <input type="date" id="issue-3-2" placeholder="time" />
-            <p>When did you leave the meeting?</p>
-            <input type="time" id="issue-3-3" placeholder="time" />
-            <br>
-            <p><strong>Please do not submit a request if you are requesting less than 15 minutes.</strong></p>
-            <br>
-            <button id="issue-3-2" class="submit-button grayish" onclick="window.location.href = '/'">Cancel</button>
-            <button id="issue-3-3" class="submit-button" onclick="submitRequest()">Submit</button>
-        </div>
-        <div style="display:none;" id="4">
-            <p class='redtext'>Sorry, you are not eligable for these hours.</p>
-        </div>
-        <br><span>&nbsp;</span>
     </div>
-    <p class="tag">Jesuit Portland Robotics 2374</p>
-    <br />
-    <span>&nbsp;</span>
+    <!-- Libs JS -->
+    <script src="../assets/dist/libs/apexcharts/dist/apexcharts.min.js?1692870487" defer></script>
+    <script src="../assets/dist/libs/jsvectormap/dist/js/jsvectormap.min.js?1692870487" defer></script>
+    <script src="../assets/dist/libs/jsvectormap/dist/maps/world.js?1692870487" defer></script>
+    <script src="../assets/dist/libs/jsvectormap/dist/maps/world-merc.js?1692870487" defer></script>
+    <!-- Tabler Core -->
+    <script src="../assets/dist/js/tabler.min.js?1692870487" defer></script>
+    <script src="../assets/dist/js/demo.min.js?1692870487" defer></script>
+    <script src="../assets/dist/libs/list.js/dist/list.min.js?1735606190" defer=""></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/assets/alertify.min.js"></script>
+    <script src="/generic.js"></script>
+    <script src="./idLoad.js"></script>
 </body>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://unpkg.com/jwt-decode@3.1.2/build/jwt-decode.js"></script>
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/assets/alertify.min.js"></script>
-<script src="/generic.js"></script>
-<script src="requests.js"></script>
 
 </html>

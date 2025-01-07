@@ -557,6 +557,9 @@ async function findUsersViaSearch(search) {
                 return [];
             }
             results = await User.find({ hours: { $gt: search.slice(1) } });
+        } else if (search.startsWith("subteam:")) {
+            const subteam = search.slice(8);
+            results = await User.find({ subgroup: subteam });
         } else {
             results = await User.find({ name: { $regex: search, $options: "i" } });
         }
@@ -1138,6 +1141,26 @@ async function loadAllPreSeasonHours() {
     }
 }
 
+async function getStaffRecord(id) {
+    try {
+        const user = await User.findOne({ id: id });
+        const subgroup = user.subgroup;
+        // Get ALL submissions
+        const submissions = await Submissions.find({});
+        var relevantSubmissions = [];
+        // Scan each submission's first user's subgroup. If it equals the subgroup of the user, add it to the list.
+        for (let i = 0; i < submissions.length; i++) {
+            if (submissions[i].data[0].id === id) {
+                relevantSubmissions.push(submissions[i]);
+            }
+        }
+        return relevantSubmissions;
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
 console.log("Database Manager Loaded.");
 
 module.exports = {
@@ -1175,4 +1198,5 @@ module.exports = {
     createConfig,
     updateOldHours,
     loadAllPreSeasonHours,
+    getStaffRecord,
 };

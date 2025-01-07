@@ -2,7 +2,7 @@
 //       IMPORTANT STATICS        //
 /// ----------------------------- ///
 
-const version = "3.7.1";
+const version = "3.7.2";
 
 /// ----------------------------- ///
 
@@ -833,6 +833,29 @@ try {
         socket.on("getLoggedInPerSubteam", (callback) => {
             try {
                 db.getLoggedInPerSubteam()
+                    .then((data) => {
+                        callback({
+                            status: "ok",
+                            data: data,
+                        });
+                    })
+                    .catch((err) => {
+                        callback({
+                            status: "error",
+                            data: err,
+                        });
+                    });
+            } catch (err) {
+                callback({
+                    status: "error",
+                    data: err,
+                });
+            }
+        });
+
+        socket.on("getStaffRecord", (email, callback) => {
+            try {
+                db.getStaffRecord(email)
                     .then((data) => {
                         callback({
                             status: "ok",

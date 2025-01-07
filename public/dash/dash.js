@@ -39,6 +39,16 @@ function timestampToDate(timestamp) {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
+function removeDateFromTimestamp(timestamp) {
+    // Format: 2024-09-09T15:15:00.000Z
+    // To: 2000-01-01T15:15:00.000Z
+    const date = new Date(timestamp);
+    date.setFullYear(2000);
+    date.setMonth(0);
+    date.setDate(1);
+    return date.toISOString();
+}
+
 function numPad(num) {
     return num.toString().padStart(4, '0');
 }
@@ -118,43 +128,6 @@ function main() {
         document.getElementById('user-subteam').innerText = "Undeclared";
     }
 
-    const record = document.getElementById("record");
-
-    if (data.record.length == 0) {
-        record.innerHTML = `
-            <tr>
-                <td colspan="7" class="text-center">No records found</td>
-            </tr>
-        `;
-    } else {
-
-        var count = data.record.length + 1;
-        record.innerHTML = "";
-        var reversedRecord = data.record.reverse();
-        isLoggedIn = false;
-        reversedRecord.forEach((element) => {
-            count--;
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-            <td class="sort-number"><span class="text-secondary">${numPad(count)}</span></td>
-            <td class="sort-date">${timestampToDate(element.start)}</td>
-            <td class="sort-issuer">${idToName(element.issuer, conversion)}</td>
-            <td class="sort-in">${timestampToTime(element.start)}</td>
-            <td class="sort-out">${timestampToTime(element.end)}</td>
-            <td class="sort-hours">${calculateDelta(element.start, element.end)}</td>
-            <td class="sort-status">${getStatus(element.status, element.end)}</td>
-        `;
-            record.appendChild(tr);
-        });
-
-        const list = new List('table-default', {
-            sortClass: 'table-sort',
-            listClass: 'table-tbody',
-            valueNames: ['sort-number', { attr: 'data-date', name: 'sort-date' }, 'sort-issuer', { attr: 'data-in', name: 'sort-in' }, { attr: 'data-out', name: 'sort-out' }, 'sort-hours', 'sort-status']
-        });
-
-    }
-
     const hours = document.getElementById("hours");
     hours.innerHTML = data.hours.toFixed(2);
 
@@ -190,6 +163,43 @@ function main() {
 
     if (!firstLoadDone) {
         firstLoadDone = true;
+
+        const record = document.getElementById("record");
+
+        if (data.record.length == 0) {
+            record.innerHTML = `
+            <tr>
+                <td colspan="7" class="text-center">No records found</td>
+            </tr>
+        `;
+        } else {
+
+            var count = data.record.length + 1;
+            record.innerHTML = "";
+            var reversedRecord = data.record.reverse();
+            isLoggedIn = false;
+            reversedRecord.forEach((element) => {
+                count--;
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+            <td class="sort-number"><span class="text-secondary">${numPad(count)}</span></td>
+            <td class="sort-date" data-date="${element.start}">${timestampToDate(element.start)}</td>
+            <td class="sort-issuer">${idToName(element.issuer, conversion)}</td>
+            <td class="sort-in" data-date="${removeDateFromTimestamp(element.start)}">${timestampToTime(element.start)}</td>
+            <td class="sort-out" data-date="${removeDateFromTimestamp(element.end)}">${timestampToTime(element.end)}</td>
+            <td class="sort-hours">${calculateDelta(element.start, element.end)}</td>
+            <td class="sort-status">${getStatus(element.status, element.end)}</td>
+        `;
+                record.appendChild(tr);
+            });
+
+            const list = new List('table-default', {
+                sortClass: 'table-sort',
+                listClass: 'table-tbody',
+                valueNames: ['sort-number', { attr: 'data-date', name: 'sort-date' }, 'sort-issuer', { attr: 'data-date', name: 'sort-in' }, { attr: 'data-date', name: 'sort-out' }, 'sort-hours', 'sort-status']
+            });
+
+        }
 
         console.log(alert);
 

@@ -1,7 +1,76 @@
+function getStatus(status, end) {
+    if (!end) {
+        return `<span class="badge bg-success me-1"></span> Verified    `;
+    }
+    if (status == 1) {
+        return `<span class="badge bg-success me-1"></span> Verified`;
+    } else if (status == 2) {
+        return `<span class="badge bg-warning me-1"></span> Reviewing`;
+    } else if (status == 3) {
+        return `<span class="badge bg-danger me-1"></span> Rejected`;
+    } else {
+        return `<span class="badge bg-secondary me-1"></span> Unknown`;
+    }
+}
 
+function timestampToTime(timestamp) {
+    // Format: 2024-09-09T15:15:00.000Z
+    // To: 3:15 PM
+    const date = new Date(timestamp);
+    const f = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+    if (f === "Invalid Date") {
+        return " ";
+    }
+    return f;
+}
+
+function timestampToDate(timestamp) {
+    // Format: 2024-09-09T15:15:00.000Z
+    // To: Sep 9, 2024
+    const date = new Date(timestamp);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function numPad(num) {
+    return num.toString().padStart(4, '0');
+}
+
+function findNet(element) {
+    // Iterate through element.data
+    let net = 0;
+    element.data.forEach((e) => {
+        if (e.status == 1) {
+            net++;
+        } else if (e.status == 2) {
+            net--;
+        }
+    });
+    return net;
+}
+
+function calculateDelta(start, end) {
+    const start_date = new Date(start);
+    var end_date = 0;
+    if (end) {
+        end_date = new Date(end);
+    } else {
+        end_date = new Date();
+    }
+    const delta = (end_date - start_date) / 1000 / 60 / 60;
+    // Round to 2 decimal places
+    return delta.toFixed(2);
+}
+
+function idToName(id, conversion) {
+    // Find the name of the user with the given id in the conversion array which has format { id, name }
+    const user = conversion.find(user => user.id === id);
+    return user.name;
+}
 
 var isMeeting = false;
 var version;
+var conversion;
+var subRecord = [];
 
 document.addEventListener("DOMContentLoaded", function (event) {
     var scrollpos = localStorage.getItem('scrollpos');
@@ -35,13 +104,10 @@ function personal() {
 }
 
 function isLoggedIn(user) {
-    console.log("ISLOGGED");
-    console.log(user);
     const record = user.record;
     if (record.length > 0) {
         const latestRecord = record[record.length - 1];
         if (latestRecord.end) {
-            console.log(latestRecord.end);
             return false;
         } else {
             return true;
@@ -59,6 +125,23 @@ function generateProfilePicture(firstName) {
     document.getElementById('profile-picture').appendChild(avatarSpan);
 }
 
+function deepView(id) {
+    // Create a js alert that shows all students that were signed in or out in this submission
+    const submission = subRecord.find(submission => submission.id == id);
+    console.log(subRecord);
+    const data = submission.data;
+    let toDisplay = "";
+    data.forEach((element) => {
+        if (element.status == 1) {
+            toDisplay += `${element.id} (IN)\n`;
+        } else if (element.status == 2) {
+            toDisplay += `${element.id} (OUT)\n`;
+        }
+    });
+    alert(toDisplay);
+}
+    
+
 async function setProfilePicture() {
     const pictureUrl = localStorage.getItem("picture");
     if (pictureUrl) {
@@ -73,7 +156,6 @@ async function setProfilePicture() {
             } else {
                 // Fetch from the URL and then cache it
                 const response = await fetch(pictureUrl);
-                console.log("FETCHED PHOTO");
                 const blob = await response.blob();
                 const reader = new FileReader();
                 reader.onload = function () {
@@ -115,8 +197,6 @@ var hasVice = false;
 
 function updateDocument(members, hasVice) {
 
-    console.log(members);
-
     // Remove all elements after "aHead" up until element with id "submit-btn"
     let element = document.getElementById('aHead');
     while (element.nextElementSibling.id != "submit-btn") {
@@ -130,8 +210,6 @@ function updateDocument(members, hasVice) {
     members.forEach((user) => {
         let status = "";
         let l = isLoggedIn(user);
-        console.log(user.id);
-        console.log(user.record);
         let badge = "";
         if (user.id == localStorage.getItem("auth")) {
             status += "(You) ";
@@ -196,7 +274,6 @@ function updateDocument(members, hasVice) {
     // Iterate over the NodeList and attach an event listener to each radio button
     radioButtons.forEach(radioButton => {
         radioButton.addEventListener('change', function (event) {
-            // console.log('Radio button selected:', event.target.id);
             let r = radioType(event.target.id);
             if (r != 1) {
                 actionsSum++;
@@ -221,8 +298,6 @@ function orgHandler() {
     socket.emit("stm", localStorage.getItem("auth"), (response) => {
         // If response is not null
         if (response) {
-
-            console.log(response.data);
 
             if (response.m) {
                 document.getElementById('submit-warn').style.display = "none";
@@ -310,6 +385,49 @@ function passSubmit() {
     });
 }
 
+function populateRecord() {
+    socket.emit("getStaffRecord", localStorage.getItem("auth"), (response) => {
+        const data = response.data;
+        const record = document.getElementById("record");
+
+        if (data.length == 0) {
+            record.innerHTML = `
+            <tr>
+                <td colspan="7" class="text-center">No records found</td>
+            </tr>
+        `;
+        } else {
+            subRecord = data;
+            var count = data.length + 1;
+            record.innerHTML = "";
+            var reversedRecord = data.reverse();
+            // isLoggedIn = false;
+            reversedRecord.forEach((element) => {
+                count--;
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+            <td class="sort-number"><span class="text-secondary">${numPad(count)}</span></td>
+            <td class="sort-date" data-date="${element.time}">${timestampToDate(element.time)}</td>
+            <td class="sort-issuer">${element.owner}</td>
+            <td class="sort-net" data-net="${findNet(element) + 100000000}">${findNet(element)}</td>
+            <td class="sort-status">${getStatus(element.status, element.end)}</td>
+            <td style="padding-left:41px;cursor:pointer;"><button onclick="deepView(${element.id})" style="color:blue;border:none;background-color:transparent;outline:none;"><svg xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-external-link"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" /><path d="M11 13l9 -9" /><path d="M15 4h5v5" /></svg></button></td>
+        `;
+                record.appendChild(tr);
+            });
+
+            const list = new List('table-default', {
+                sortClass: 'table-sort',
+                listClass: 'table-tbody',
+                valueNames: ['sort-number', { attr: 'data-date', name: 'sort-date' }, 'sort-issuer', { attr: 'data-net', name: 'sort-net' }, 'sort-status'],
+            });
+
+        }
+    });
+};
+
+
+
 function main() {
 
     setProfilePicture();
@@ -338,55 +456,20 @@ function main() {
         orgHandler();
     });
 
-    const record = document.getElementById("record");
-
-    if (data.record.length == 0) {
-        record.innerHTML = `
-            <tr>
-                <td colspan="7" class="text-center">No records found</td>
-            </tr>
-        `;
-    } else {
-
-        var count = data.record.length + 1;
-        record.innerHTML = "";
-        var reversedRecord = data.record.reverse();
-        isLoggedIn = false;
-        reversedRecord.forEach((element) => {
-            count--;
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-            <td class="sort-number"><span class="text-secondary">${numPad(count)}</span></td>
-            <td class="sort-date">${timestampToDate(element.start)}</td>
-            <td class="sort-issuer">${idToName(element.issuer, conversion)}</td>
-            <td class="sort-in">${timestampToTime(element.start)}</td>
-            <td class="sort-out">${timestampToTime(element.end)}</td>
-            <td class="sort-hours">${calculateDelta(element.start, element.end)}</td>
-            <td class="sort-status">${getStatus(element.status, element.end)}</td>
-        `;
-            record.appendChild(tr);
-        });
-
-        const list = new List('table-default', {
-            sortClass: 'table-sort',
-            listClass: 'table-tbody',
-            valueNames: ['sort-number', { attr: 'data-date', name: 'sort-date' }, 'sort-issuer', { attr: 'data-in', name: 'sort-in' }, { attr: 'data-out', name: 'sort-out' }, 'sort-hours', 'sort-status']
-        });
-
-    }
-
     const versionElement = document.getElementById("version");
     versionElement.innerHTML = "v" + version;
+
+    populateRecord();
 }
 
 function performChecks() {
     socket.emit("dataRequest", localStorage.getItem("auth"), (response) => {
-        console.log(response.status);
 
         if (!(response.status == "admin" || response.status == "networkAdmin")) {
             location.replace("/limbo")
         } else {
             version = response.version;
+            conversion = response.conversion;
             main();
         }
     });
@@ -487,7 +570,7 @@ const gty = (y) => {
 
 var uData;
 
-socket.emit("findUsers", "#", (response) => {
+socket.emit("findUsers", "subteam:" + localStorage.getItem("subteam").toLowerCase(), (response) => {
     if (response.status == "ok") {
         // document.getElementById("list").innerHTML = "";
         var tData = response.data;
@@ -505,7 +588,7 @@ socket.emit("findUsers", "#", (response) => {
         document.getElementById("active_students").innerText = activeUsers(uData);
         document.getElementById("total_hours").innerText =
             Math.round(uData.reduce((acc, obj) => acc + obj.hours, 0) * 10) / 10;
-        document.getElementById("retention").innerText = "N/A"; //retention(uData);
+        // document.getElementById("retention").innerText = "N/A"; //retention(uData);
 
     } else {
         alert("There was an error!");
