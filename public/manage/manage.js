@@ -72,6 +72,8 @@ var version;
 var conversion;
 var subRecord = [];
 
+var subt;
+
 document.addEventListener("DOMContentLoaded", function (event) {
     var scrollpos = localStorage.getItem('scrollpos');
     if (scrollpos) window.scrollTo(0, scrollpos);
@@ -140,7 +142,7 @@ function deepView(id) {
     });
     alert(toDisplay);
 }
-    
+
 
 async function setProfilePicture() {
     const pictureUrl = localStorage.getItem("picture");
@@ -323,6 +325,8 @@ function orgHandler() {
             // Set the profile subteam to "Undeclared"
             document.getElementById('user-subteam').innerText = "Undeclared";
         }
+
+        writeGeneralStats();
     });
 }
 
@@ -449,6 +453,8 @@ function main() {
             let wu = response.charAt(0).toUpperCase() + response.slice(1)
             document.getElementById('user-subteam').innerText = wu;
             localStorage.setItem("subteam", wu);
+            subt = wu.toLowerCase();
+            console.log("wrote xt: " + subt);
         } else {
             // Set the profile subteam to "Undeclared"
             document.getElementById('user-subteam').innerText = "Undeclared";
@@ -570,27 +576,30 @@ const gty = (y) => {
 
 var uData;
 
-socket.emit("findUsers", "subteam:" + localStorage.getItem("subteam").toLowerCase(), (response) => {
-    if (response.status == "ok") {
-        // document.getElementById("list").innerHTML = "";
-        var tData = response.data;
-        uData = tData.slice(); // Create a shallow copy to avoid modifying the original array
-        uData.sort((a, b) => {
-            const lastNameA = a.name.split(" ").pop(); // Extract last name of a
-            const lastNameB = b.name.split(" ").pop(); // Extract last name of b
-            return lastNameA.localeCompare(lastNameB); // Compare last names alphabetically
-        });
-        var numy = 1;
+function writeGeneralStats() {
+    socket.emit("findUsers", "subteam:" + subt, (response) => {
+        console.log(subt);
+        if (response.status == "ok") {
+            // document.getElementById("list").innerHTML = "";
+            var tData = response.data;
+            uData = tData.slice(); // Create a shallow copy to avoid modifying the original array
+            uData.sort((a, b) => {
+                const lastNameA = a.name.split(" ").pop(); // Extract last name of a
+                const lastNameB = b.name.split(" ").pop(); // Extract last name of b
+                return lastNameA.localeCompare(lastNameB); // Compare last names alphabetically
+            });
+            var numy = 1;
 
-        // MASS DATA FIELDS
+            // MASS DATA FIELDS
 
-        document.getElementById("total_students").innerText = uData.length;
-        document.getElementById("active_students").innerText = activeUsers(uData);
-        document.getElementById("total_hours").innerText =
-            Math.round(uData.reduce((acc, obj) => acc + obj.hours, 0) * 10) / 10;
-        // document.getElementById("retention").innerText = "N/A"; //retention(uData);
+            document.getElementById("total_students").innerText = uData.length;
+            document.getElementById("active_students").innerText = activeUsers(uData);
+            document.getElementById("total_hours").innerText =
+                Math.round(uData.reduce((acc, obj) => acc + obj.hours, 0) * 10) / 10;
+            // document.getElementById("retention").innerText = "N/A"; //retention(uData);
 
-    } else {
-        alert("There was an error!");
-    }
-});
+        } else {
+            alert("There was an error!");
+        }
+    });
+}
