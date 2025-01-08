@@ -1,98 +1,35 @@
 var socket = io();
 
+function hideAllExceptFirst() {
+    const formElements = [
+        'control-typeSelect',
+        'control-inOutSelect',
+        'control-descibeIssue',
+        'control-whatDid',
+        'control-whatDateIF',
+        'control-whatDateREG',
+        'control-timeIn',
+        'control-timeOut',
+        'control-submit'
+    ];
+
+    formElements.forEach((id, index) => {
+        const element = document.getElementById(id);
+        if (element && index !== 0) {
+            element.style.display = 'none';
+        }
+    });
+}
+
+// Call the function to hide all form elements except the first one
+hideAllExceptFirst();
 
 if (!localStorage.getItem("auth")) {
     location.replace("/")
 }
 
-var observe;
-if (window.attachEvent) {
-    observe = function (element, event, handler) {
-        element.attachEvent('on' + event, handler);
-    };
-}
-else {
-    observe = function (element, event, handler) {
-        element.addEventListener(event, handler, false);
-    };
-}
-function init() {
-    var issue_1_1 = document.getElementById('issue-1-1');
-    function resize() {
-        const csc = window.scrollY;
-        issue_1_1.style.height = 'auto';
-        issue_1_1.style.height = issue_1_1.scrollHeight + 'px';
-        window.scrollTo(0, csc);
-    }
-    function delayedResize() {
-        window.setTimeout(resize, 0);
-    }
-
-    observe(issue_1_1, 'change', resize);
-    observe(issue_1_1, 'cut', delayedResize);
-    observe(issue_1_1, 'paste', delayedResize);
-    observe(issue_1_1, 'drop', delayedResize);
-    observe(issue_1_1, 'keydown', delayedResize);
-
-    issue_1_1.focus();
-    issue_1_1.select();
-
-    resize();
-}
-
-init();
-
-function update() {
-    var choice = document.getElementById("request-type").value;
-    document.getElementById("1").style.display = "none";
-    document.getElementById("2").style.display = "none";
-    document.getElementById("3").style.display = "none";
-    document.getElementById("4").style.display = "none";
-
-    document.getElementById(choice).style.display = "block";
-}
-
-function updateSignType() {
-    var choice = document.getElementById("signtypea").value;
-    document.getElementById("issue-2-2").style.display = "block";
-    document.getElementById("issue-2-3").style.display = "inline-block";
-    document.getElementById("issue-2-4").style.display = "inline-block";
-    if (choice == "in") {
-        document.getElementById("typedesc").innerText = "What day did you forget to sign in?"
-        document.getElementById("typedesc2").innerText = "What time did you arrive?"
-        document.getElementById("typedesc3").innerText = "What time did you leave?"
-        document.getElementById("issue-2b-2").style.display = "block";
-        document.getElementById("issue-2c-2").style.display = "block";
-    } else if (choice == "out") {
-        document.getElementById("typedesc").innerText = "What day did you forget to sign out?"
-        document.getElementById("typedesc2").innerText = ""
-        document.getElementById("typedesc3").innerText = "What time did you leave?"
-        document.getElementById("issue-2b-2").style.display = "none";
-        document.getElementById("issue-2c-2").style.display = "block";
-    }
-}
-
 function submitRequest() {
-    uemail = localStorage.getItem("auth");
-    uname = localStorage.getItem("name");
-    utype = document.getElementById("request-type").value;
-    udesc = "";
-    udesc2 = "";
-    udesc3 = "";
-    udesc4 = "";
-    if (utype == "1") {
-        udesc = document.getElementById("issue-1-1").value;
-        udesc2 = document.getElementById("issue-1-2").value;
-    } else if (utype == "2") {
-        udesc = document.getElementById("signtypea").value;
-        udesc2 = document.getElementById("issue-2-2").value;
-        udesc3 = document.getElementById("issue-2b-2").value;
-        udesc4 = document.getElementById("issue-2c-2").value;
-    } else if (utype == "3") {
-        udesc = document.getElementById("issue-3-1").value;
-        udesc2 = document.getElementById("issue-3-2").value;
-        udesc3 = document.getElementById("issue-3-3").value;
-    }
+
     socket.emit("submitRequest", uemail, uname, utype, udesc, udesc2, udesc3, udesc4, (response) => {
         if (response.status == "success") {
             alert("Request submitted successfully!");
@@ -104,4 +41,14 @@ function submitRequest() {
     });
 }
 
-update();
+// Listen for a dropdown change of element with id "control-typeSelect"
+document.getElementById("typeSelect").addEventListener("change", function() {
+    var selectedValue = this.value;
+    console.log(selectedValue);
+    hideAllExceptFirst();
+    if (selectedValue == "other") {
+        document.getElementById("control-whatDateIF").style.display = "block";
+        document.getElementById("control-descibeIssue").style.display = "block";
+    } else {
+    }
+});

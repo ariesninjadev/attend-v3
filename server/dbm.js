@@ -981,7 +981,8 @@ async function subteamMaster(id) {
 async function massSubmit(email, users) {
     // Check that the email provided is a lead or vice
     const user = await Subgroups.findOne({ owner: email });
-    if (!user) {
+    const vice = await Subgroups.findOne({ vice: email });
+    if (!(user || vice)) {
         // Now check if they are management
         const management = await User.findOne({ id: email });
         if (management.subgroup != "management") {

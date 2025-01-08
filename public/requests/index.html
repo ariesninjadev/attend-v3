@@ -44,7 +44,7 @@
                     </a>
                 </h1>
                 <div class="navbar-nav flex-row order-md-last">
-                    
+
                     <div class="d-none d-md-flex" style="margin-right:5px;">
                         <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" title="Enable dark mode"
                             data-bs-toggle="tooltip" data-bs-placement="bottom">
@@ -69,7 +69,7 @@
                                     d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />
                             </svg>
                         </a>
-                       
+
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
@@ -101,14 +101,14 @@
                                 Attendance Petition
                             </h2>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
             <!-- Page body -->
             <div class="page-body">
                 <div class="container-xl">
-                    
+
                     <div class="row row-cards">
 
                         <div class="col-12">
@@ -126,51 +126,134 @@
                         <hr style="margin-top: 20px; margin-bottom: 20px;">
 
                         <div class="col-lg-12">
-                          <div class="card card-lg">
-                            <div class="card-body">
-                              <div class="markdown">
-                                <p>Changing subteams is a big decision. Before proceeding, make sure you've given a lot of thought to the idea of changing your subteam, as you likely won't be able to change it again.</p>
-                                <p>Changing your subteam is an agreement between you, the coach, the captain, the attendance manager, your current subteam lead, and your potential new subteam lead. To obtain the necessary approval, please send a single email addressed to the following people:</p>
-                                <ul>
-                                    <li>Coach: <a href="mailto:pwhite@jesuitmail.org">pwhite@jesuitmail.org</a></li>
-                                    <li>Captain: <a href="mailto:ahuang26@jesuitmail.org">ahuang26@jesuitmail.org</a></li>
-                                    <li>Attendance Manager: <a href="mailto:apowvalla26@jesuitmail.org">apowvalla26@jesuitmail.org</a></li>
-                                    <li>Current Subteam Lead*</li>
-                                    <li>Desired Subteam Lead*</li>
-                                </ul>
-                                <em>*Subteam lead emails listed at bottom</em>
-                                <br><br>
-                                <p>Make sure to include the following information in your email:</p>
-                                <ul>
-                                    <li>Your name</li>
-                                    <li>Your current subteam</li>
-                                    <li>Your desired subteam</li>
-                                    <li>Why you want to change subteams</li>
-                                </ul>
-                                <p>Once you've sent the email, you'll receive a response from the coach as promptly as possible.</p>
-                                <p>Other things to note:</p>
-                                <ul>
-                                    <li>Changing subteams is a big decision. Make sure you've given it a lot of thought.</li>
-                                    <li>Changing subteams is not guaranteed. The coach has the final say.</li>
-                                    <li>Changing subteams may not be possible if the desired subteam is full/overpopulated.</li>
-                                    <li>Changing subteams may not be possible at certain times during the year, especially midway through the season.</li>
-                                    <li>Changing subteams may only be possible once.</li>
-                                </ul>
-                                <p>Once your request is approved, you'll want to meet with your new subteam lead at the next meeting to discuss how you'll move forward.</p>
-                                <br>
-                                <p>Subteam Lead Emails:</p>
-                                <ul>
-                                    <li>Design: <a href="mailto:bschind25@jesuitmail.org">bschind25@jesuitmail.org</a></li>
-                                    <li>Electrical: <a href="mailto:skattar26@jesuitmail.org">skattar26@jesuitmail.org</a></li>
-                                    <li>Manufacturing: <a href="mailto:ovacmu26@jesuitmail.org">ovacmu26@jesuitmail.org</a></li>
-                                    <li>Marketing: <a href="mailto:gwerts26@jesuitmail.org">gwerts26@jesuitmail.org</a></li>
-                                    <li>Software: <a href="mailto:apowvalla26@jesuitmail.org">apowvalla26@jesuitmail.org</a></li>
-                              </div>
+                            <div class="card card-lg">
+                                <div class="card-body">
+
+                                    <h3>If you have an issue, forgot to sign in, forgot to sign out, or would like to
+                                        request extra hours, please complete a request below.</h3>
+
+                                    <h3 style="color:red;">If the request will affect your hours by less than 15
+                                        minutes, don't make one! We won't approve it.</h3>
+
+                                    <hr>
+
+                                    <div class="form-floating" id="control-typeSelect">
+                                        <select class="form-select" id="typeSelect" aria-label="typeSelect">
+                                            <option disabled selected="">Choose an option</option>
+                                            <option value="look">My hours don't look right</option>
+                                            <option value="forgot">I forgot to sign in/out</option>
+                                            <option value="late">I stayed late to a meeting</option>
+                                            <option value="other">Another issue</option>
+                                        </select>
+                                        <label for="typeSelect">Request Type</label>
+                                    </div>
+
+                                    <br>
+
+                                    <div class="form-floating" id="control-inOutSelect" style="display:none;">
+                                        <select class="form-select" id="inOutSelect" aria-label="inOutSelect">
+                                            <option disabled selected="">Choose an option</option>
+                                            <option value="in">Sign in</option>
+                                            <option value="out">Sign out</option>
+                                        </select>
+                                        <label for="inOutSelect">I forgot to...</label>
+                                    </div>
+
+                                    <br>
+
+                                    <div class="mb-3" id="control-descibeIssue" style="display:none;">
+                                        <label class="form-label">Describe your issue.
+                                            <!-- <span class="form-label-description">56/100</span> --></label>
+                                        <textarea class="form-control" name="example-textarea-input" rows="6"
+                                            placeholder="Type here.." style="height: 109px;"></textarea>
+                                    </div>
+
+                                    <div class="mb-3" id="control-whatDid" style="display:none;">
+                                        <label class="form-label">Describe what you did after the meeting ended.
+                                            <!-- <span class="form-label-description">56/100</span> --></label>
+                                        <textarea class="form-control" name="example-textarea-input" rows="6"
+                                            placeholder="Type here.." style="height: 109px;"></textarea>
+                                    </div>
+
+                                    <div class="mb-3" id="control-whatDateIF" style="display:none;">
+                                        <label class="form-label">Enter the date of occurance, if applicable.
+                                            <!-- <span class="form-label-description">56/100</span> --></label>
+                                        <div class="input-icon">
+                                            <span
+                                                class="input-icon-addon"><!-- Download SVG icon from http://tabler.io/icons/icon/calendar -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="icon">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <path
+                                                        d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z">
+                                                    </path>
+                                                    <path d="M16 3v4"></path>
+                                                    <path d="M8 3v4"></path>
+                                                    <path d="M4 11h16"></path>
+                                                    <path d="M11 15h1"></path>
+                                                    <path d="M12 15v3"></path>
+                                                </svg>
+                                            </span>
+                                            <input class="form-control" placeholder="Select a date"
+                                                id="dateOfOccurance">
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3" id="control-whatDateREG" style="display:none;">
+                                        <label class="form-label">Enter the date of occurance.
+                                            <!-- <span class="form-label-description">56/100</span> --></label>
+                                        <div class="input-icon">
+                                            <span
+                                                class="input-icon-addon"><!-- Download SVG icon from http://tabler.io/icons/icon/calendar -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="icon">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <path
+                                                        d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z">
+                                                    </path>
+                                                    <path d="M16 3v4"></path>
+                                                    <path d="M8 3v4"></path>
+                                                    <path d="M4 11h16"></path>
+                                                    <path d="M11 15h1"></path>
+                                                    <path d="M12 15v3"></path>
+                                                </svg>
+                                            </span>
+                                            <input class="form-control" placeholder="Select a date"
+                                                id="dateOfOccurance">
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3" id="control-timeIn" style="display:none;">
+                                        <label class="form-label">Time in</label>
+                                        <input style="padding:0.5rem!important;" type="time" class="form-control"
+                                            name="example-text-input" placeholder="Input placeholder">
+                                    </div>
+
+                                    <div class="mb-3" id="control-timeOut" style="display:none;">
+                                        <label class="form-label">Time out</label>
+                                        <input style="padding:0.5rem!important;" type="time" class="form-control"
+                                            name="example-text-input" placeholder="Input placeholder">
+                                    </div>
+
+                                    <br>
+
+                                    <div class="mb-3" id="control-submit" style="display:none;">
+                                        <button onclick="submitForm();" class="btn btn-primary ms-auto form-control">Submit</button>
+                                        <br><br>
+                                        <div class="page-pretitle">
+                                            Read the <a href="#">Petition Form Policy</a>.
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
-                          </div>
                         </div>
-                        
-                      </div>
+
+                    </div>
 
                 </div>
             </div>
@@ -180,9 +263,11 @@
                         <div class="col-lg-auto ms-lg-auto">
                             <ul class="list-inline list-inline-dots mb-0">
                                 <li class="list-inline-item"><a href="https://www.instagram.com/2374_jesuit_robotics/"
-                                        class="link-secondary" target="_blank" rel="noopener noreferrer">Instagram</a></li>
-                                <li class="list-inline-item"><a href="https://team2374.org" target="_blank" rel="noopener noreferrer"
-                                        class="link-secondary" rel="noopener">Team 2374</a></li>
+                                        class="link-secondary" target="_blank" rel="noopener noreferrer">Instagram</a>
+                                </li>
+                                <li class="list-inline-item"><a href="https://team2374.org" target="_blank"
+                                        rel="noopener noreferrer" class="link-secondary" rel="noopener">Team 2374</a>
+                                </li>
                             </ul>
                         </div>
                         <div class="col-12 col-lg-auto mt-3 mt-lg-0">
@@ -205,123 +290,30 @@
             </footer>
         </div>
     </div>
-    <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">New report</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Name</label>
-                        <input type="text" class="form-control" name="example-text-input"
-                            placeholder="Your report name">
-                    </div>
-                    <label class="form-label">Report type</label>
-                    <div class="form-selectgroup-boxes row mb-3">
-                        <div class="col-lg-6">
-                            <label class="form-selectgroup-item">
-                                <input type="radio" name="report-type" value="1" class="form-selectgroup-input" checked>
-                                <span class="form-selectgroup-label d-flex align-items-center p-3">
-                                    <span class="me-3">
-                                        <span class="form-selectgroup-check"></span>
-                                    </span>
-                                    <span class="form-selectgroup-label-content">
-                                        <span class="form-selectgroup-title strong mb-1">Simple</span>
-                                        <span class="d-block text-secondary">Provide only basic data needed for the
-                                            report</span>
-                                    </span>
-                                </span>
-                            </label>
-                        </div>
-                        <div class="col-lg-6">
-                            <label class="form-selectgroup-item">
-                                <input type="radio" name="report-type" value="1" class="form-selectgroup-input">
-                                <span class="form-selectgroup-label d-flex align-items-center p-3">
-                                    <span class="me-3">
-                                        <span class="form-selectgroup-check"></span>
-                                    </span>
-                                    <span class="form-selectgroup-label-content">
-                                        <span class="form-selectgroup-title strong mb-1">Advanced</span>
-                                        <span class="d-block text-secondary">Insert charts and additional advanced
-                                            analyses to be inserted
-                                            in the report</span>
-                                    </span>
-                                </span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div class="mb-3">
-                                <label class="form-label">Report url</label>
-                                <div class="input-group input-group-flat">
-                                    <span class="input-group-text">
-                                        https://tabler.io/reports/
-                                    </span>
-                                    <input type="text" class="form-control ps-0" value="report-01" autocomplete="off">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="mb-3">
-                                <label class="form-label">Visibility</label>
-                                <select class="form-select">
-                                    <option value="1" selected>Private</option>
-                                    <option value="2">Public</option>
-                                    <option value="3">Hidden</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label class="form-label">Client name</label>
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label class="form-label">Reporting period</label>
-                                <input type="date" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div>
-                                <label class="form-label">Additional information</label>
-                                <textarea class="form-control" rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
-                        Cancel
-                    </a>
-                    <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
-                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M12 5l0 14" />
-                            <path d="M5 12l14 0" />
-                        </svg>
-                        Create new report
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- Libs JS -->
     <script src="../assets/dist/libs/apexcharts/dist/apexcharts.min.js?1692870487" defer></script>
     <script src="../assets/dist/libs/jsvectormap/dist/js/jsvectormap.min.js?1692870487" defer></script>
     <script src="../assets/dist/libs/jsvectormap/dist/maps/world.js?1692870487" defer></script>
     <script src="../assets/dist/libs/jsvectormap/dist/maps/world-merc.js?1692870487" defer></script>
+    <script src="../assets/dist/libs/litepicker/dist/litepicker.js?1736346519" defer></script>
+    <script>
+        // @formatter:off
+        document.addEventListener("DOMContentLoaded", function () {
+            window.Litepicker && (new Litepicker({
+                element: document.getElementById('dateOfOccurance'),
+                buttonText: {
+                    previousMonth: `<!-- Download SVG icon from http://tabler.io/icons/icon/chevron-left -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+                    nextMonth: `<!-- Download SVG icon from http://tabler.io/icons/icon/chevron-right -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
+                },
+                format: 'MMMM D, YYYY',
+                maxDate: new Date(),
+                highlightedDays: [new Date()],
+            }));
+        });
+        // @formatter:on
+    </script>
     <!-- Tabler Core -->
     <script src="../assets/dist/js/tabler.min.js?1692870487" defer></script>
     <script src="../assets/dist/js/demo.min.js?1692870487" defer></script>
@@ -330,6 +322,7 @@
     <script type="text/javascript" src="/assets/alertify.min.js"></script>
     <script src="/generic.js"></script>
     <script src="./idLoad.js"></script>
+    <script src="./requests.js"></script>
 </body>
 
 </html>
