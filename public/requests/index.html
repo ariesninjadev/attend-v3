@@ -140,8 +140,8 @@
                                     <div class="form-floating" id="control-typeSelect">
                                         <select class="form-select" id="typeSelect" aria-label="typeSelect">
                                             <option disabled selected="">Choose an option</option>
-                                            <option value="look">My hours don't look right</option>
-                                            <option value="forgot">I forgot to sign in/out</option>
+                                            <!-- <option value="look">My hours don't look right</option> -->
+                                            <option value="forgot">I wasn't signed in/out</option>
                                             <option value="late">I stayed late to a meeting</option>
                                             <option value="other">Another issue</option>
                                         </select>
@@ -152,27 +152,27 @@
 
                                     <div class="form-floating" id="control-inOutSelect" style="display:none;">
                                         <select class="form-select" id="inOutSelect" aria-label="inOutSelect">
-                                            <option disabled selected="">Choose an option</option>
-                                            <option value="in">Sign in</option>
-                                            <option value="out">Sign out</option>
+                                            <option disabled selected="" value="">Choose an option</option>
+                                            <option value="in">Signed in</option>
+                                            <option value="out">Signed out</option>
                                         </select>
-                                        <label for="inOutSelect">I forgot to...</label>
+                                        <label for="inOutSelect">I wasn't...</label>
                                     </div>
 
                                     <br>
 
-                                    <div class="mb-3" id="control-descibeIssue" style="display:none;">
+                                    <div class="mb-3" id="control-describeIssue" style="display:none;">
                                         <label class="form-label">Describe your issue.
                                             <!-- <span class="form-label-description">56/100</span> --></label>
                                         <textarea class="form-control" name="example-textarea-input" rows="6"
-                                            placeholder="Type here.." style="height: 109px;"></textarea>
+                                            placeholder="Type here.." style="height: 109px;" id="describeIssue"></textarea>
                                     </div>
 
                                     <div class="mb-3" id="control-whatDid" style="display:none;">
                                         <label class="form-label">Describe what you did after the meeting ended.
                                             <!-- <span class="form-label-description">56/100</span> --></label>
                                         <textarea class="form-control" name="example-textarea-input" rows="6"
-                                            placeholder="Type here.." style="height: 109px;"></textarea>
+                                            placeholder="Type here.." style="height: 109px;" id="whatDid"></textarea>
                                     </div>
 
                                     <div class="mb-3" id="control-whatDateIF" style="display:none;">
@@ -197,7 +197,7 @@
                                                 </svg>
                                             </span>
                                             <input class="form-control" placeholder="Select a date"
-                                                id="dateOfOccurance">
+                                                id="whatDateIF">
                                         </div>
                                     </div>
 
@@ -223,26 +223,26 @@
                                                 </svg>
                                             </span>
                                             <input class="form-control" placeholder="Select a date"
-                                                id="dateOfOccurance">
+                                                id="whatDateREG">
                                         </div>
                                     </div>
 
                                     <div class="mb-3" id="control-timeIn" style="display:none;">
-                                        <label class="form-label">Time in</label>
+                                        <label class="form-label">Arrival Time</label>
                                         <input style="padding:0.5rem!important;" type="time" class="form-control"
-                                            name="example-text-input" placeholder="Input placeholder">
+                                            name="example-text-input" placeholder="Input placeholder" id="timeIn">
                                     </div>
 
                                     <div class="mb-3" id="control-timeOut" style="display:none;">
-                                        <label class="form-label">Time out</label>
+                                        <label class="form-label">Departure Time</label>
                                         <input style="padding:0.5rem!important;" type="time" class="form-control"
-                                            name="example-text-input" placeholder="Input placeholder">
+                                            name="example-text-input" placeholder="Input placeholder" id="timeOut">
                                     </div>
 
                                     <br>
 
                                     <div class="mb-3" id="control-submit" style="display:none;">
-                                        <button onclick="submitForm();" class="btn btn-primary ms-auto form-control">Submit</button>
+                                        <button id="submit" disabled onclick="submitForm();" class="btn btn-primary ms-auto form-control">Submit</button>
                                         <br><br>
                                         <div class="page-pretitle">
                                             Read the <a href="#">Petition Form Policy</a>.
@@ -300,7 +300,21 @@
         // @formatter:off
         document.addEventListener("DOMContentLoaded", function () {
             window.Litepicker && (new Litepicker({
-                element: document.getElementById('dateOfOccurance'),
+                element: document.getElementById('whatDateIF'),
+                buttonText: {
+                    previousMonth: `<!-- Download SVG icon from http://tabler.io/icons/icon/chevron-left -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+                    nextMonth: `<!-- Download SVG icon from http://tabler.io/icons/icon/chevron-right -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
+                },
+                format: 'MMMM D, YYYY',
+                maxDate: new Date(),
+                highlightedDays: [new Date()],
+            }));
+        });
+        document.addEventListener("DOMContentLoaded", function () {
+            window.Litepicker && (new Litepicker({
+                element: document.getElementById('whatDateREG'),
                 buttonText: {
                     previousMonth: `<!-- Download SVG icon from http://tabler.io/icons/icon/chevron-left -->
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
