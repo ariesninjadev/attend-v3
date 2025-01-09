@@ -41,7 +41,8 @@
                 </button>
                 <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
                     <a href="/">
-                        <img src="logo-reefscape.png" width="110" height="32" alt="Team 2374" class="navbar-brand-image">
+                        <img src="logo-reefscape.png" width="110" height="32" alt="Team 2374"
+                            class="navbar-brand-image">
                     </a>
                 </h1>
                 <div class="navbar-nav flex-row order-md-last">
@@ -181,7 +182,7 @@
                                             <div id="total_students" class="font-weight-medium">
                                                 TOTAL_STUDENTS
                                             </div>
-                                            <div class="text-muted">Subteam Members</div>
+                                            <div class="text-muted" id="subteam-members">Subteam Members</div>
                                         </div>
                                     </div>
                                 </div>
@@ -238,7 +239,7 @@
                                             <div id="total_hours" class="font-weight-medium">
                                                 TOTAL_HOURS
                                             </div>
-                                            <div class="text-muted">Subteam Hours</div>
+                                            <div class="text-muted" id="subteam-hours">Subteam Hours</div>
                                         </div>
                                     </div>
                                 </div>
@@ -275,33 +276,55 @@
                         </div> -->
                         <hr style="margin-top:2rem;">
                         <button onclick="personal();" id="dash-btn" class="btn btn-primary"
-                            style="margin-top:20px;"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-dashboard"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 13m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M13.45 11.55l2.05 -2.05" /><path d="M6.4 20a9 9 0 1 1 11.2 0z" /></svg>View Personal Dashboard</button>
+                            style="margin-top:20px;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-dashboard">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M12 13m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                <path d="M13.45 11.55l2.05 -2.05" />
+                                <path d="M6.4 20a9 9 0 1 1 11.2 0z" />
+                            </svg>View Personal Dashboard</button>
                         <hr style="margin-top:3rem;">
                         <span id="aHead">
 
                             <h3 class="card-title">Take Attendance for <span id="tDate"></span>.</h3>
 
-                            <div class="col-2 d-none d-xxl-block">
-                                <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
-                                    <form action="./" method="get" autocomplete="off" novalidate="">
-                                        <div class="input-icon">
-                                            <span class="input-icon-addon">
-                                                <!-- Download SVG icon from http://tabler-icons.io/i/search -->
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                    class="icon">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                    <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
-                                                    <path d="M21 21l-6 -6"></path>
-                                                </svg>
-                                            </span>
-                                            <input id="userInput" type="text" value="" class="form-control"
-                                                placeholder="Search…" aria-label="Search in website">
-                                        </div>
-                                    </form>
+                            <div class="row g-2 align-items-center">
+                                <div class="col-2 d-none d-xxl-block">
+                                    <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
+                                        <form action="./" method="get" autocomplete="off" novalidate="">
+                                            <div class="input-icon">
+                                                <span class="input-icon-addon">
+                                                    <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="icon">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                        <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
+                                                        <path d="M21 21l-6 -6"></path>
+                                                    </svg>
+                                                </span>
+                                                <input id="userInput" type="text" value="" class="form-control"
+                                                    placeholder="Search…" aria-label="Search in website">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <select class="form-select" id="subteamSearch" onchange="subteamChange()">
+                                        <option disabled selected="">Select a subteam</option>
+                                        <option value="all">All</option>
+                                        <option value="design">Design</option>
+                                        <option value="electrical">Electrical</option>
+                                        <option value="manufacturing">Manufacturing</option>
+                                        <option value="marketing">Marketing</option>
+                                        <option value="software">Software</option>
+                                    </select>
                                 </div>
                             </div>
+
                         </span>
 
                         <!-- <div class="col-md-6 col-lg-4">
@@ -363,7 +386,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">Your Attendance Submission Record</h3>
+                                    <h3 class="card-title"><span id="stlabel">Your</span> Team Submission Record</h3>
                                 </div>
                                 <div id="table-default" class="table-responsive">
                                     <table class="table">
@@ -384,28 +407,64 @@
                                         </thead>
                                         <tbody class="table-tbody placeholder-glow" id="record">
                                             <tr>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
+                                                <td>
+                                                    <div class="placeholder placeholder-xs col-12"></div>
+                                                </td>
+                                                <td>
+                                                    <div class="placeholder placeholder-xs col-12"></div>
+                                                </td>
+                                                <td>
+                                                    <div class="placeholder placeholder-xs col-12"></div>
+                                                </td>
+                                                <td>
+                                                    <div class="placeholder placeholder-xs col-12"></div>
+                                                </td>
+                                                <td>
+                                                    <div class="placeholder placeholder-xs col-12"></div>
+                                                </td>
+                                                <td>
+                                                    <div class="placeholder placeholder-xs col-12"></div>
+                                                </td>
                                             </tr>
                                             <tr>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
+                                                <td>
+                                                    <div class="placeholder placeholder-xs col-12"></div>
+                                                </td>
+                                                <td>
+                                                    <div class="placeholder placeholder-xs col-12"></div>
+                                                </td>
+                                                <td>
+                                                    <div class="placeholder placeholder-xs col-12"></div>
+                                                </td>
+                                                <td>
+                                                    <div class="placeholder placeholder-xs col-12"></div>
+                                                </td>
+                                                <td>
+                                                    <div class="placeholder placeholder-xs col-12"></div>
+                                                </td>
+                                                <td>
+                                                    <div class="placeholder placeholder-xs col-12"></div>
+                                                </td>
                                             </tr>
                                             <tr>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
-                                                <td><div class="placeholder placeholder-xs col-12"></div></td>
+                                                <td>
+                                                    <div class="placeholder placeholder-xs col-12"></div>
+                                                </td>
+                                                <td>
+                                                    <div class="placeholder placeholder-xs col-12"></div>
+                                                </td>
+                                                <td>
+                                                    <div class="placeholder placeholder-xs col-12"></div>
+                                                </td>
+                                                <td>
+                                                    <div class="placeholder placeholder-xs col-12"></div>
+                                                </td>
+                                                <td>
+                                                    <div class="placeholder placeholder-xs col-12"></div>
+                                                </td>
+                                                <td>
+                                                    <div class="placeholder placeholder-xs col-12"></div>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -421,9 +480,11 @@
                         <div class="col-lg-auto ms-lg-auto">
                             <ul class="list-inline list-inline-dots mb-0">
                                 <li class="list-inline-item"><a href="https://www.instagram.com/2374_jesuit_robotics/"
-                                        class="link-secondary" target="_blank" rel="noopener noreferrer">Instagram</a></li>
-                                <li class="list-inline-item"><a href="https://team2374.org" target="_blank" rel="noopener noreferrer"
-                                        class="link-secondary" rel="noopener">Team 2374</a></li>
+                                        class="link-secondary" target="_blank" rel="noopener noreferrer">Instagram</a>
+                                </li>
+                                <li class="list-inline-item"><a href="https://team2374.org" target="_blank"
+                                        rel="noopener noreferrer" class="link-secondary" rel="noopener">Team 2374</a>
+                                </li>
                             </ul>
                         </div>
                         <div class="col-12 col-lg-auto mt-3 mt-lg-0">

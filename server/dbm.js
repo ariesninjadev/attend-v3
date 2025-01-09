@@ -257,6 +257,20 @@ const Subgroups = mongoose.model("subgroups", subgroupsSchema);
 const Submissions = mongoose.model("submissions", submissionsSchema);
 const Config = mongoose.model("config", configSchema);
 
+
+var allUsers;
+
+// Update allUsers cache every 5 minutes
+setInterval(async () => {
+    allUsers = await User.find({});
+}, 300000);
+
+// Load all users into the cache once. Follow async rules.
+(async () => {
+    allUsers = await User.find({});
+})();
+
+
 async function registerUser(id, name, grade, v, subgroup) {
     // Check if the user already exists
     const user = await User.findOne({ id: id });
@@ -923,11 +937,12 @@ async function subteamMaster(id) {
 
             // Move the leader to the front of the array, and the vice to 2nd.
             const leader = members.find((member) => member.id === "ahuang26@jesuitmail.org");
-            const vice = members.find((member) => member.id === "");
+            // const vice = members.find((member) => member.id === "");
             members.splice(members.indexOf(leader), 1);
-            members.splice(members.indexOf(vice), 1);
+            // members.splice(members.indexOf(vice), 1);
             members.unshift(leader);
-            members.splice(1, 0, vice);
+            // members.splice(1, 0, vice);
+            hasVice = false;
         } else {
 
             var comp;
@@ -1142,17 +1157,32 @@ async function loadAllPreSeasonHours() {
     }
 }
 
+function getSubteamFromCache(id) {
+    const user = allUsers.find((user) => user.id === id);
+    if (!user) {
+        return false;
+    }
+    return user.subgroup;
+}
+
 async function getStaffRecord(id) {
     try {
         const user = await User.findOne({ id: id });
-        const subgroup = user.subgroup;
+        const userSubteam = user.subgroup;
         // Get ALL submissions
         const submissions = await Submissions.find({});
         var relevantSubmissions = [];
-        // Scan each submission's first user's subgroup. If it equals the subgroup of the user, add it to the list.
+        // Scan each submission's users. If any of their subteams matches ours, add it to the list.
         for (let i = 0; i < submissions.length; i++) {
-            if (submissions[i].data[0].id === id) {
-                relevantSubmissions.push(submissions[i]);
+            for (let j = 0; j < submissions[i].data.length; j++) {
+                const subteam = getSubteamFromCache(submissions[i].data[j].id);
+                if (!subteam) {
+                    continue;
+                }
+                if (subteam == userSubteam) {
+                    relevantSubmissions.push(submissions[i]);
+                    break;
+                }
             }
         }
         return relevantSubmissions;
