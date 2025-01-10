@@ -345,6 +345,10 @@ function userout(ee) {
     });
 }
 
+function capFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 function valve(content) {
     socket.emit("findUsers", content, (response) => {
         if (response.status == "ok") {
@@ -364,6 +368,7 @@ function valve(content) {
   <button class='p-button signon-button' onclick="popup('${s.id
                     }')">Details</button>
   <p id='h-${s.id}'>Hours: ${s.hours}</p>
+  <p>Subteam: ${capFirstLetter(s.subgroup)}</p>
 </div>
 `;
             });
@@ -416,7 +421,7 @@ function addUser() {
             }, 250);
         } else {
             document.getElementById("cards").innerHTML =
-                'Please enter at least 3 characters<br><strong>OR</strong><br>Type "#" to show all students<br>Type "^[num]" to show students with at least [num] hrs<br><br>';
+                'Please enter at least 3 characters<br><strong>OR</strong><br>Type "#" to show all students<br>Type "^[num]" to show students with at least [num] hrs<br>Type "subteam:[subteam_name] to show students in a specified subteam.<br><br>';
         }
     });
 })();

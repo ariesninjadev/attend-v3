@@ -2,7 +2,7 @@
 //       IMPORTANT STATICS        //
 /// ----------------------------- ///
 
-const version = "3.8.0";
+const version = "3.8.1";
 
 /// ----------------------------- ///
 
@@ -260,7 +260,7 @@ try {
         
                 data = await db.retrieve(email);
         
-                if (!data) {
+                if (!data && (!status == "admin" || !status == "networkAdmin")) {
                     callback({ status: "nonuser" });
                     return;
                 }
