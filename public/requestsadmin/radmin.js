@@ -95,7 +95,7 @@ function editText(id, type) {
         document.getElementById("rs-"+id).value = "true";
         document.getElementById("nd-"+id).value = "true";
     } else if (type == 1) {
-        document.getElementById("fb-"+id).value = "Note from reviewer: Final Warning! Please provide a description of what you did after the meeting time ended. This will help us to better understand the situation and make a more informed decision.";
+        document.getElementById("fb-"+id).value = "Note from reviewer: This is your second time not properly describing what you did after the meeting ended. Next time, please provide a description of what you did after the meeting time ended. This will help us to better understand the situation and make a more informed decision. Further violations will result in your request being rejected.";
         document.getElementById("rs-"+id).value = "true";
         document.getElementById("nd-"+id).value = "true";
     } else if (type == 2) {

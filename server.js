@@ -2,7 +2,7 @@
 //       IMPORTANT STATICS        //
 /// ----------------------------- ///
 
-const version = "3.8.1";
+const version = "3.8.2";
 
 /// ----------------------------- ///
 
@@ -784,12 +784,12 @@ try {
                     }
 
                     if (data.type == "1") {
-                        var reasonText = "receive extra hours because of a bug or issue";
+                        var reasonText = "receive extra hours because of a bug or issue you encountered";
                     } else if (data.type == "2") {
                         if (data.desc1 == "in") {
-                            var reasonText = "receive extra hours because you forgot to log in";
+                            var reasonText = "receive extra hours because you were not signed in";
                         } else {
-                            var reasonText = "have your hours corrected because you forgot to log out";
+                            var reasonText = "have your hours corrected because you were not signed out";
                         }
                     } else if (data.type == "3") {
                         var reasonText = "receive extra hours because you stayed late to a meeting";
