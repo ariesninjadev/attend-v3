@@ -56,6 +56,7 @@ function valve() {
                     <div class="card" id="${s.id}">
                         <h2>${s.name}</h2>
                         <p>${s.email}</p>
+                        <p>${s.subgroup} | ${s.hours} hours</p>
                         <p>Type: ${type}</p>
                         <p>${data}</p>
 
