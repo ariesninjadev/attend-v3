@@ -41,11 +41,15 @@ function valve() {
                 }
 
                 var noDesc = 0;
+                var subgroup;
+                var hours;
 
                 // Loop through the user array to find the user object with matching email
                 for (var i = 0; i < uData.user.length; i++) {
                     if (uData.user[i].id === s.email) {
                         noDesc = uData.user[i].noDesc;
+                        subgroup = uData.user[i].subgroup;
+                        hours = uData.user[i].hours;
                         break; // Stop the loop once found
                     }
                 }
@@ -56,6 +60,7 @@ function valve() {
                     <div class="card" id="${s.id}">
                         <h2>${s.name}</h2>
                         <p>${s.email}</p>
+                        <p>${subgroup} | ${hours} hours</p>
                         <p>Type: ${type}</p>
                         <p>${data}</p>
 
@@ -95,7 +100,7 @@ function editText(id, type) {
         document.getElementById("rs-"+id).value = "true";
         document.getElementById("nd-"+id).value = "true";
     } else if (type == 1) {
-        document.getElementById("fb-"+id).value = "Note from reviewer: Final Warning! Please provide a description of what you did after the meeting time ended. This will help us to better understand the situation and make a more informed decision.";
+        document.getElementById("fb-"+id).value = "Note from reviewer: This is your second time not properly describing what you did after the meeting ended. Next time, please provide a description of what you did after the meeting time ended. This will help us to better understand the situation and make a more informed decision. Further violations will result in your request being rejected.";
         document.getElementById("rs-"+id).value = "true";
         document.getElementById("nd-"+id).value = "true";
     } else if (type == 2) {

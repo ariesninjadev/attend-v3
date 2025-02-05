@@ -39,14 +39,22 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-                    <a href=".">
-                        <img src="logo.png" width="110" height="32" alt="Team 2374" class="navbar-brand-image">
+                    <a href="/">
+                        <img src="logo-reefscape.png" width="110" height="32" alt="Team 2374" class="navbar-brand-image">
                     </a>
                 </h1>
                 <div class="navbar-nav flex-row order-md-last">
                     
                     <div class="nav-item d-none d-md-flex me-3">
                         <div class="btn-list">
+                            <a id="staff-transfer" href="/" class="btn" rel="noreferrer" style="display:none;">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="24" height="24" stroke-width="2">
+                                    <path d="M5 12l14 0"></path>
+                                    <path d="M5 12l4 4"></path>
+                                    <path d="M5 12l4 -4"></path>
+                                  </svg>
+                                Go back
+                            </a>
                             <a href="/relocate" class="btn" rel="noreferrer">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -182,7 +190,7 @@
                             <div class="card card-active">
                                 <div class="card-body" style="text-align:center;">
                                     <div class="d-flex align-items-center">
-                                        <div style="width:100%;color:black;" class="subheader">You are curently clocked in.</div>    
+                                        <div style="width:100%;" class="subheader">You are currently clocked in.</div>    
                                     </div>
                                 </div>
                             </div>
@@ -203,13 +211,23 @@
                                     <div class="d-flex align-items-center">
                                         <div id="hours" style="width:100%;font-size:4em;margin-top:15px;" class="h1 mb-0 me-2"><div class="placeholder placeholder-s col-1"></div></div>  
                                     </div>
-                                    <br style="margin-top:40px;margin-bottom:40px;">
+                                    <br style="margin-top:50px;margin-bottom:50px;">
+                                    <br style="margin-top:50px;margin-bottom:50px;">
                                     <div class="d-flex align-items-center">
                                         <div style="width:100%;" class="subheader">Required for Varsity Letter:</div>    
                                     </div>
                                     <div class="d-flex align-items-center">
-                                        <div style="width:100%;" class="h1 mb-0 me-2">Undecided</div>  
+                                        <div id="varsity" style="width:100%;" class="h1 mb-0 me-2"><div class="placeholder placeholder-s col-1"></div></div>  
                                     </div>
+                                    <br style="margin-top:10px;">
+                                    <div class="d-flex align-items-center">
+                                        <div style="width:100%;" class="subheader">Varsity Eligibility:</div>    
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div id="eligibility" style="width:100%;font-size:1em;" class="h1 mb-0 me-2"><div class="placeholder placeholder-s col-1"></div></div>  
+                                    </div>
+                                    <br><br>
+                                    <i style="font-size:0.6em;" class="subheader">* To earn your varsity letter, you must be present at robotics for this many hours. This is only one requirement for the letter.</i>
                                 </div>
                                 
                             </div>
@@ -285,13 +303,13 @@
                                 
                                 <div class="card-body" style="text-align:center;">
                                     <div class="d-flex align-items-center">
-                                        <div style="width:100%;" class="subheader">Preseason Hours:</div>
+                                        <div style="width:100%;margin-bottom:0.9rem;" class="subheader">2024/25 Preseason Hours:</div>
                                         
                                     </div>
                                     <div class="d-flex align-items-center">
                                         <div id="pre-hours" style="width:100%;" class="h1 mb-0 me-2"><div class="placeholder placeholder-s col-3"></div></div>
                                     </div>
-                                    <i style="font-size:0.6em;">(We are still gathering this data. Check back soon!)</i>
+                                    <!-- <i style="font-size:0.6em;">(We are still gathering this data. Check back soon!)</i> -->
                                 </div>
                                 
                             </div>
@@ -306,8 +324,8 @@
                         <div class="col-lg-auto ms-lg-auto">
                             <ul class="list-inline list-inline-dots mb-0">
                                 <li class="list-inline-item"><a href="https://www.instagram.com/2374_jesuit_robotics/"
-                                        class="link-secondary">Instagram</a></li>
-                                <li class="list-inline-item"><a href="https://team2374.org" target="_blank"
+                                        class="link-secondary" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+                                <li class="list-inline-item"><a href="https://team2374.org" target="_blank" rel="noopener noreferrer"
                                         class="link-secondary" rel="noopener">Team 2374</a></li>
                             </ul>
                         </div>
@@ -320,8 +338,8 @@
                                     All rights reserved.
                                 </li>
                                 <li class="list-inline-item">
-                                    <a href="./changelog.html" class="link-secondary" rel="noopener">
-                                        v3.6.0
+                                    <a id="version" class="link-secondary" rel="noopener">
+                                        vX.X.X
                                     </a>
                                 </li>
                             </ul>
@@ -331,131 +349,30 @@
             </footer>
         </div>
     </div>
-    <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">New report</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Name</label>
-                        <input type="text" class="form-control" name="example-text-input"
-                            placeholder="Your report name">
-                    </div>
-                    <label class="form-label">Report type</label>
-                    <div class="form-selectgroup-boxes row mb-3">
-                        <div class="col-lg-6">
-                            <label class="form-selectgroup-item">
-                                <input type="radio" name="report-type" value="1" class="form-selectgroup-input" checked>
-                                <span class="form-selectgroup-label d-flex align-items-center p-3">
-                                    <span class="me-3">
-                                        <span class="form-selectgroup-check"></span>
-                                    </span>
-                                    <span class="form-selectgroup-label-content">
-                                        <span class="form-selectgroup-title strong mb-1">Simple</span>
-                                        <span class="d-block text-secondary">Provide only basic data needed for the
-                                            report</span>
-                                    </span>
-                                </span>
-                            </label>
-                        </div>
-                        <div class="col-lg-6">
-                            <label class="form-selectgroup-item">
-                                <input type="radio" name="report-type" value="1" class="form-selectgroup-input">
-                                <span class="form-selectgroup-label d-flex align-items-center p-3">
-                                    <span class="me-3">
-                                        <span class="form-selectgroup-check"></span>
-                                    </span>
-                                    <span class="form-selectgroup-label-content">
-                                        <span class="form-selectgroup-title strong mb-1">Advanced</span>
-                                        <span class="d-block text-secondary">Insert charts and additional advanced
-                                            analyses to be inserted
-                                            in the report</span>
-                                    </span>
-                                </span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div class="mb-3">
-                                <label class="form-label">Report url</label>
-                                <div class="input-group input-group-flat">
-                                    <span class="input-group-text">
-                                        https://tabler.io/reports/
-                                    </span>
-                                    <input type="text" class="form-control ps-0" value="report-01" autocomplete="off">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="mb-3">
-                                <label class="form-label">Visibility</label>
-                                <select class="form-select">
-                                    <option value="1" selected>Private</option>
-                                    <option value="2">Public</option>
-                                    <option value="3">Hidden</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label class="form-label">Client name</label>
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label class="form-label">Reporting period</label>
-                                <input type="date" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div>
-                                <label class="form-label">Additional information</label>
-                                <textarea class="form-control" rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
-                        Cancel
-                    </a>
-                    <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
-                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M12 5l0 14" />
-                            <path d="M5 12l14 0" />
-                        </svg>
-                        Create new report
-                    </a>
-                </div>
+    <!-- Modal -->
+    <div class="modal modal-blur fade" id="modal-simple" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Team Message</h5>
+              <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
             </div>
+            <div id="alert-body" class="modal-body">
+            </div>
+            <div class="modal-footer">
+              <button onclick="readAlert();" style="width:100%;" type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
         </div>
-    </div>
-    <!-- Libs JS -->
-    <script src="../assets/dist/libs/apexcharts/dist/apexcharts.min.js?1692870487" defer></script>
-    <script src="../assets/dist/libs/jsvectormap/dist/js/jsvectormap.min.js?1692870487" defer></script>
-    <script src="../assets/dist/libs/jsvectormap/dist/maps/world.js?1692870487" defer></script>
-    <script src="../assets/dist/libs/jsvectormap/dist/maps/world-merc.js?1692870487" defer></script>
-    <!-- Tabler Core -->
+      </div>
+    <!-- Core -->
     <script src="../assets/dist/js/tabler.min.js?1692870487" defer></script>
     <script src="../assets/dist/js/demo.min.js?1692870487" defer></script>
-    <script src="../assets/dist/libs/list.js/dist/list.min.js?1735606190" defer=""></script>
-    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="/assets/alertify.min.js"></script>
-    <script src="/generic.js"></script>
-    <script src="./dash.js"></script>
+    <script src="../assets/dist/libs/list.js/dist/list.min.js?1735606190" defer></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" crossorigin="anonymous" defer></script>
+    <script type="text/javascript" src="/assets/alertify.min.js" defer></script>
+    <script src="/generic.js" defer></script>
+    <script src="./dash.js" defer></script>
 </body>
 
 </html>

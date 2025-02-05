@@ -1,98 +1,60 @@
 var socket = io();
 
+function hideAllExceptFirst() {
+    const formElements = [
+        'control-typeSelect',
+        'control-inOutSelect',
+        'control-describeIssue',
+        'control-whatDid',
+        'control-whatDateIF',
+        'control-whatDateREG',
+        'control-timeIn',
+        'control-timeOut',
+        'control-submit'
+    ];
+
+    formElements.forEach((id, index) => {
+        const element = document.getElementById(id);
+        if (element && index !== 0) {
+            element.style.display = 'none';
+        }
+    });
+}
+
+var uemail = localStorage.getItem("auth");
+var uname = localStorage.getItem("name");
+var utype = "";
+var udesc = "";
+var udesc2 = "";
+var udesc3 = "";
+var udesc4 = "";
+
+// Call the function to hide all form elements except the first one
+hideAllExceptFirst();
 
 if (!localStorage.getItem("auth")) {
     location.replace("/")
 }
 
-var observe;
-if (window.attachEvent) {
-    observe = function (element, event, handler) {
-        element.attachEvent('on' + event, handler);
-    };
-}
-else {
-    observe = function (element, event, handler) {
-        element.addEventListener(event, handler, false);
-    };
-}
-function init() {
-    var issue_1_1 = document.getElementById('issue-1-1');
-    function resize() {
-        const csc = window.scrollY;
-        issue_1_1.style.height = 'auto';
-        issue_1_1.style.height = issue_1_1.scrollHeight + 'px';
-        window.scrollTo(0, csc);
-    }
-    function delayedResize() {
-        window.setTimeout(resize, 0);
+function submitForm() {
+
+    if (document.getElementById("typeSelect").value == "other") {
+        utype = "1";
+        udesc = document.getElementById("describeIssue").value;
+        udesc2 = document.getElementById("whatDateIF").value;
+    } else if (document.getElementById("typeSelect").value == "forgot") {
+        utype = "2";
+        udesc = document.getElementById("inOutSelect").value;
+        udesc2 = document.getElementById("whatDateREG").value;
+        udesc3 = document.getElementById("timeIn").value;
+        udesc4 = document.getElementById("timeOut").value;
+    } else if (document.getElementById("typeSelect").value == "late") {
+        utype = "3";
+        udesc = document.getElementById("whatDid").value;
+        udesc2 = document.getElementById("whatDateREG").value;
+        udesc3 = document.getElementById("timeOut").value;
     }
 
-    observe(issue_1_1, 'change', resize);
-    observe(issue_1_1, 'cut', delayedResize);
-    observe(issue_1_1, 'paste', delayedResize);
-    observe(issue_1_1, 'drop', delayedResize);
-    observe(issue_1_1, 'keydown', delayedResize);
-
-    issue_1_1.focus();
-    issue_1_1.select();
-
-    resize();
-}
-
-init();
-
-function update() {
-    var choice = document.getElementById("request-type").value;
-    document.getElementById("1").style.display = "none";
-    document.getElementById("2").style.display = "none";
-    document.getElementById("3").style.display = "none";
-    document.getElementById("4").style.display = "none";
-
-    document.getElementById(choice).style.display = "block";
-}
-
-function updateSignType() {
-    var choice = document.getElementById("signtypea").value;
-    document.getElementById("issue-2-2").style.display = "block";
-    document.getElementById("issue-2-3").style.display = "inline-block";
-    document.getElementById("issue-2-4").style.display = "inline-block";
-    if (choice == "in") {
-        document.getElementById("typedesc").innerText = "What day did you forget to sign in?"
-        document.getElementById("typedesc2").innerText = "What time did you arrive?"
-        document.getElementById("typedesc3").innerText = "What time did you leave?"
-        document.getElementById("issue-2b-2").style.display = "block";
-        document.getElementById("issue-2c-2").style.display = "block";
-    } else if (choice == "out") {
-        document.getElementById("typedesc").innerText = "What day did you forget to sign out?"
-        document.getElementById("typedesc2").innerText = ""
-        document.getElementById("typedesc3").innerText = "What time did you leave?"
-        document.getElementById("issue-2b-2").style.display = "none";
-        document.getElementById("issue-2c-2").style.display = "block";
-    }
-}
-
-function submitRequest() {
-    uemail = localStorage.getItem("auth");
-    uname = localStorage.getItem("name");
-    utype = document.getElementById("request-type").value;
-    udesc = "";
-    udesc2 = "";
-    udesc3 = "";
-    udesc4 = "";
-    if (utype == "1") {
-        udesc = document.getElementById("issue-1-1").value;
-        udesc2 = document.getElementById("issue-1-2").value;
-    } else if (utype == "2") {
-        udesc = document.getElementById("signtypea").value;
-        udesc2 = document.getElementById("issue-2-2").value;
-        udesc3 = document.getElementById("issue-2b-2").value;
-        udesc4 = document.getElementById("issue-2c-2").value;
-    } else if (utype == "3") {
-        udesc = document.getElementById("issue-3-1").value;
-        udesc2 = document.getElementById("issue-3-2").value;
-        udesc3 = document.getElementById("issue-3-3").value;
-    }
     socket.emit("submitRequest", uemail, uname, utype, udesc, udesc2, udesc3, udesc4, (response) => {
         if (response.status == "success") {
             alert("Request submitted successfully!");
@@ -104,4 +66,78 @@ function submitRequest() {
     });
 }
 
-update();
+// Listen for a dropdown change of element with id "control-typeSelect"
+document.getElementById("typeSelect").addEventListener("change", function() {
+    var selectedValue = this.value;
+    console.log(selectedValue);
+    hideAllExceptFirst();
+    document.getElementById("control-submit").style.display = "block";
+    if (selectedValue == "other") {
+        document.getElementById("control-whatDateIF").style.display = "block";
+        document.getElementById("control-describeIssue").style.display = "block";
+    } else if (selectedValue == "look") {
+        document.getElementById("control-whatDateIF").style.display = "block";
+        document.getElementById("control-describeIssue").style.display = "block";
+    } else if (selectedValue == "forgot") {
+        document.getElementById("control-inOutSelect").style.display = "block";
+    } else if (selectedValue == "late") {
+        document.getElementById("control-whatDid").style.display = "block";
+        document.getElementById("control-whatDateREG").style.display = "block";
+        document.getElementById("control-timeOut").style.display = "block";
+    }
+});
+
+// Listen for a dropdown change of element with id "control-inOutSelect"
+document.getElementById("inOutSelect").addEventListener("change", function() {
+    var selectedValue = this.value;
+    console.log(selectedValue);
+    hideAllExceptFirst();
+    document.getElementById("control-inOutSelect").style.display = "block";
+    document.getElementById("control-submit").style.display = "block";
+    if (selectedValue == "in") {
+        document.getElementById("control-whatDateREG").style.display = "block";
+        document.getElementById("control-timeIn").style.display = "block";
+        document.getElementById("control-timeOut").style.display = "block";
+    } else if (selectedValue == "out") {
+        document.getElementById("control-whatDateREG").style.display = "block";
+        document.getElementById("control-timeOut").style.display = "block";
+    }
+});
+
+// Every 100ms, check all VISIBLE form elements for their values and store them. If all visible form elements have values, enable the submit button.
+setInterval(() => {
+    var typeSelect = document.getElementById("typeSelect").value;
+    var inOutSelect = document.getElementById("inOutSelect").value;
+    var describeIssue = document.getElementById("describeIssue").value;
+    var whatDid = document.getElementById("whatDid").value;
+    var whatDateIF = document.getElementById("whatDateIF").value;
+    var whatDateREG = document.getElementById("whatDateREG").value;
+    var timeIn = document.getElementById("timeIn").value;
+    var timeOut = document.getElementById("timeOut").value;
+
+    if (typeSelect == "other") {
+        if (describeIssue && whatDateIF) {
+            document.getElementById("submit").disabled = false;
+        } else {
+            document.getElementById("submit").disabled = true;
+        }
+    } else if (typeSelect == "look") {
+        if (describeIssue && whatDateIF) {
+            document.getElementById("submit").disabled = false;
+        } else {
+            document.getElementById("submit").disabled = true;
+        }
+    } else if (typeSelect == "forgot") {
+        if (inOutSelect && whatDateREG && timeIn && timeOut) {
+            document.getElementById("submit").disabled = false;
+        } else {
+            document.getElementById("submit").disabled = true;
+        }
+    } else if (typeSelect == "late") {
+        if (whatDid && whatDateREG && timeOut) {
+            document.getElementById("submit").disabled = false;
+        } else {
+            document.getElementById("submit").disabled = true;
+        }
+    }
+}, 100);

@@ -2,33 +2,37 @@
 //       IMPORTANT STATICS        //
 /// ----------------------------- ///
 
-const version = "3.5.0";
-
-const popupVersion = "100001";
-
-const network = [];
-
-const network_admins = [
-    "apowvalla26@jesuitmail.org",
-    "whitenj@gmail.com",
-    "pwhite@jesuitportland.org",
-    "pwhite@jesuitmail.org",
-];
-
-process.env.TZ = "America/Los_Angeles";
-
-const register_as_offline = false;
+const version = "3.8.5";
 
 /// ----------------------------- ///
 
+var varsity_letter_hours;
+
+var popupUID;
+var popupMessage;
+var popupEnabled = false;
+
+process.env.TZ = "America/Los_Angeles";
+
+var register_as_offline = false;
+
+var special_events = [];
+
+var network_admins = [];
+
+console.clear();
+
 console.log(`
 
-    ░█████╗░████████╗████████╗███████╗███╗░░██╗██████╗░  ██╗░░░██╗██████╗░
-    ██╔══██╗╚══██╔══╝╚══██╔══╝██╔════╝████╗░██║██╔══██╗  ██║░░░██║╚════██╗
-    ███████║░░░██║░░░░░░██║░░░█████╗░░██╔██╗██║██║░░██║  ╚██╗░██╔╝░█████╔╝
-    ██╔══██║░░░██║░░░░░░██║░░░██╔══╝░░██║╚████║██║░░██║  ░╚████╔╝░░╚═══██╗
-    ██║░░██║░░░██║░░░░░░██║░░░███████╗██║░╚███║██████╔╝  ░░╚██╔╝░░██████╔╝
-    ╚═╝░░╚═╝░░░╚═╝░░░░░░╚═╝░░░╚══════╝╚═╝░░╚══╝╚═════╝░  ░░░╚═╝░░░╚═════╝░
+     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+    ░░░░░█████╗░████████╗████████╗███████╗███╗░░██╗██████╗░░░░██╗░░░██╗██████╗░░░░░
+    ░░░░██╔══██╗╚══██╔══╝╚══██╔══╝██╔════╝████╗░██║██╔══██╗░░░██║░░░██║╚════██╗░░░░
+    ░░░░███████║░░░██║░░░░░░██║░░░█████╗░░██╔██╗██║██║░░██║░░░╚██╗░██╔╝░█████╔╝░░░░
+    ░░░░██╔══██║░░░██║░░░░░░██║░░░██╔══╝░░██║╚████║██║░░██║░░░░╚████╔╝░░╚═══██╗░░░░
+    ░░░░██║░░██║░░░██║░░░░░░██║░░░███████╗██║░╚███║██████╔╝░░░░░╚██╔╝░░██████╔╝░░░░
+    ░░░░╚═╝░░╚═╝░░░╚═╝░░░░░░╚═╝░░░╚══════╝╚═╝░░╚══╝╚═════╝░░░░░░░╚═╝░░░╚═════╝░░░░░
+     ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+         Made by: Aries Powvalla                                Version: ${version}
 `);
 
 try {
@@ -38,6 +42,7 @@ try {
     const path = require("path");
     const db = require("./server/dbm.js");
     const mail = require("./server/mail.js");
+    const stat = require("./server/statAdder.js");
 
     app.set("view engine", "ejs");
     app.set("views", path.join(__dirname, "public"));
@@ -109,6 +114,25 @@ try {
 
     }
 
+    function updateConfigs() {
+        db.getConfig()
+            .then((data) => {
+                varsity_letter_hours = data.varsity_letter_hours;
+                popupUID = data.alert.uid;
+                popupMessage = data.alert.message;
+                popupEnabled = data.alert.enabled;
+                process.env.TZ = data.timezone;
+                register_as_offline = data.offline;
+                special_events = data.special_events;
+                network_admins = data.network_admins;
+            })
+            .catch((err) => {
+                console.error(err);
+                return false;
+            });
+    }
+
+    // Grab the schedule data
     try {
         db.sch_pull()
             .then((data) => {
@@ -123,7 +147,39 @@ try {
         return false;
     }
 
+    // Load the config data
+    try {
+        db.getConfig()
+            .then((data) => {
+                if (!data || data == null) {
+                    return db.createConfig();
+                }
+            })
+            .then(() => {
+                return db.getConfig();
+            })
+            .then((data) => {
+                varsity_letter_hours = data.varsity_letter_hours;
+                popupUID = data.alert.uid;
+                popupMessage = data.alert.message;
+                popupEnabled = data.alert.enabled;
+                process.env.TZ = data.timezone;
+                register_as_offline = data.offline;
+                special_events = data.special_events;
+                network_admins = data.network_admins;
+                console.log("Config data loaded.");
+            })
+            .catch((err) => {
+                console.error(err);
+                return false;
+            });
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+
     setInterval(schedcron, 10000);
+    setInterval(updateConfigs, 20000);
 
     function convertTimeBToDate(timeB, dateA) {
         return new Date(
@@ -140,6 +196,9 @@ try {
         const dateB = convertTimeBToDate(timeB, dateA);
         return Math.abs(dateA - dateB) <= 900000;
     }
+
+    // // Single run code: load all users preseason hours
+    // db.loadAllPreSeasonHours(stat);
 
 
     app.get("*", function (req, res) {
@@ -160,9 +219,9 @@ try {
                     gradYear = match[0];
                 } else {
                     console.log("No graduation year found in the email");
-                    return false;
+                    gradYear = 0;
                 }
-                db.registerUser(email, name, gradYear, popupVersion, subgroup).then((data) => {
+                db.registerUser(email, name, gradYear, "0", subgroup).then((data) => {
                     callback({
                         status: "ok",
                         data: data,
@@ -177,84 +236,67 @@ try {
             }
         });
 
-        socket.on("dataRequest", (email, callback) => {
+        socket.on("dataRequest", async (email, callback) => {
             try {
+                let status;
+                let data;
+                let doAlert;
+        
                 if (network_admins.includes(email)) {
-                    callback({
-                        status: "networkAdmin",
-                    });
-                    return false;
-                }
-                if (register_as_offline) {
-                    // Hang for 2 seconds to simulate offline mode then callback offline
+                    status = "networkAdmin";
+                } else if (register_as_offline) {
                     setTimeout(() => {
-                        callback({
-                            status: "offline",
-                        });
+                        callback({ status: "offline" });
                     }, 2000);
-                    return false;
+                    return;
+                } else if (email == null) {
+                    callback({ status: "guest" });
+                    return;
+                } else if (await db.isAdmin(email)) {
+                    status = "admin";
+                } else {
+                    status = "user";
                 }
-                if (email == null) {
-                    callback({
-                        status: "guest",
-                    });
-                    return false;
+        
+                data = await db.retrieve(email);
+        
+                if (!data && (!status == "admin" || !status == "networkAdmin")) {
+                    callback({ status: "nonuser" });
+                    return;
                 }
-                db.isAdmin(email)
+
+                doAlert = await db.checkAlertState(email, popupUID);
+
+                let enabled = (popupEnabled && doAlert);
+        
+                callback({
+                    status: status,
+                    data: data,
+                    conversion: db.getConversionCache(),
+                    varsity: varsity_letter_hours,
+                    version: version,
+                    alert: {
+                        uid: popupUID,
+                        message: popupMessage,
+                        enabled: enabled,
+                    },
+                    special_events: special_events,
+                });
+            } catch (err) {
+                console.error(err);
+                callback({ status: "error", data: err });
+            }
+        });
+
+        socket.on("updateAlertState", (email) => {
+            try {
+                db.updateAlertState(email, popupUID)
                     .then((data) => {
-                        if (data) {
-                            callback({
-                                status: "admin",
-                            });
-                        } else {
-                            db.retrieve(email)
-                                .then((data) => {
-                                    if (!data) {
-                                        callback({
-                                            status: "nonuser",
-                                        });
-                                        return false;
-                                    }
-                                    callback({
-                                        status: "user",
-                                        data: data,
-                                        conversion: db.getConversionCache(),
-                                    });
-                                })
-                                .catch((err) => {
-                                    callback({
-                                        status: "error",
-                                        data: err,
-                                    });
-                                });
-                        }
                     })
                     .catch((err) => {
-                        callback({
-                            status: "error",
-                            data: err,
-                        });
                     });
-                // db.retrieve(email)
-                //     .then((data) => {
-                //         callback({
-                //             status: "user",
-                //             data: data,
-                //             m: meetingActive,
-                //             mdata_local: fetchToday(),
-                //         });
-                //     })
-                //     .catch((err) => {
-                //         callback({
-                //             status: "error",
-                //             data: err,
-                //         });
-                //     });
             } catch (err) {
-                callback({
-                    status: "error",
-                    data: err,
-                });
+                console.error(err);
             }
         });
 
@@ -652,33 +694,33 @@ try {
             }
         });
 
-        socket.on("fetchUpdates", (id, callback) => {
-            try {
-                db.getLatest(id, popupVersion)
-                    .then((data) => {
-                        if (!data || isLastBehindCurrent(data, popupVersion)) {
-                            callback({
-                                status: "update"
-                            });
-                        } else {
-                            callback({
-                                status: "ok",
-                            });
-                        }
-                    })
-                    .catch((err) => {
-                        callback({
-                            status: "error",
-                            data: err,
-                        });
-                    });
-            } catch (err) {
-                callback({
-                    status: "error",
-                    data: err,
-                });
-            }
-        });
+        // socket.on("fetchUpdates", (id, callback) => {
+        //     try {
+        //         db.fetchAlertAndJump(id, popupUID)
+        //             .then((data) => {
+        //                 if (popupEnabled && data) {
+        //                     callback({
+        //                         status: "update"
+        //                     });
+        //                 } else {
+        //                     callback({
+        //                         status: "ok",
+        //                     });
+        //                 }
+        //             })
+        //             .catch((err) => {
+        //                 callback({
+        //                     status: "error",
+        //                     data: err,
+        //                 });
+        //             });
+        //     } catch (err) {
+        //         callback({
+        //             status: "error",
+        //             data: err,
+        //         });
+        //     }
+        // });
 
         socket.on("submitRequest", (uemail, uname, utype, udesc, udesc2, udesc3, udesc4, callback) => {
             try {
@@ -742,12 +784,12 @@ try {
                     }
 
                     if (data.type == "1") {
-                        var reasonText = "receive extra hours because of a bug or issue";
+                        var reasonText = "receive extra hours because of a bug or issue you encountered";
                     } else if (data.type == "2") {
                         if (data.desc1 == "in") {
-                            var reasonText = "receive extra hours because you forgot to log in";
+                            var reasonText = "receive extra hours because you were not signed in";
                         } else {
-                            var reasonText = "have your hours corrected because you forgot to log out";
+                            var reasonText = "have your hours corrected because you were not signed out";
                         }
                     } else if (data.type == "3") {
                         var reasonText = "receive extra hours because you stayed late to a meeting";
@@ -791,6 +833,29 @@ try {
         socket.on("getLoggedInPerSubteam", (callback) => {
             try {
                 db.getLoggedInPerSubteam()
+                    .then((data) => {
+                        callback({
+                            status: "ok",
+                            data: data,
+                        });
+                    })
+                    .catch((err) => {
+                        callback({
+                            status: "error",
+                            data: err,
+                        });
+                    });
+            } catch (err) {
+                callback({
+                    status: "error",
+                    data: err,
+                });
+            }
+        });
+
+        socket.on("getStaffRecord", (email, callback) => {
+            try {
+                db.getStaffRecord(email)
                     .then((data) => {
                         callback({
                             status: "ok",
