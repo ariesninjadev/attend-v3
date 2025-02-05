@@ -1,7 +1,7 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #274e35 !important;
-    background-image: url("bg.png");
+    background-color: #161616 !important;
+    /* background-image: url("bg.png"); */
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -79,7 +79,7 @@ overlay {
     max-width: min(800px, 80%);
     margin: 0 auto;
     padding: 20px;
-    background-color: #366840;
+    background-color: #000000;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 

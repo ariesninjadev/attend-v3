@@ -374,26 +374,7 @@ function valve(content) {
 }
 
 function addUser() {
-    var e = prompt("Email?");
-    if (e == null || e == "") {
-        return false;
-    }
-    var n = prompt("Full Name?");
-    if (n == null || n == "") {
-        return false;
-    }
-    var s = prompt("Subgroup?");
-    if (e != null && n != null && s != null) {
-        console.log(e);
-        socket.emit("createUser", e, n, s, (response) => {
-            if (response.status == "ok" && response.data == true) {
-                alert("User added.");
-                location.reload();
-            } else {
-                alertify.error("There was an error! > " + response.data);
-            }
-        });
-    }
+    window.location.href = "/kiosk/new";
 }
 
 // Beautiful search function by Aries Powvalla
