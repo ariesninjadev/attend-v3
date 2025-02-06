@@ -483,6 +483,9 @@ function extractByQuery(query) {
             if (!(response.status == "admin" || response.status == "networkAdmin")) {
                 location.replace("/limbo")
             } else {
+                if (response.status == "networkAdmin") {
+                    document.getElementById("admin").style.display = "block";
+                }
                 version = response.version;
                 conversion = response.conversion;
                 main();
