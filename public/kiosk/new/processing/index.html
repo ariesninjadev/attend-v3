@@ -1,0 +1,152 @@
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>2374 | Processing...</title>
+	<script defer="" data-api="/stats/api/event" data-domain="preview.tabler.io" src="/stats/js/script.js"></script>
+	<meta name="msapplication-TileColor" content="#066fd1">
+	<meta name="theme-color" content="#066fd1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon">
+	<meta name="canonical" content="https://tabler.io/demo/page-loader.html">
+	<!-- CSS files -->
+	<link href="../../../assets/dist/css/tabler.min.css?1738448787" rel="stylesheet">
+	<link href="../../../assets/dist/css/tabler-flags.min.css?1738448787" rel="stylesheet">
+	<link href="../../../assets/dist/css/tabler-socials.min.css?1738448787" rel="stylesheet">
+	<link href="../../../assets/dist/css/tabler-payments.min.css?1738448787" rel="stylesheet">
+	<link href="../../../assets/dist/css/tabler-vendors.min.css?1738448787" rel="stylesheet">
+	<link href="../../../assets/dist/css/tabler-marketing.min.css?1738448787" rel="stylesheet">
+	<link href="../../../assets/dist/css/demo.min.css?1738448787" rel="stylesheet">
+	<style>
+		@import url('https://rsms.me/inter/inter.css');
+    
+    @keyframes zoomIn {
+        from {
+            transform: scale(1);
+            margin-top: inherit;
+        }
+        to {
+            transform: scale(1.6);
+			margin-top: 40px;
+        }
+    }
+    
+    .zoom-animation {
+        animation: zoomIn 0.6s ease-out forwards;
+    }
+    
+    .logo-container {
+        transition: all 0.6s ease-out;
+    }
+	</style>
+</head>
+
+<body class=" d-flex flex-column">
+	<script src="../../../assets/dist/js/demo-theme.min.js?1738448787"></script>
+	<div class="page">
+		<div class="container container-slim py-4" style="max-width:28rem;margin-top:30vh;">
+			<div class="text-center">
+				<div class="mb-3 logo-container">
+					<a href="." class="navbar-brand navbar-brand-autodark"><img src="../logo.png" style="width:100%;" alt=""></a>
+				</div>
+				<div id="text" class="text-secondary mb-3" style="font-size:1rem;">Setting up your account...</div>
+				<div id="prog" class="progress progress-sm">
+					<div class="progress-bar progress-bar-indeterminate"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Libs JS -->
+	<!-- Tabler Core -->
+	<script src="../../../assets/dist/js/tabler.min.js?1738448788" defer=""></script>
+	<script src="../../../assets/dist/js/demo.min.js?1738448788" defer=""></script>
+	<script src="
+https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.8.1/tsparticles.confetti.bundle.min.js
+"></script>
+	<script defer=""
+		src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"
+		integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ=="
+		data-cf-beacon="{&quot;rayId&quot;:&quot;90d85c0dbee92f5a&quot;,&quot;serverTiming&quot;:{&quot;name&quot;:{&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfSpeedBrain&quot;:true,&quot;cfCacheStatus&quot;:true}},&quot;version&quot;:&quot;2025.1.0&quot;,&quot;token&quot;:&quot;84cae67e72b342399609db8f32d1c3ff&quot;}"
+		crossorigin="anonymous"></script>
+	<script>
+
+		// Confetti
+		function doConfetti() {
+			const duration = 2 * 1000,
+				animationEnd = Date.now() + duration,
+				defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+			function randomInRange(min, max) {
+				return Math.random() * (max - min) + min;
+			}
+
+			const interval = setInterval(function () {
+				const timeLeft = animationEnd - Date.now();
+
+				if (timeLeft <= 0) {
+					return clearInterval(interval);
+				}
+
+				const particleCount = 50 * (timeLeft / duration);
+
+				// since particles fall down, start a bit higher than random
+				confetti(
+					Object.assign({}, defaults, {
+						particleCount,
+						origin: { x: randomInRange(0.0, 0.2), y: Math.random() - 0.2 },
+					})
+				);
+				confetti(
+					Object.assign({}, defaults, {
+						particleCount,
+						origin: { x: randomInRange(0.8, 1), y: Math.random() - 0.2 },
+					})
+				);
+			}, 400);
+
+			const timeLeft = animationEnd - Date.now();
+
+				if (timeLeft <= 0) {
+					return clearInterval(interval);
+				}
+
+				const particleCount = 50 * (timeLeft / duration);
+
+				// since particles fall down, start a bit higher than random
+				confetti(
+					Object.assign({}, defaults, {
+						particleCount,
+						origin: { x: randomInRange(0.0, 0.2), y: Math.random() - 0.2 },
+					})
+				);
+				confetti(
+					Object.assign({}, defaults, {
+						particleCount,
+						origin: { x: randomInRange(0.8, 1), y: Math.random() - 0.2 },
+					})
+				);
+		}
+
+		setTimeout(() => {
+    const text = document.getElementById('text');
+    const prog = document.getElementById('prog');
+    const logo = document.querySelector('.logo-container');
+    
+    text.innerText = '🎉 Success! Welcome to the team.';
+    prog.style.display = 'none';
+    text.classList.add('zoom-animation');
+    logo.classList.add('zoom-animation');
+    doConfetti();
+}, 4500);
+	</script>
+
+</body>
+
+</html>

@@ -1,0 +1,121 @@
+<!doctype html>
+<!--
+* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
+* @version 1.0.0-beta20
+* @link https://tabler.io
+* Copyright 2018-2023 The Tabler Authors
+* Copyright 2018-2023 codecalm.net Paweł Kuna
+* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
+-->
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>2374 | New Member</title>
+    <link rel="stylesheet" href="/assets/alertify.min.css" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+    <link rel="apple-touch-icon" type="image/png" href="/assets/apple-touch-icon.png" />
+    <!-- CSS files -->
+    <link href="../../assets/dist/css/tabler.min.css?1692870487" rel="stylesheet" />
+    <link href="../../assets/dist/css/tabler-flags.min.css?1692870487" rel="stylesheet" />
+    <link href="../../assets/dist/css/tabler-payments.min.css?1692870487" rel="stylesheet" />
+    <link href="../../assets/dist/css/tabler-vendors.min.css?1692870487" rel="stylesheet" />
+    <link href="../../assets/dist/css/demo.min.css?1692870487" rel="stylesheet" />
+    <style>
+        @import url('https://rsms.me/inter/inter.css');
+
+        :root {
+            --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+        }
+
+        body {
+            font-feature-settings: "cv03", "cv04", "cv11";
+        }
+    </style>
+</head>
+
+<body class=" d-flex flex-column">
+    <script src="../../assets/dist/js/demo-theme.min.js?1692870487"></script>
+    <div class="page page-center">
+        <div class="container container-tight py-4">
+            <div class="text-center mb-4">
+                <a href="." class="navbar-brand navbar-brand-autodark">
+                    <img src="./logo.png" width="110" height="32" alt="Tabler" class="navbar-brand-image"
+                        style="height:3rem;">
+                </a>
+            </div>
+            <div class="card card-md">
+                <div class="card-body text-center py-4 p-sm-5">
+                    <!-- <img src="./season.png" class="mb-n2" alt=""> -->
+                    <h1 class="">Welcome to Jesuit Robotics!</h1>
+                    <p class="text-secondary">Please fill in the information below to complete your registration.</p>
+                </div>
+                <div class="hr-text hr-text-center hr-text-spaceless">your info</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">I go to:</label>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="btn-radio-basic" id="btn-radio-basic-1"
+                                value="1" autocomplete="off">
+                            <label for="btn-radio-basic-1" type="button" class="btn">Jesuit</label>
+                            <input type="radio" class="btn-check" name="btn-radio-basic" id="btn-radio-basic-2"
+                                value="2" autocomplete="off">
+                            <label for="btn-radio-basic-2" type="button" class="btn">Edison</label>
+                        </div>
+                    </div>
+                    <div style="display:none;" id="email-form" class="mb-3">
+                        <label class="form-label" id="email-title">Jesuit Email</label>
+                        <div class="input-group input-group-flat">
+                            <input type="text" class="form-control" autocomplete="off" id="email-input">
+                            <span class="input-group-text" id="email-suffix">
+                                @jesuitmail.org
+                            </span>
+                        </div>
+                    </div>
+                    <div style="display:none;" id="name-form" class="mb-3">
+                        <label class="form-label">Name</label>
+                        <div class="row g-2">
+                            <div class="col">
+                                <input type="text" class="form-control" placeholder="First" id="name-first">
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" placeholder="Last" id="name-last">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:none;" id="subteam-form">
+                        <label class="form-label">Subteam</label>
+                        <select class="form-select mb-0" id="subteam-input">
+                            <option value="design" style="display:none;"></option>
+                            <option value="design">Design</option>
+                            <option value="electrical">Electrical</option>
+                            <option value="manufacturing">Manufacturing</option>
+                            <option value="marketing">Marketing</option>
+                            <option value="software">Software</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row align-items-center mt-3">
+                <div class="col">
+                    <div id="errorContainer" class="container"></div>
+                    <div class="btn-list justify-content-center">
+                        <button class="btn btn-primary" style="width:100%;opacity:0;" id="submit" onclick="submitForm()">
+                            Complete Registration
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Libs JS -->
+    <!-- Tabler Core -->
+    <script src="../../assets/dist/js/tabler.min.js?1692870487" defer></script>
+    <script src="../../assets/dist/js/demo.min.js?1692870487" defer></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" crossorigin="anonymous"></script>
+    <script src="./script.js"></script>
+</body>
+
+</html>
