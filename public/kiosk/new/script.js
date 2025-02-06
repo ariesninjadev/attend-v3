@@ -11,6 +11,13 @@ var schoolId = -1;
 var errorsEmail = [];
 
 function performChecks() {
+
+    if (!localStorage.getItem("sudoToken")) {
+        location.replace("/limbo");
+    } else {
+        localStorage.removeItem("sudoToken");
+    }
+
     socket.emit("dataRequest", localStorage.getItem("auth"), (response) => {
 
         if ((response.status !== "networkAdmin")) {
@@ -20,6 +27,8 @@ function performChecks() {
 }
 
 performChecks();
+
+localStorage.setItem("tablerTheme", "light");
 
 function checkSubmit() {
     var errorContainer = document.getElementById("errorContainer");

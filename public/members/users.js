@@ -379,7 +379,7 @@ function valve(content) {
 }
 
 function addUser() {
-    window.location.href = "/kiosk/new";
+    window.location.href = "/kiosk/new/auth";
 }
 
 // Beautiful search function by Aries Powvalla
