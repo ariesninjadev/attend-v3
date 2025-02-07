@@ -2,12 +2,14 @@
 // Record related getters
 
 var isLoggedIn = false;
+var signedInTime = 0;
 
 var firstLoadDone = false;
 
-function getStatus(status, end) {
+function getStatus(status, end, start) {
     if (!end) {
         isLoggedIn = true;
+        signedInTime = timestampToTime(start);
         return `<span class="badge bg-yellow me-1"></span> Present`;
     }
     if (status == 1) {
@@ -104,10 +106,13 @@ var data;
 var conversion;
 var varsity_letter_hours;
 var version;
-var alert;
+var alertData;
 
 
 function main() {
+    if (!data.hours) {
+        location.replace("/limbo");
+    }
     // If localstorage "picture" is set
     if (localStorage.getItem("picture")) {
         // Set the profile picture to the value of localstorage "picture"
@@ -155,6 +160,7 @@ function main() {
     const banner = document.getElementById("clocked-in");
     if (isLoggedIn) {
         // Unhide
+        document.getElementById("clocked-in-text").innerHTML = `You are present: Clocked in at ${signedInTime}`;
         banner.style.display = "block";
     } else {
         // Hide
@@ -188,7 +194,7 @@ function main() {
             <td class="sort-in" data-date="${removeDateFromTimestamp(element.start)}">${timestampToTime(element.start)}</td>
             <td class="sort-out" data-date="${removeDateFromTimestamp(element.end)}">${timestampToTime(element.end)}</td>
             <td class="sort-hours">${calculateDelta(element.start, element.end)}</td>
-            <td class="sort-status">${getStatus(element.status, element.end)}</td>
+            <td class="sort-status">${getStatus(element.status, element.end, element.start)}</td>
         `;
                 record.appendChild(tr);
             });
@@ -201,17 +207,25 @@ function main() {
 
         }
 
-        console.log(alert);
-
         const versionElement = document.getElementById("version");
         versionElement.innerHTML = "v" + version;
 
         const alertText = document.getElementById("alert-body");
         alertText.innerHTML = alert.message;
 
-        if (alert.enabled) {
+        if (alertData.enabled) {
             var myModal = new bootstrap.Modal(document.getElementById('modal-simple'));
             myModal.show();
+        }
+
+        const banner = document.getElementById("clocked-in");
+        if (isLoggedIn) {
+            // Unhide
+            document.getElementById("clocked-in-text").innerHTML = `You are present: Clocked in at ${signedInTime}`;
+            banner.style.display = "block";
+        } else {
+            // Hide
+            banner.style.display = "none";
         }
     }
 
@@ -233,7 +247,7 @@ function performChecks() {
             conversion = response.conversion;
             varsity_letter_hours = response.varsity;
             version = response.version;
-            alert = response.alert;
+            alertData = response.alert;
             main();
         }
     });

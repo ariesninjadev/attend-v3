@@ -2,7 +2,7 @@
 //       IMPORTANT STATICS        //
 /// ----------------------------- ///
 
-const version = "3.8.8";
+const version = "3.9.0";
 
 /// ----------------------------- ///
 
@@ -52,11 +52,26 @@ try {
         res.sendFile(__dirname + "/public/index.html");
     });
 
-    /// --- SCHEDCRON BY ARIES POWVALLA --- ///
+    /// --- SCHEDULE CRON JOB --- ///
 
     var eternalData;
     var meetingActive = false;
     var logoutApplied = false;
+
+    var queuedSubmissions = [];
+    var queuedStudents = [];
+
+    function av3ToDateObject(av3) {
+        // Format: { start: { hour: int, minute, int } }
+        // To: Date object (with day as today)
+        console.log(av3);
+        const date = new Date();
+        date.setHours(av3.hour);
+        date.setMinutes(av3.minute);
+        date.setSeconds(0);
+        date.setMilliseconds(0);
+        return date;
+    }
 
     function fetchToday() {
         let now = new Date();
@@ -72,6 +87,16 @@ try {
             .toLocaleString("en-US", { weekday: "short" })
             .toLowerCase();
 
+        // Grab the schedule data
+        db.sch_pull()
+            .then((data) => {
+                eternalData = data;
+            })
+            .catch((err) => {
+                console.error(err);
+                return false;
+            });
+
         meetingActive =
             eternalData[currentDay].enabled &&
             isMeetingInProgress(
@@ -82,6 +107,23 @@ try {
 
         if (meetingActive) {
             logoutApplied = false;
+            // If there are queued submissions, process them.
+            if (queuedSubmissions.length > 0) {
+                const todaySchedule = fetchToday();
+                const meetingStartTime = av3ToDateObject(todaySchedule.start);
+                queuedSubmissions.forEach((submission) => {
+                    db.massSubmit(submission.email, submission.users, true, meetingStartTime)
+                        .then((data) => {
+                            console.log(data);
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                        });
+                });
+                queuedSubmissions = [];
+                queuedStudents = [];
+
+            }
         } else {
             if (!logoutApplied) {
                 logoutApplied = true;
@@ -241,7 +283,7 @@ try {
                 let status;
                 let data;
                 let doAlert;
-        
+
                 if (network_admins.includes(email)) {
                     status = "networkAdmin";
                 } else if (register_as_offline) {
@@ -257,10 +299,10 @@ try {
                 } else {
                     status = "user";
                 }
-        
+
                 data = await db.retrieve(email);
-        
-                if (!data && (!status == "admin" || !status == "networkAdmin")) {
+
+                if (!data && status != "admin" && status != "networkAdmin") {
                     callback({ status: "nonuser" });
                     return;
                 }
@@ -268,7 +310,7 @@ try {
                 doAlert = await db.checkAlertState(email, popupUID);
 
                 let enabled = (popupEnabled && doAlert);
-        
+
                 callback({
                     status: status,
                     data: data,
@@ -343,11 +385,11 @@ try {
             }
         });
 
-        socket.on("stm", (email, callback) => {
+        socket.on("subteamMaster", (email, callback) => {
             try {
                 db.subteamMaster(email)
                     .then((data) => {
-                        callback({ data, m: meetingActive });
+                        callback({ data, m: meetingActive, next: fetchToday(), queue: queuedStudents });
                     })
                     .catch((err) => {
                         callback({
@@ -365,21 +407,53 @@ try {
 
         socket.on("massSubmit", (email, users, callback) => {
             try {
-                db.massSubmit(email, users)
+                var doUseMeetingStart = false;
+                const now = new Date();
+                const todaySchedule = fetchToday();
+                const meetingStartTime = av3ToDateObject(todaySchedule.start);
+                const graceTimeMs = 15 * 60 * 1000;
+                if (now - meetingStartTime <= graceTimeMs) {
+                    doUseMeetingStart = true;
+                }
+                // If a submission was sent before the meeting start time, add it to the queue instead
+                if (now - meetingStartTime <= 0) {
+                    queuedSubmissions.push({ email, users });
+                    // Users with status != 0
+                    var actionableUsers = users.filter((user) => { return user.status != 0; });
+                    // Remove any users that are already in the queue from the queue before re-adding them (as they may have been updated)
+                    queuedStudents = queuedStudents.filter((item) => {
+                        return !actionableUsers.some((user) => {
+                            return user.id === item.id;
+                        });
+                    });
+                    queuedStudents = queuedStudents.concat(actionableUsers);
+                    // If the user's status is 2, remove them from the queue
+                    queuedStudents = queuedStudents.filter((user) => {
+                        return user.status != 2;
+                    });
+                    console.log(queuedStudents);
+                    callback({
+                        status: "queued",
+                    });
+                    return;
+                }
+                db.massSubmit(email, users, doUseMeetingStart, meetingStartTime)
                     .then((data) => {
                         callback({
                             status: data,
                         });
                     })
                     .catch((err) => {
+                        console.error(err);
                         callback({
-                            status: "error",
+                            status: "errorix",
                             data: err,
                         });
                     });
             } catch (err) {
+                console.error(err);
                 callback({
-                    status: "error",
+                    status: "errorim",
                     data: err,
                 });
             }
@@ -634,6 +708,28 @@ try {
             }
         });
 
+        socket.on("removeOne", (u, callback) => {
+            try {
+                db.deleteRecordById(u)
+                    .then((data) => {
+                        callback({
+                            status: data,
+                        });
+                    })
+                    .catch((err) => {
+                        callback({
+                            status: "error",
+                            data: err,
+                        });
+                    });
+            } catch (err) {
+                callback({
+                    status: "error",
+                    data: err,
+                });
+            }
+        });
+
         socket.on("hourEdit", (ref, index, start, end, callback) => {
             try {
                 db.hourEdit(ref, index, start, end)
@@ -856,6 +952,29 @@ try {
         socket.on("getStaffRecord", (email, callback) => {
             try {
                 db.getStaffRecord(email)
+                    .then((data) => {
+                        callback({
+                            status: "ok",
+                            data: data,
+                        });
+                    })
+                    .catch((err) => {
+                        callback({
+                            status: "error",
+                            data: err,
+                        });
+                    });
+            } catch (err) {
+                callback({
+                    status: "error",
+                    data: err,
+                });
+            }
+        });
+
+        socket.on("setVisibility", (email, callback) => {
+            try {
+                db.setVisibility(email)
                     .then((data) => {
                         callback({
                             status: "ok",

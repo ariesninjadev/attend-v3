@@ -274,6 +274,17 @@ function popup2() {
     popupContainer2.style.display = "flex";
 }
 
+function setVisibility(id) {
+    socket.emit("setVisibility", id, (response) => {
+        if (response.status == "ok") {
+            valve(document.getElementById("userInput").value);
+            alertify.success("Success.");
+        } else {
+            alertify.error("There was an error:" + response.status);
+        }
+    });
+}
+
 function clearAll() {
     const conf = window.prompt(
         'Are you SURE you want to clear all login data?\n\nIt is recommended to create a backup first.\n\nConfirm your action by typing\n"I wish to delete all attendance data."'
@@ -303,6 +314,26 @@ function clearStudent() {
         socket.emit("clearOne", conf, (response) => {
             if (response.status == "success") {
                 alert("The student was cleared.");
+                location.reload();
+            } else if ((response.statuee = "nouser")) {
+                alertify.error("No such student.");
+            } else {
+                alertify.error("There was an error:" + response.status);
+            }
+        });
+    } else {
+        alertify.error("Action Cancelled.");
+    }
+}
+
+function removeStudent() {
+    const conf = window.prompt(
+        "This action will PERMANENTLY DELETE THE STUDENT FROM THE ROSTER.\n\nEnter the full name of the student."
+    );
+    if (conf != "" && conf != null) {
+        socket.emit("removeOne", conf, (response) => {
+            if (response.status == "success") {
+                alert("The student was deleted.");
                 location.reload();
             } else if ((response.statuee = "nouser")) {
                 alertify.error("No such student.");
@@ -367,6 +398,7 @@ function valve(content) {
                     }')">${isLoggedIn(s.record) ? "Sign Out" : "Sign In"}</button>
   <button class='p-button signon-button' onclick="popup('${s.id
                     }')">Details</button>
+  <button class='p-button signon-button' onclick="setVisibility('${s.id}')">${s.hidden ? "Unhide" : "Hide"}</button>
   <p id='h-${s.id}'>Hours: ${s.hours}</p>
   <p>Subteam: ${capFirstLetter(s.subgroup)}</p>
 </div>
@@ -392,7 +424,7 @@ function addUser() {
 
         if (
             val !== oldVal &&
-            (val.length >= 3 || val == "#" || Array.from(val)[0] == "^")
+            (val.length >= 3 || val == "#" || Array.from(val)[0] == "^" || Array.from(val)[0] == "v")
         ) {
             oldVal = val;
             clearTimeout(delayTimer);
@@ -402,7 +434,7 @@ function addUser() {
             }, 250);
         } else {
             document.getElementById("cards").innerHTML =
-                'Please enter at least 3 characters<br><strong>OR</strong><br>Type "#" to show all students<br>Type "^[num]" to show students with at least [num] hrs<br>Type "subteam:[subteam_name] to show students in a specified subteam.<br><br>';
+                'Please enter at least 3 characters<br><strong>OR</strong><br>Type "#" to show all students<br>Type "^[num]" to show students with at least [num] hrs (or "v" for less)<br>Type "subteam:[subteam_name] to show students in a specified subteam.<br><br>';
         }
     });
 })();

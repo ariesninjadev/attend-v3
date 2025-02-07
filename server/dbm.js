@@ -99,6 +99,7 @@ const userSchema = new mongoose.Schema(
             ],
         },
         subgroup: { type: String, required: false },
+        hidden: { type: Boolean, required: false },
     },
     { collection: "students" }
 );
@@ -571,6 +572,11 @@ async function findUsersViaSearch(search) {
                 return [];
             }
             results = await User.find({ hours: { $gt: search.slice(1) } });
+        } else if (Array.from(search)[0] === "v") {
+            if (!isNumeric(search.slice(1))) {
+                return [];
+            }
+            results = await User.find({ hours: { $lt: search.slice(1) } });
         } else if (search.startsWith("subteam:")) {
             const subteam = search.slice(8);
             results = await User.find({ subgroup: subteam });
@@ -723,6 +729,20 @@ async function removeRecordById(userId) {
             return "nouser";
         }
 
+        return "success";
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
+async function deleteRecordById(userId) {
+    try {
+        // Delete the document with the given user name. If no document was deleted, return "nouser"
+        const result = await User.deleteOne({ name: userId });
+        if (result.deletedCount === 0) {
+            return "nouser";
+        }
         return "success";
     } catch (err) {
         console.error(err);
@@ -925,25 +945,20 @@ async function subteamMaster(id) {
     // If they are not, return false.
     try {
 
-        const result = await Subgroups.findOne({ owner: id });
-        const result2 = await Subgroups.findOne({ vice: id });
         const requester = await User.findOne({ id: id });
 
-        var hasVice = true;
-
         if (requester.subgroup == "management") {
-            // Return ALL users
-            var members = await User.find({});
 
-            // Move the leader to the front of the array, and the vice to 2nd.
-            const leader = members.find((member) => member.id === "ahuang26@jesuitmail.org");
-            // const vice = members.find((member) => member.id === "");
-            members.splice(members.indexOf(leader), 1);
-            // members.splice(members.indexOf(vice), 1);
-            members.unshift(leader);
-            // members.splice(1, 0, vice);
-            hasVice = false;
+            var members = await User.find({});
+            var leaderIndex = members.findIndex((member) => member.id === "ahuang26@jesuitmail.org");
+            if (leaderIndex !== -1) {
+                members[leaderIndex].addendum = 1;
+            }
+
         } else {
+
+            const result = await Subgroups.findOne({ owner: id });
+            const result2 = await Subgroups.findOne({ vice: id });
 
             var comp;
 
@@ -957,35 +972,22 @@ async function subteamMaster(id) {
 
             var members = await User.find({ subgroup: comp.id });
 
-            // Move the leader to the front of the array, and the vice to 2nd.
-            const leader = members.find((member) => member.id === comp.owner);
-            const vice = members.find((member) => member.id === comp.vice);
+            var leaderIndex = members.findIndex((member) => member.id === comp.owner);
+            var viceIndex = members.findIndex((member) => member.id === comp.vice);
 
-            members.splice(members.indexOf(leader), 1);
-
-            if (vice) {
-                members.splice(members.indexOf(vice), 1);
+            if (leaderIndex !== -1) {
+                members[leaderIndex].addendum = 1;
+            }
+            if (viceIndex !== -1) {
+                members[viceIndex].addendum = 2;
             }
 
-            members.unshift(leader);
-
-            if (vice) {
-                members.splice(1, 0, vice);
-            }
-
-        }
-
-        // If the second element is undefined, it means there is no vice
-        if (members[1] === undefined) {
-            hasVice = false;
         }
 
         // Remove null elements
         members = members.filter((member) => member !== undefined);
 
-        //console.log(members);
-
-        return { members, hasVice };
+        return members;
 
     } catch (err) {
         console.error(err);
@@ -993,7 +995,7 @@ async function subteamMaster(id) {
     }
 }
 
-async function massSubmit(email, users) {
+async function massSubmit(email, users, doUseMeetingStart, meetingStart) {
     // Check that the email provided is a lead or vice
     const user = await Subgroups.findOne({ owner: email });
     const vice = await Subgroups.findOne({ vice: email });
@@ -1018,8 +1020,13 @@ async function massSubmit(email, users) {
             console.log("User not found: " + users[i].id);
             continue;
         }
-        // Get the current time
-        const time = new Date();
+        // Get the current time or use the meeting start time if signing in
+        var time = new Date();
+        if (doUseMeetingStart && users[i].status == 1) {
+            time = meetingStart;
+        }
+
+        console.log(time);
 
         // Perform the action using postTime
         const result = await postTime(users[i].id, time, users[i].status == 1, email);
@@ -1029,8 +1036,8 @@ async function massSubmit(email, users) {
         }
     }
     // Create a submission
-    const time = new Date();
-    createSubmission(Date.now(), email, "mass", time, "N/A", users);
+    const time2 = new Date();
+    createSubmission(Date.now(), email, "mass", time2, "N/A", users);
     return true;
 }
 
@@ -1137,7 +1144,7 @@ async function loadAllPreSeasonHours() {
     try {
         // Get all users
         const users = await User.find({}).exec();
-        
+
         // Iterate over each user
         for (let i = 0; i < users.length; i++) {
             // Get the user's record
@@ -1147,7 +1154,7 @@ async function loadAllPreSeasonHours() {
             // Add preseason hours number to old hours
             await updateOldHours(users[i].id, "preseason-2025", h);
         }
-        
+
         // Log the completion
         console.log("All pre-season hours have been loaded.");
         // Call the callback function
@@ -1192,6 +1199,24 @@ async function getStaffRecord(id) {
     }
 }
 
+async function setVisibility(id) {
+    try {
+        const user = await User.findOne({ id: id });
+        await User.updateOne(
+            { id: id },
+            {
+                $set: {
+                    hidden: !user.hidden,
+                },
+            }
+        );
+        return true;
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
 console.log("Database Manager Loaded.");
 
 module.exports = {
@@ -1211,6 +1236,7 @@ module.exports = {
     fetchAllRequests,
     removeAllRecords,
     removeRecordById,
+    deleteRecordById,
     removeRecordByStartTime,
     hourRemove,
     hourEdit,
@@ -1230,4 +1256,5 @@ module.exports = {
     updateOldHours,
     loadAllPreSeasonHours,
     getStaffRecord,
+    setVisibility,
 };

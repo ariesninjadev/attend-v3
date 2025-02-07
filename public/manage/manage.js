@@ -31,6 +31,27 @@ function timestampToDate(timestamp) {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
+function av3ToTime(av3) {
+    // Format: { start: { hour: int, minute, int } }
+    // To: 3:15 PM
+    const hour = av3.start.hour;
+    const minute = av3.start.minute;
+    const period = hour < 12 ? "AM" : "PM";
+    const f = `${hour % 12 || 12}:${minute.toString().padStart(2, '0')} ${period}`;
+    return f;
+}
+
+function av3ToDateObject(av3) {
+    // Format: { start: { hour: int, minute, int } }
+    // To: Date object (with day as today)
+    const date = new Date();
+    date.setHours(av3.start.hour);
+    date.setMinutes(av3.start.minute);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+    return date;
+}
+
 function numPad(num) {
     return num.toString().padStart(4, '0');
 }
@@ -71,6 +92,7 @@ var isMeeting = false;
 var version;
 var conversion;
 var subRecord = [];
+var queue = [];
 
 var specifiedSubteam = "all";
 
@@ -211,20 +233,24 @@ function updateDocument(members, hasVice, showBadges = true) {
     let html = "";
     let i = 0;
     members.forEach((user) => {
+        if (user.hidden == true) {
+            return;
+        }
         let status = "";
         let l = isLoggedIn(user);
+        let inQueue = queue.find(u => u.id == user.id);
         let badge = "";
         if (user.id == localStorage.getItem("auth")) {
             status += "(You) ";
         }
-        if (i == 0 && showBadges) {
+        if (user.addendum == 1 && showBadges) {
             badge = `<div class="ribbon ribbon-top bg-red">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-crown" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M12 6l4 6l5 -4l-2 10h-14l-2 -10l5 4z" />
 </svg>
                                 </div>`;
-        } else if (i == 1 && hasVice && showBadges) {
+        } else if (user.addendum == 2 && showBadges) {
             badge = `<div class="ribbon ribbon-top bg-blue">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-number-2" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -234,6 +260,8 @@ function updateDocument(members, hasVice, showBadges = true) {
         }
         if (l) {
             status += "<span class='badge bg-primary text-green-fg ms-2'>Present</span>";
+        } else if (inQueue) {
+            status += "<span class='badge bg-yellow text-green-fg ms-2'>In Queue</span>";
         }
         html += `
                 <div class="col-md-6 col-lg-4">
@@ -244,7 +272,7 @@ function updateDocument(members, hasVice, showBadges = true) {
                                 <h3 class="card-title">${user.name} ${status}</h3>
                                     <p class="card-subtitle"><a onclick="copyEmail('${user.id}')" href="#" style="color:gray;"><svg style="margin-right:4px;" xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg>
                                     ${user.id}</a></p>
-                                    <p>${user.hours} hours</p>
+                                    <p>${user.hours} hours${localStorage.getItem("subteam") == "Management" ? " | " + user.subgroup.charAt(0).toUpperCase() + user.subgroup.slice(1) : ""}</p>
                                     <div class="btn-group w-100 userData" role="group" data-email="${user.id}">
                                         <input type="radio" class="btn-check" name="btg-${i}" id="btg-${i}-1"
                                             autocomplete="off" ${(user.localSelection == 1 || user.localSelection == null) ? "checked" : ""}>
@@ -258,10 +286,10 @@ function updateDocument(members, hasVice, showBadges = true) {
                                                 <path d="M6 6l12 12" />
                                             </svg></label>
                                         <input type="radio" class="btn-check" name="btg-${i}" id="btg-${i}-2"
-                                            autocomplete="off" ${l ? "disabled" : ""} ${user.localSelection == 2 ? "checked" : ""}>
+                                            autocomplete="off" ${l || inQueue ? "disabled" : ""} ${user.localSelection == 2 ? "checked" : ""}>
                                         <label for="btg-${i}-2" type="button" class="btn">Arriving</label>
                                         <input type="radio" class="btn-check" name="btg-${i}" id="btg-${i}-3"
-                                            autocomplete="off" ${!l ? "disabled" : ""} ${user.localSelection == 3 ? "checked" : ""}>
+                                            autocomplete="off" ${!(l || inQueue) ? "disabled" : ""} ${user.localSelection == 3 ? "checked" : ""}>
                                         <label for="btg-${i}-3" type="button" class="btn">Leaving</label>
                                     </div>
                                 </div>
@@ -295,30 +323,82 @@ function updateDocument(members, hasVice, showBadges = true) {
             user.localSelection = r;
         });
     });
+
+    document.getElementById("submit-btn").style.display = "block";
 }
 
 function orgHandler() {
-    socket.emit("stm", localStorage.getItem("auth"), (response) => {
+    socket.emit("subteamMaster", localStorage.getItem("auth"), (response) => {
         // If response is not null
         if (response) {
 
+            queue = response.queue;
+
+            document.getElementById('main-title').style.display = "block";
+            document.getElementById('roster-loader').style.display = "none";
+            document.getElementById("search-bar").style.display = "flex";
+
             if (response.m) {
                 document.getElementById('submit-warn').style.display = "none";
+                document.getElementById('submit-success').style.display = "block";
                 isMeeting = true;
-            }
-
-            hasVice = response.data.hasVice;
-            userData = response.data.members;
-
-            // Move the active user to second position IF AND ONLY IF they are not already first or second
-            let activeUser = userData.find(user => user.id === localStorage.getItem("auth"));
-            if (activeUser) {
-                let index = userData.indexOf(activeUser);
-                if (index > 1) {
-                    userData.splice(index, 1);
-                    userData.splice(1, 0, activeUser);
+                // If the meeting started less than 15 minutes ago, show grace period message
+                if (new Date() - av3ToDateObject(response.next) < 15 * 60 * 1000) {
+                    const meetingStartPlus15 = new Date(av3ToDateObject(response.next).getTime() + 15 * 60 * 1000);
+                    document.getElementById('submit-grace').style.display = "block";
+                    document.getElementById('submit-grace-text').innerHTML = "Grace period is active until " + timestampToTime(meetingStartPlus15) + ". Sign-ins will count as if submitted at " + av3ToTime(response.next) + ".";
+                }
+            } else {
+                // If there is a meeting today and it starts within 30 minutes (response.next is the time):
+                if (response.next && av3ToDateObject(response.next) - new Date() < 30 * 60 * 1000 && av3ToDateObject(response.next) - new Date() > 0) {
+                    document.getElementById('submit-info').style.display = "block";
+                    document.getElementById('submit-info-text').innerHTML = "A meeting is starting soon (" + av3ToTime(response.next) + "). You can sign people in early, but they won't earn hours until the meeting starts.";
+                    isMeeting = true;
+                } else {
+                    if (response.next && response.next.enabled) {
+                        if (av3ToDateObject(response.next) - new Date() < 0) {
+                            document.getElementById('submit-warn').style.display = "block";
+                            document.getElementById('submit-warn-text').innerHTML = "The meeting today has ended.";
+                            isMeeting = false;
+                        } else {
+                            document.getElementById('submit-warn').style.display = "block";
+                            document.getElementById('submit-warn-text').innerHTML = "Today's meeting begins at " + av3ToTime(response.next) + ".";
+                            isMeeting = false;
+                        }
+                    } else {
+                        document.getElementById('submit-warn-text').innerHTML = "There is no meeting today.";
+                        document.getElementById('submit-warn').style.display = "block";
+                        isMeeting = false;
+                    }
                 }
             }
+
+            var tempAll = response.data;
+            var leadShift = [];
+            var generalShift = [];
+
+            let activeUser = tempAll.find(user => user.id === localStorage.getItem("auth"));
+            if (activeUser) {
+                let index = tempAll.indexOf(activeUser);
+                if (!activeUser.addendum) {
+                    generalShift.push(activeUser);
+                    tempAll.splice(index, 1);
+                }
+            }
+
+            for (let i = 0; i < tempAll.length; i++) {
+                if (tempAll[i].addendum == 2) {
+                    leadShift.push(tempAll[i]);
+                    tempAll.splice(i, 1);
+                    i--; // Adjust index after removal
+                } else if (tempAll[i].addendum == 1) {
+                    leadShift.splice(0, 0, tempAll[i]);
+                    tempAll.splice(i, 1);
+                    i--; // Adjust index after removal
+                }
+            }
+
+            userData = leadShift.concat(generalShift).concat(tempAll);
 
             updateDocument(userData, hasVice);
 
@@ -340,85 +420,87 @@ function extractByQuery(query) {
             }
         });
     } else {
-            userData.forEach((e) => {
-                if (e.name.toLowerCase().includes(query.toLowerCase()) && e.subgroup == specifiedSubteam) {
-                    data.push(e);
-                }
-            });
-        }
-        updateDocument(data, hasVice);
-    }
-
-    (function () {
-        var oldVal = "";
-        var delayTimer;
-        $("#userInput").on("input", function () {
-            var val = this.value;
-
-            if (
-                val !== oldVal &&
-                val.length >= 1
-            ) {
-                extractByQuery(val);
-
-            } else {
-                updateDocument(userData, hasVice);
-            }
-            oldVal = val;
-        });
-    })();
-
-    function passSubmit() {
-        let data = [];
-        let i = 0;
-        // document.querySelectorAll('.userData').forEach((e) => {
-        //     let email = e.getAttribute('data-email');
-        //     let status = 0;
-        //     if (document.getElementById(`btg-${i}-2`).checked) {
-        //         status = 1;
-        //     } else if (document.getElementById(`btg-${i}-3`).checked) {
-        //         status = 2;
-        //     }
-        //     data.push({ id: email, status: status });
-        //     i++;
-        // });
         userData.forEach((e) => {
-            let status = 0;
-            if (e.localSelection == 2) {
-                status = 1;
-            } else if (e.localSelection == 3) {
-                status = 2;
-            }
-            data.push({ id: e.id, status: status });
-        });
-        socket.emit("massSubmit", localStorage.getItem("auth"), data, (response) => {
-            if (response) {
-                location.replace("/limbo");
+            if (e.name.toLowerCase().includes(query.toLowerCase()) && e.subgroup == specifiedSubteam) {
+                data.push(e);
             }
         });
     }
+    updateDocument(data, hasVice);
+}
 
-    function populateRecord() {
-        socket.emit("getStaffRecord", localStorage.getItem("auth"), (response) => {
-            const data = response.data;
-            const record = document.getElementById("record");
+(function () {
+    var oldVal = "";
+    var delayTimer;
+    $("#userInput").on("input", function () {
+        var val = this.value;
 
-            if (data.length == 0) {
-                record.innerHTML = `
+        if (
+            val !== oldVal &&
+            val.length >= 1
+        ) {
+            extractByQuery(val);
+
+        } else {
+            updateDocument(userData, hasVice);
+        }
+        oldVal = val;
+    });
+})();
+
+function passSubmit() {
+    let data = [];
+    let i = 0;
+    // document.querySelectorAll('.userData').forEach((e) => {
+    //     let email = e.getAttribute('data-email');
+    //     let status = 0;
+    //     if (document.getElementById(`btg-${i}-2`).checked) {
+    //         status = 1;
+    //     } else if (document.getElementById(`btg-${i}-3`).checked) {
+    //         status = 2;
+    //     }
+    //     data.push({ id: email, status: status });
+    //     i++;
+    // });
+    userData.forEach((e) => {
+        let status = 0;
+        if (e.localSelection == 2) {
+            status = 1;
+        } else if (e.localSelection == 3) {
+            status = 2;
+        }
+        data.push({ id: e.id, status: status });
+    });
+    socket.emit("massSubmit", localStorage.getItem("auth"), data, (response) => {
+        if (response) {
+            location.replace("/limbo");
+        }
+    });
+}
+
+function populateRecord() {
+    document.getElementById("record-btn").innerHTML = "Loading...";
+    document.getElementById("record-btn").disabled = true;
+    socket.emit("getStaffRecord", localStorage.getItem("auth"), (response) => {
+        const data = response.data;
+        const record = document.getElementById("record");
+
+        if (data.length == 0) {
+            record.innerHTML = `
             <tr>
                 <td colspan="7" class="text-center">No records found</td>
             </tr>
         `;
-            } else {
-                subRecord = data;
-                var count = data.length + 1;
-                record.innerHTML = "";
-                var reversedRecord = data.reverse();
-                // isLoggedIn = false;
-                reversedRecord.forEach((element) => {
-                    count--;
-                    const tr = document.createElement("tr");
-                    tr.innerHTML = `
+        } else {
+            subRecord = data;
+            var count = data.length + 1;
+            record.innerHTML = "";
+            var reversedRecord = data.reverse();
+            // isLoggedIn = false;
+            reversedRecord.forEach((element) => {
+                count--;
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
             <td class="sort-number"><span class="text-secondary">${numPad(count)}</span></td>
             <td class="sort-date" data-date="${element.time}">${timestampToDate(element.time)}</td>
             <td class="sort-issuer">${element.owner}</td>
@@ -426,220 +508,223 @@ function extractByQuery(query) {
             <td class="sort-status">${getStatus(element.status, element.end)}</td>
             <td style="padding-left:41px;cursor:pointer;"><button onclick="deepView(${element.id})" style="color:blue;border:none;background-color:transparent;outline:none;"><svg xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-external-link"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" /><path d="M11 13l9 -9" /><path d="M15 4h5v5" /></svg></button></td>
         `;
-                    record.appendChild(tr);
-                });
+                record.appendChild(tr);
+            });
 
-                const list = new List('table-default', {
-                    sortClass: 'table-sort',
-                    listClass: 'table-tbody',
-                    valueNames: ['sort-number', { attr: 'data-date', name: 'sort-date' }, 'sort-issuer', { attr: 'data-net', name: 'sort-net' }, 'sort-status'],
-                });
+            const list = new List('table-default', {
+                sortClass: 'table-sort',
+                listClass: 'table-tbody',
+                valueNames: ['sort-number', { attr: 'data-date', name: 'sort-date' }, 'sort-issuer', { attr: 'data-net', name: 'sort-net' }, 'sort-status'],
+            });
 
-            }
-        });
-    };
-
-
-
-    function main() {
-
-        setProfilePicture();
-
-        // If localstorage "name" is set
-        if (localStorage.getItem("name")) {
-            // Set the profile name to the value of localstorage "name"
-            document.getElementById('user-name').textContent = localStorage.getItem("name");
         }
+        document.getElementById("record-btn").style.display = "none";
+        document.getElementById("record-body").style.display = "block";
+    });
+};
 
-        // socket emit "getSubteam" with localstorage "auth" as the parameter
-        socket.emit("getSubteam", localStorage.getItem("auth"), (response) => {
-            // If response is not null
-            if (response) {
-                if (response == "management") {
-                    // document.getElementById('wbht').style.display = "none";
-                }
-                // Set the profile subteam to the value of response and capitalize the first letter
-                let wu = response.charAt(0).toUpperCase() + response.slice(1)
-                document.getElementById('user-subteam').innerText = wu;
-                localStorage.setItem("subteam", wu);
-                document.getElementById('stlabel').innerText = wu;
-                subt = wu.toLowerCase();
-            } else {
-                // Set the profile subteam to "Undeclared"
-                document.getElementById('user-subteam').innerText = "Undeclared";
+
+
+function main() {
+
+    setProfilePicture();
+
+    // If localstorage "name" is set
+    if (localStorage.getItem("name")) {
+        // Set the profile name to the value of localstorage "name"
+        document.getElementById('user-name').textContent = localStorage.getItem("name");
+    }
+
+    // socket emit "getSubteam" with localstorage "auth" as the parameter
+    socket.emit("getSubteam", localStorage.getItem("auth"), (response) => {
+        // If response is not null
+        if (response) {
+            if (response.toLowerCase() == "management") {
+                document.getElementById("subteamSearch").style.display = "block";
             }
-            orgHandler();
-        });
-
-        const versionElement = document.getElementById("version");
-        versionElement.innerHTML = "v" + version;
-
-        populateRecord();
-    }
-
-    function performChecks() {
-        socket.emit("dataRequest", localStorage.getItem("auth"), (response) => {
-
-            if (!(response.status == "admin" || response.status == "networkAdmin")) {
-                location.replace("/limbo")
-            } else {
-                if (response.status == "networkAdmin") {
-                    document.getElementById("admin").style.display = "block";
-                }
-                version = response.version;
-                conversion = response.conversion;
-                main();
-            }
-        });
-    }
-
-    performChecks();
-
-    function sendAlert() {
-        socket.emit("sendAlert", localStorage.getItem("auth"), (response) => {
-            if (response) {
-                localStorage.setItem("alert", "Alert sent!");
-                location.replace("/limbo");
-            }
-        });
-    }
-
-
-    /// STATS
-
-    function activeUsers(users) {
-        const thirtyDaysAgo = new Date();
-        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
-        let n = users.filter((user) =>
-            user.record.some(
-                (activity) =>
-                    new Date(activity.end) > thirtyDaysAgo &&
-                    new Date(activity.start) < new Date(activity.end) &&
-                    new Date(activity.end) - new Date(activity.start) >= 1 * 60 * 60 * 1000
-            )
-        ).length;
-
-        return n == 0 ? "N/A" : n;
-    }
-
-    function retention(users) {
-        const thirtyDaysAgo = new Date();
-        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
-        const activeUsers30DaysAgo = users.filter((user) =>
-            user.record.some(
-                (activity) =>
-                    new Date(activity.start) < thirtyDaysAgo &&
-                    new Date(activity.end) > thirtyDaysAgo &&
-                    new Date(activity.end) - new Date(activity.start) >= 6 * 60 * 60 * 1000
-            )
-        ).length;
-
-        const currentActiveUsers = activeUsers(users);
-
-        if (activeUsers30DaysAgo === 0) {
-            return "N/A";
-        }
-
-        return (
-            Math.round((currentActiveUsers / activeUsers30DaysAgo) * 10000) / 100 + "%"
-        );
-    }
-
-    function formatDate1(dateStringa, dateStringb) {
-        const date = new Date(dateStringa);
-        const date2 = new Date(dateStringb);
-
-        if (isNaN(date.getTime())) {
-            return "Invalid Date 1";
-        }
-
-        const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-
-        const dayOfWeek = daysOfWeek[date.getDay()];
-        const day = String(date.getDate()).padStart(2, "0");
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const year = String(date.getFullYear()).slice(-2);
-        const hours = String(date.getHours() % 12 || 12).padStart(2, "0");
-        const minutes = String(date.getMinutes()).padStart(2, "0");
-        const period = date.getHours() < 12 ? "AM" : "PM";
-
-        const hours2 = String(date2.getHours() % 12 || 12).padStart(2, "0");
-        const minutes2 = String(date2.getMinutes()).padStart(2, "0");
-        const period2 = date2.getHours() < 12 ? "AM" : "PM";
-
-        if (isNaN(date2.getTime())) {
-            return `<strong>${dayOfWeek} ${month}/${day}/${year} | ${hours}:${minutes} ${period} (SIGNED IN)</strong>`;
-        }
-
-        const formattedDate = `${dayOfWeek} ${month}/${day}/${year} from ${hours}:${minutes} ${period} to ${hours2}:${minutes2} ${period2}`;
-
-        return formattedDate;
-    }
-
-    const gty = (y) => {
-        const currentYear = new Date().getFullYear() % 100;
-        const graduationYear = parseInt(y, 10);
-        const grade =
-            currentYear >= graduationYear ? 12 : 13 - (graduationYear - currentYear);
-        return Math.max(1, Math.min(12, grade));
-    };
-
-    var uData;
-
-    function writeGeneralStats() {
-        let searchTerm;
-        if (subt == 'management') {
-            searchTerm = "#";
-            document.getElementById("subteam-members").innerText = "Total Members";
-            document.getElementById("subteam-hours").innerText = "Total Hours";
+            // Set the profile subteam to the value of response and capitalize the first letter
+            let wu = response.charAt(0).toUpperCase() + response.slice(1)
+            document.getElementById('user-subteam').innerText = wu;
+            localStorage.setItem("subteam", wu);
+            document.getElementById('stlabel').innerText = wu;
+            subt = wu.toLowerCase();
         } else {
-            searchTerm = "subteam:" + subt;
+            // Set the profile subteam to "Undeclared"
+            document.getElementById('user-subteam').innerText = "Undeclared";
         }
-        socket.emit("findUsers", searchTerm, (response) => {
-            if (response.status == "ok") {
-                // document.getElementById("list").innerHTML = "";
-                var tData = response.data;
-                uData = tData.slice(); // Create a shallow copy to avoid modifying the original array
-                uData.sort((a, b) => {
-                    const lastNameA = a.name.split(" ").pop(); // Extract last name of a
-                    const lastNameB = b.name.split(" ").pop(); // Extract last name of b
-                    return lastNameA.localeCompare(lastNameB); // Compare last names alphabetically
-                });
-                var numy = 1;
+        // 2 second delay
+        setTimeout(orgHandler, 1000);
+    });
 
-                // MASS DATA FIELDS
+    const versionElement = document.getElementById("version");
+    versionElement.innerHTML = "v" + version;
 
-                document.getElementById("total_students").innerText = uData.length;
-                document.getElementById("active_students").innerText = activeUsers(uData);
-                document.getElementById("total_hours").innerText =
-                    Math.round(uData.reduce((acc, obj) => acc + obj.hours, 0) * 10) / 10;
-                // document.getElementById("retention").innerText = "N/A"; //retention(uData);
+    // populateRecord();
+}
 
-            } else {
-                alert("There was an error!");
+function performChecks() {
+    socket.emit("dataRequest", localStorage.getItem("auth"), (response) => {
+
+        if (!(response.status == "admin" || response.status == "networkAdmin")) {
+            location.replace("/limbo")
+        } else {
+            if (response.status == "networkAdmin") {
+                document.getElementById("admin").style.display = "block";
             }
-        });
+            version = response.version;
+            conversion = response.conversion;
+            main();
+        }
+    });
+}
+
+performChecks();
+
+function sendAlert() {
+    socket.emit("sendAlert", localStorage.getItem("auth"), (response) => {
+        if (response) {
+            localStorage.setItem("alert", "Alert sent!");
+            location.replace("/limbo");
+        }
+    });
+}
+
+
+/// STATS
+
+function activeUsers(users) {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    let n = users.filter((user) =>
+        user.record.some(
+            (activity) =>
+                new Date(activity.end) > thirtyDaysAgo &&
+                new Date(activity.start) < new Date(activity.end) &&
+                new Date(activity.end) - new Date(activity.start) >= 1 * 60 * 60 * 1000
+        )
+    ).length;
+
+    return n == 0 ? "N/A" : n;
+}
+
+function retention(users) {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const activeUsers30DaysAgo = users.filter((user) =>
+        user.record.some(
+            (activity) =>
+                new Date(activity.start) < thirtyDaysAgo &&
+                new Date(activity.end) > thirtyDaysAgo &&
+                new Date(activity.end) - new Date(activity.start) >= 6 * 60 * 60 * 1000
+        )
+    ).length;
+
+    const currentActiveUsers = activeUsers(users);
+
+    if (activeUsers30DaysAgo === 0) {
+        return "N/A";
     }
 
-    function subteamChange() {
-        const sts = document.getElementById("subteamSearch");
-        const value = sts.value;
-        // If the value is empty, show all users by calling updateDocument with the original userData
-        if (value === "") {
-            updateDocument(userData, hasVice);
-            specifiedSubteam = "all";
-            return;
-        }
-        if (value === "all") {
-            updateDocument(userData, hasVice);
-            specifiedSubteam = "all";
-            return;
-        }
-        // Filter the userData array to only include users whose subgroup is equal to the value
-        const filteredData = userData.filter(user => user.subgroup === value);
-        specifiedSubteam = value;
-        // Update the document with the filtered data
-        updateDocument(filteredData, hasVice, false);
+    return (
+        Math.round((currentActiveUsers / activeUsers30DaysAgo) * 10000) / 100 + "%"
+    );
+}
+
+function formatDate1(dateStringa, dateStringb) {
+    const date = new Date(dateStringa);
+    const date2 = new Date(dateStringb);
+
+    if (isNaN(date.getTime())) {
+        return "Invalid Date 1";
     }
+
+    const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+
+    const dayOfWeek = daysOfWeek[date.getDay()];
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = String(date.getFullYear()).slice(-2);
+    const hours = String(date.getHours() % 12 || 12).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const period = date.getHours() < 12 ? "AM" : "PM";
+
+    const hours2 = String(date2.getHours() % 12 || 12).padStart(2, "0");
+    const minutes2 = String(date2.getMinutes()).padStart(2, "0");
+    const period2 = date2.getHours() < 12 ? "AM" : "PM";
+
+    if (isNaN(date2.getTime())) {
+        return `<strong>${dayOfWeek} ${month}/${day}/${year} | ${hours}:${minutes} ${period} (SIGNED IN)</strong>`;
+    }
+
+    const formattedDate = `${dayOfWeek} ${month}/${day}/${year} from ${hours}:${minutes} ${period} to ${hours2}:${minutes2} ${period2}`;
+
+    return formattedDate;
+}
+
+const gty = (y) => {
+    const currentYear = new Date().getFullYear() % 100;
+    const graduationYear = parseInt(y, 10);
+    const grade =
+        currentYear >= graduationYear ? 12 : 13 - (graduationYear - currentYear);
+    return Math.max(1, Math.min(12, grade));
+};
+
+var uData;
+
+function writeGeneralStats() {
+    let searchTerm;
+    if (subt == 'management') {
+        searchTerm = "#";
+        document.getElementById("subteam-members").innerText = "Total Members";
+        document.getElementById("subteam-hours").innerText = "Total Hours";
+    } else {
+        searchTerm = "subteam:" + subt;
+    }
+    socket.emit("findUsers", searchTerm, (response) => {
+        if (response.status == "ok") {
+            // document.getElementById("list").innerHTML = "";
+            var tData = response.data;
+            uData = tData.slice(); // Create a shallow copy to avoid modifying the original array
+            uData.sort((a, b) => {
+                const lastNameA = a.name.split(" ").pop(); // Extract last name of a
+                const lastNameB = b.name.split(" ").pop(); // Extract last name of b
+                return lastNameA.localeCompare(lastNameB); // Compare last names alphabetically
+            });
+            var numy = 1;
+
+            // MASS DATA FIELDS
+
+            document.getElementById("total_students").innerText = uData.length;
+            document.getElementById("active_students").innerText = activeUsers(uData);
+            document.getElementById("total_hours").innerText =
+                Math.round(uData.reduce((acc, obj) => acc + obj.hours, 0) * 10) / 10;
+            // document.getElementById("retention").innerText = "N/A"; //retention(uData);
+
+        } else {
+            alert("There was an error!");
+        }
+    });
+}
+
+function subteamChange() {
+    const sts = document.getElementById("subteamSearch");
+    const value = sts.value;
+    // If the value is empty, show all users by calling updateDocument with the original userData
+    if (value === "") {
+        updateDocument(userData, hasVice);
+        specifiedSubteam = "all";
+        return;
+    }
+    if (value === "all") {
+        updateDocument(userData, hasVice);
+        specifiedSubteam = "all";
+        return;
+    }
+    // Filter the userData array to only include users whose subgroup is equal to the value
+    const filteredData = userData.filter(user => user.subgroup === value);
+    specifiedSubteam = value;
+    // Update the document with the filtered data
+    updateDocument(filteredData, hasVice, false);
+}

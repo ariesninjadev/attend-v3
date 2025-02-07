@@ -29,7 +29,7 @@
       
         <br />
         <cardsection id="cards">Please enter at least 3 characters<br><strong>OR</strong><br>Type "#" to show all
-            students<br>Type "^[num]" to show students with at least [num] hrs<br>Type "subteam:[subteam_name] to show students in a specified subteam.<br><br></cardsection>
+            students<br>Type "^[num]" to show students with at least [num] hrs (or "v" for less)<br>Type "subteam:[subteam_name] to show students in a specified subteam.<br><br></cardsection>
         <button class="p-button" id="back" onclick="javascript:popup2()">
             General Settings
         </button>
@@ -54,6 +54,8 @@
             <h2 id="popupTitle">Settings</h2>
             <div id="popupContent">
                 <button class="submit-button" onclick="addUser()">Add Student</button><br /><br />
+                <button class="submit-button" onclick="removeStudent()">
+                    REMOVE One Student</button><br /><br />
                 <button class="submit-button" onclick="clearStudent()">
                     Clear One Student</button><br /><br />
                 <button class="submit-button redx" onclick="clearAll()">

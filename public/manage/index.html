@@ -161,6 +161,19 @@
             <div class="page-body">
                 <div class="container-xl">
                     <div class="row row-deck row-cards">
+                        <div class="col-12">
+                            <div class="card bg-secondary text-primary-fg">
+
+                                <div class="card-body">
+                                    <h3 class="card-title">You are running a new app version</h3>
+                                    <p>If you run into any issues or if something looks wrong, please email <a
+                                            style="color:white;"
+                                            href="mailto:apowvalla26@jesuitmail.org">apowvalla26@jesuitmail.org</a> as
+                                        soon as possible. Issues that affect you likely affect everyone else, and
+                                        attendance needs to be as accurate as possible.</p>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="col-sm-12 col-lg-4">
                             <div class="card card-sm">
@@ -181,7 +194,7 @@
                                         </div>
                                         <div class="col">
                                             <div id="total_students" class="font-weight-medium">
-                                                TOTAL_STUDENTS
+                                                Loading...
                                             </div>
                                             <div class="text-muted" id="subteam-members">Subteam Members</div>
                                         </div>
@@ -211,7 +224,7 @@
                                         </div>
                                         <div class="col">
                                             <div id="active_students" class="font-weight-medium">
-                                                ACTIVE_STUDENTS
+                                                Loading...
                                             </div>
                                             <div class="text-muted">Active Members (30d)</div>
                                         </div>
@@ -238,7 +251,7 @@
                                         </div>
                                         <div class="col">
                                             <div id="total_hours" class="font-weight-medium">
-                                                TOTAL_HOURS
+                                                Loading...
                                             </div>
                                             <div class="text-muted" id="subteam-hours">Subteam Hours</div>
                                         </div>
@@ -289,10 +302,111 @@
                         <hr style="margin-top:3rem;">
                         <span id="aHead">
 
-                            <h3 class="card-title">Take Attendance for <span id="tDate"></span>.</h3>
+                            <div class="container container-slim py-4" style="margin-top:-30px;margin-bottom:-15px;"
+                                id="roster-loader">
+                                <div class="text-center">
+                                    <div class="text-secondary mb-3">Preparing roster...</div>
+                                    <div class="progress progress-sm">
+                                        <div class="progress-bar progress-bar-indeterminate"></div>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <div class="row g-2 align-items-center">
-                                <div class="col-2 d-none d-xxl-block">
+                            <h3 class="card-title" id="main-title" style="display:none;">Take Attendance for <span
+                                    id="tDate"></span>.</h3>
+
+                            <div style="display:none;margin-bottom:0px;" id="submit-warn" class="alert alert-danger"
+                                role="alert">
+                                <div class="d-flex">
+                                    <div>
+                                        <!-- Download SVG icon from http://tabler.io/icons/icon/alert-circle -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="icon alert-icon icon-2">
+                                            <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
+                                            <path d="M12 8v4"></path>
+                                            <path d="M12 16h.01"></path>
+                                        </svg>
+                                    </div>
+                                    <div id="submit-warn-text">
+                                        There is no meeting in progress.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="display:none;margin-bottom:0px;" id="submit-info" class="alert alert-info"
+                                role="alert">
+                                <div class="d-flex">
+                                    <div>
+                                        <!-- Download SVG icon from http://tabler.io/icons/icon/alert-circle -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="icon alert-icon icon-2">
+                                            <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
+                                            <path d="M12 9h.01"></path>
+                                            <path d="M11 12h1v4h1"></path>
+                                        </svg>
+                                    </div>
+                                    <div id="submit-info-text">
+                                        A meeting is starting soon. You can sign people in early, but they won't earn
+                                        hours until the meeting starts.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="display:none;margin-bottom:0px;" id="submit-success" class="alert alert-success"
+                                role="alert">
+                                <div class="d-flex">
+                                    <div>
+                                        <!-- Download SVG icon from http://tabler.io/icons/icon/alert-circle -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="icon alert-icon icon-2">
+                                            <path d="M5 12l5 5l10 -10"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        A meeting is in progress.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="display:none;margin-bottom:0px;margin-top:20px;" id="submit-grace"
+                                class="alert alert-info" role="alert">
+                                <div class="d-flex">
+                                    <div>
+                                        <!-- Download SVG icon from http://tabler.io/icons/icon/alert-circle -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="icon alert-icon icon-2">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M12 15h2a1 1 0 0 0 1 -1v-1a1 1 0 0 0 -1 -1h-2v-3h3" />
+                                            <path d="M9 9v6" />
+                                            <path d="M3 12v.01" />
+                                            <path d="M12 21v.01" />
+                                            <path d="M7.5 4.2v.01" />
+                                            <path d="M16.5 19.8v.01" />
+                                            <path d="M7.5 19.8v.01" />
+                                            <path d="M4.2 16.5v.01" />
+                                            <path d="M19.8 16.5v.01" />
+                                            <path d="M4.2 7.5v.01" />
+                                            <path d="M21 12a9 9 0 0 0 -9 -9" />
+                                        </svg>
+                                    </div>
+                                    <div id="submit-grace-text">
+                                        Grace period is active until (). Sign-ins will count as if submitted at ().
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br>
+
+                            <div class="row g-2 align-items-center" style="display:none;" id="search-bar">
+                                <div class="col-2 d-none d-sm-block">
                                     <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
                                         <form action="./" method="get" autocomplete="off" novalidate="">
                                             <div class="input-icon">
@@ -308,13 +422,14 @@
                                                     </svg>
                                                 </span>
                                                 <input id="userInput" type="text" value="" class="form-control"
-                                                    placeholder="Search…" aria-label="Search in website">
+                                                    placeholder="Search by name…" aria-label="Searchbar">
                                             </div>
                                         </form>
                                     </div>
                                 </div>
                                 <div class="col-2">
-                                    <select class="form-select" id="subteamSearch" onchange="subteamChange()">
+                                    <select style="display:none;" class="form-select" id="subteamSearch"
+                                        onchange="subteamChange()">
                                         <option disabled selected="">Select a subteam</option>
                                         <option value="all">All</option>
                                         <option value="design">Design</option>
@@ -326,52 +441,17 @@
                                 </div>
                             </div>
 
+
+
                         </span>
 
-                        <!-- <div class="col-md-6 col-lg-4">
-                            <div class="card">
-                                <div class="ribbon ribbon-top bg-black">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user"
-                                        width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff"
-                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
-                                        <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                                    </svg>
-                                </div>
 
-                                <div class="card-header">
-                                    <h3 class="card-title"><span id="self-name"></span> (You)</h3>
-                                </div>
-                                <div class="card-body">
-                                    <div class="btn-group w-100 userData" role="group" id="self-email">
-                                        <input type="radio" class="btn-check" name="btg-self" id="btg-self-1"
-                                            autocomplete="off" checked>
-                                        <label for="btg-self-1" type="button" class="btn"><svg
-                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round"
-                                                class="icon icon-tabler icons-tabler-outline icon-tabler-x">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                <path d="M18 6l-12 12" />
-                                                <path d="M6 6l12 12" />
-                                            </svg></label>
-                                        <input type="radio" class="btn-check" name="btg-self" id="btg-self-2"
-                                            autocomplete="off">
-                                        <label for="btg-self-2" type="button" class="btn">Arriving</label>
-                                        <input type="radio" class="btn-check" name="btg-self" id="btg-self-3"
-                                            autocomplete="off">
-                                        <label for="btg-self-3" type="button" class="btn">Leaving</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
- -->
+
 
 
                         <button onclick="passSubmit()" disabled id="submit-btn" class="btn btn-primary"
-                            style="margin-top:20px;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            style="margin-top:20px;display:none;"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round"
                                 class="icon icon-tabler icons-tabler-outline icon-tabler-mail-forward">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -380,11 +460,11 @@
                                 <path d="M15 18h6" />
                                 <path d="M18 15l3 3l-3 3" />
                             </svg>Submit Attendance</button>
-                        <p id="submit-warn" style="text-align:center;color:red;">There is no meeting currently active.
-                        </p>
-                        <hr>
 
-                        <div class="col-12">
+                        <hr>
+                        <button class="btn" style="margin-top:0;" onclick="populateRecord();" id="record-btn">Load
+                            Record</button>
+                        <div class="col-12" id="record-body" style="display:none;">
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title"><span id="stlabel">Your</span> Team Submission Record</h3>
