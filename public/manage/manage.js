@@ -272,15 +272,15 @@ function updateDocument(members, hasVice, showBadges = true) {
                                 <h3 class="card-title">${user.name} ${status}</h3>
                                     <p class="card-subtitle"><a onclick="copyEmail('${user.id}')" href="#" style="color:gray;"><svg style="margin-right:4px;" xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg>
                                     ${user.id}</a></p>
-                                    <p>${user.hours} hours${localStorage.getItem("subteam") == "Management" ? " | " + user.subgroup.charAt(0).toUpperCase() + user.subgroup.slice(1) : ""}</p>
-                                    <div class="btn-group w-100 userData" role="group" data-email="${user.id}">
+                                    <p ${isMeeting ? "" : "style='margin-bottom:-6px;'"}>${user.hours} hours${localStorage.getItem("subteam") == "Management" ? " | " + user.subgroup.charAt(0).toUpperCase() + user.subgroup.slice(1) : ""}</p>
+                                    <div ${isMeeting ? "" : "style='display:none;'"} class="btn-group w-100 userData" role="group" data-email="${user.id}">
                                         <input type="radio" class="btn-check" name="btg-${i}" id="btg-${i}-1"
                                             autocomplete="off" ${(user.localSelection == 1 || user.localSelection == null) ? "checked" : ""}>
-                                        <label for="btg-${i}-1" type="button" class="btn"><svg
+                                        <label style="width:0;padding-left:0;padding-right:0;margin:0;flex:0.5 1 auto;" for="btg-${i}-1" type="button" class="btn"><svg
                                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                                 stroke-linecap="round" stroke-linejoin="round"
-                                                class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+                                                class="icon icon-tabler icons-tabler-outline icon-tabler-x" style="width:0;padding-left:0;padding-right:0;margin:0;">
                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                                 <path d="M18 6l-12 12" />
                                                 <path d="M6 6l12 12" />
@@ -312,9 +312,9 @@ function updateDocument(members, hasVice, showBadges = true) {
                 actionsSum--;
             }
             if (actionsSum > 0 && isMeeting) {
-                document.getElementById('submit-btn').disabled = false;
+                document.getElementById("submit-btn").style.display = "block";
             } else {
-                document.getElementById('submit-btn').disabled = true;
+                document.getElementById("submit-btn").style.display = "none";
             }
             // Get the parent element attribute "data-email"
             let email = event.target.parentElement.getAttribute('data-email');
@@ -323,8 +323,6 @@ function updateDocument(members, hasVice, showBadges = true) {
             user.localSelection = r;
         });
     });
-
-    document.getElementById("submit-btn").style.display = "block";
 }
 
 function orgHandler() {
