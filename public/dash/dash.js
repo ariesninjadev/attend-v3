@@ -19,7 +19,7 @@ function getStatus(status, end, start) {
     } else if (status == 3) {
         return `<span class="badge bg-danger me-1"></span> Rejected`;
     } else {
-        return `<span class="badge bg-secondary me-1"></span> Unknown`;
+        return `<span class="badge bg-success me-1"></span> Verified`;
     }
 }
 
@@ -69,6 +69,10 @@ function calculateDelta(start, end) {
 }
 
 function idToName(id, conversion) {
+    // If id is not present, return "Admin"
+    if (!id) {
+        return "JHS";
+    }
     // Find the name of the user with the given id in the conversion array which has format { id, name }
     const user = conversion.find(user => user.id === id);
     return user.name;
