@@ -140,7 +140,7 @@ function main() {
     const hours = document.getElementById("hours");
     hours.innerHTML = data.hours.toFixed(2);
 
-    const preseasonhours = document.getElementById("pre-hours");
+    const preseasonhours = document.getElementById("24-pre-hours");
     // find period = preseason-2025 in data.oldHours
     const preseason = data.oldHours.find(period => period.period === "preseason-2025");
     if (preseason) {
@@ -150,15 +150,23 @@ function main() {
     }
 
     const vars = document.getElementById("varsity");
-    vars.innerHTML = varsity_letter_hours + "<span style='font-size:0.8em;vertical-align:top;' class='text-secondary'>*</span>";
+    try {
+        vars.innerHTML = varsity_letter_hours + "<span style='font-size:0.8em;vertical-align:top;' class='text-secondary'>*</span>";
+    } catch (error) {
+
+    }
 
     const elig = document.getElementById("eligibility");
-    if (data.hours >= varsity_letter_hours) {
-        elig.innerHTML = "Eligible";
-        elig.style.color = "green";
-    } else {
-        elig.innerHTML = "Ineligible";
-        elig.style.color = "red";
+    try {
+        if (data.hours >= varsity_letter_hours) {
+            elig.innerHTML = "Eligible";
+            elig.style.color = "green";
+        } else {
+            elig.innerHTML = "Ineligible";
+            elig.style.color = "red";
+        }
+    } catch (error) {
+
     }
 
     const banner = document.getElementById("clocked-in");
@@ -215,7 +223,7 @@ function main() {
         versionElement.innerHTML = "v" + version;
 
         const alertText = document.getElementById("alert-body");
-        alertText.innerHTML = alert.message;
+        alertText.innerHTML = alertData.message;
 
         if (alertData.enabled) {
             var myModal = new bootstrap.Modal(document.getElementById('modal-simple'));
