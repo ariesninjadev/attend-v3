@@ -114,9 +114,10 @@ var alertData;
 
 
 function main() {
-    if (!data.hours) {
-        location.replace("/limbo");
-    }
+    // No idea where this came from??
+    // if (!data.hours) {
+    //     location.replace("/limbo");
+    // }
     // If localstorage "picture" is set
     if (localStorage.getItem("picture")) {
         // Set the profile picture to the value of localstorage "picture"
@@ -140,13 +141,22 @@ function main() {
     const hours = document.getElementById("hours");
     hours.innerHTML = data.hours.toFixed(2);
 
-    const preseasonhours = document.getElementById("24-pre-hours");
+    const preseasonhours25 = document.getElementById("25-pre-hours");
     // find period = preseason-2025 in data.oldHours
-    const preseason = data.oldHours.find(period => period.period === "preseason-2025");
-    if (preseason) {
-        preseasonhours.innerHTML = preseason.hours.toFixed(0);
+    const preseason25 = data.oldHours.find(period => period.period === "preseason-2025");
+    if (preseason25) {
+        preseasonhours25.innerHTML = preseason25.hours.toFixed(0);
     } else {
-        preseasonhours.innerHTML = "0";
+        preseasonhours25.innerHTML = "0";
+    }
+
+    const regseasonhours25 = document.getElementById("25-reg-hours");
+    // find period = preseason-2025 in data.oldHours
+    const regseason25 = data.oldHours.find(period => period.period === "season-2025");
+    if (regseason25) {
+        regseasonhours25.innerHTML = regseason25.hours.toFixed(0);
+    } else {
+        regseasonhours25.innerHTML = "0";
     }
 
     const vars = document.getElementById("varsity");

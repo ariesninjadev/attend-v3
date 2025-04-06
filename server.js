@@ -240,7 +240,7 @@ try {
     }
 
     // // Single run code: load all users preseason hours
-    // db.loadAllPreSeasonHours(stat);
+    // db.loadAllRegSeasonHours();
 
 
     app.get("*", function (req, res) {
