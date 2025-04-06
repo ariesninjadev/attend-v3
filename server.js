@@ -2,7 +2,7 @@
 //       IMPORTANT STATICS        //
 /// ----------------------------- ///
 
-const version = "3.9.2";
+const version = "3.10.0";
 
 /// ----------------------------- ///
 
@@ -240,7 +240,7 @@ try {
     }
 
     // // Single run code: load all users preseason hours
-    // db.loadAllPreSeasonHours(stat);
+    // db.loadAllRegSeasonHours();
 
 
     app.get("*", function (req, res) {

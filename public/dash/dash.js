@@ -114,9 +114,10 @@ var alertData;
 
 
 function main() {
-    if (!data.hours) {
-        location.replace("/limbo");
-    }
+    // No idea where this came from??
+    // if (!data.hours) {
+    //     location.replace("/limbo");
+    // }
     // If localstorage "picture" is set
     if (localStorage.getItem("picture")) {
         // Set the profile picture to the value of localstorage "picture"
@@ -140,25 +141,42 @@ function main() {
     const hours = document.getElementById("hours");
     hours.innerHTML = data.hours.toFixed(2);
 
-    const preseasonhours = document.getElementById("pre-hours");
+    const preseasonhours25 = document.getElementById("25-pre-hours");
     // find period = preseason-2025 in data.oldHours
-    const preseason = data.oldHours.find(period => period.period === "preseason-2025");
-    if (preseason) {
-        preseasonhours.innerHTML = preseason.hours.toFixed(0);
+    const preseason25 = data.oldHours.find(period => period.period === "preseason-2025");
+    if (preseason25) {
+        preseasonhours25.innerHTML = preseason25.hours.toFixed(0);
     } else {
-        preseasonhours.innerHTML = "0";
+        preseasonhours25.innerHTML = "0";
+    }
+
+    const regseasonhours25 = document.getElementById("25-reg-hours");
+    // find period = preseason-2025 in data.oldHours
+    const regseason25 = data.oldHours.find(period => period.period === "season-2025");
+    if (regseason25) {
+        regseasonhours25.innerHTML = regseason25.hours.toFixed(0);
+    } else {
+        regseasonhours25.innerHTML = "0";
     }
 
     const vars = document.getElementById("varsity");
-    vars.innerHTML = varsity_letter_hours + "<span style='font-size:0.8em;vertical-align:top;' class='text-secondary'>*</span>";
+    try {
+        vars.innerHTML = varsity_letter_hours + "<span style='font-size:0.8em;vertical-align:top;' class='text-secondary'>*</span>";
+    } catch (error) {
+
+    }
 
     const elig = document.getElementById("eligibility");
-    if (data.hours >= varsity_letter_hours) {
-        elig.innerHTML = "Eligible";
-        elig.style.color = "green";
-    } else {
-        elig.innerHTML = "Ineligible";
-        elig.style.color = "red";
+    try {
+        if (data.hours >= varsity_letter_hours) {
+            elig.innerHTML = "Eligible";
+            elig.style.color = "green";
+        } else {
+            elig.innerHTML = "Ineligible";
+            elig.style.color = "red";
+        }
+    } catch (error) {
+
     }
 
     const banner = document.getElementById("clocked-in");
@@ -215,7 +233,7 @@ function main() {
         versionElement.innerHTML = "v" + version;
 
         const alertText = document.getElementById("alert-body");
-        alertText.innerHTML = alert.message;
+        alertText.innerHTML = alertData.message;
 
         if (alertData.enabled) {
             var myModal = new bootstrap.Modal(document.getElementById('modal-simple'));

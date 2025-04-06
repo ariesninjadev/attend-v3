@@ -1140,23 +1140,39 @@ async function updateOldHours(id, period, hours) {
     }
 }
 
-async function loadAllPreSeasonHours() {
+async function loadAllRegSeasonHours() {
     try {
         // Get all users
         const users = await User.find({}).exec();
 
         // Iterate over each user
         for (let i = 0; i < users.length; i++) {
-            // Get the user's record
-            let record = users[i].record;
-            // Get their preseason hours
-            var h = stat.getPreSeasonHours(users[i].id);
-            // Add preseason hours number to old hours
-            await updateOldHours(users[i].id, "preseason-2025", h);
+            // Get their season hours
+            var h = users[i].hours;
+            // Add season hours number to old hours
+            await updateOldHours(users[i].id, "season-2025", h);
+            // Set their hours to 0
+            await User.updateOne(
+                { id: users[i].id },
+                {
+                    $set: {
+                        hours: 0,
+                    },
+                }
+            );
+            // Set their record to empty
+            await User.updateOne(
+                { id: users[i].id },
+                {
+                    $set: {
+                        record: [],
+                    },
+                }
+            );
         }
 
         // Log the completion
-        console.log("All pre-season hours have been loaded.");
+        console.log("All hours have been loaded.");
         // Call the callback function
 
     } catch (err) {
@@ -1254,7 +1270,7 @@ module.exports = {
     getConfig,
     createConfig,
     updateOldHours,
-    loadAllPreSeasonHours,
+    loadAllRegSeasonHours,
     getStaffRecord,
     setVisibility,
 };
