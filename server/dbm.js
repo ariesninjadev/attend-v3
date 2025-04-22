@@ -950,7 +950,7 @@ async function subteamMaster(id) {
         if (requester.subgroup == "management") {
 
             var members = await User.find({});
-            var leaderIndex = members.findIndex((member) => member.id === "ahuang26@jesuitmail.org");
+            var leaderIndex = members.findIndex((member) => member.id === "acone27@jesuitmail.org");
             if (leaderIndex !== -1) {
                 members[leaderIndex].addendum = 1;
             }
